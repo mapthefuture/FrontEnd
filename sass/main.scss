@@ -1,0 +1,81 @@
+// Put any @imports here
+// See Readme for a list of supported ones
+@import 'foundation';
+
+footer {
+  .footer {
+    width: 400px;
+    margin: 0 auto;
+    p {
+      color: white;
+      margin: 10px auto;
+      text-align: center;
+      a {
+        text-decoration: none;
+        color: #FFFFFF;
+      }
+    }
+  }
+}
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  width: 80%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.homeWrapper {
+  height: 100%;
+
+  h2{
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .homeRedirect {
+    display: block;
+    margin: 0 auto;
+
+    button {
+      margin: 15px auto;
+      display: block;
+    }
+
+    div {
+      margin: 15% auto;
+      width: 250px;
+    }
+  }
+}
+
+.newForm {
+  margin: 15px auto;
+
+  form {
+    border: 3px solid black;
+    border-radius: 5px;
+    padding: 25px;
+
+    input {
+      max-width: 80%;
+      margin: 5px auto;
+    }
+
+  }
+}
+
+#map {
+  max-width: 80%;
+  height: 250px;
+  margin: 5px auto; 
+}
