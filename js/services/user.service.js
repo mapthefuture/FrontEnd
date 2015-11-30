@@ -11,7 +11,7 @@ let UserService = function($http, SERVER, $cookies, $state) {
     if (token) {
       return $http.get(SERVER.URL + 'check', SERVER.CONFIG);
     } else {
-      $state.go('root.login');
+      // $state.go('root.login');
     }
 
   };

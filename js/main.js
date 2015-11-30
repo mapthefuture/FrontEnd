@@ -15,6 +15,7 @@ import NewController from './controllers/new.controller';
 import LoginController from './controllers/login.controller';
 
 // Import Directives
+import myMap from './directives/map.directive';
 
 angular
   .module('app', ['ui.router', 'mm.foundation', 'ngCookies'])
@@ -29,4 +30,5 @@ angular
   .controller('NewController', NewController)
   .controller('LoginController', LoginController)
   .service('UserService', UserService)
+  .directive('myMap', myMap)
 ;

@@ -132,6 +132,79 @@ module.exports = exports['default'];
 },{}],5:[function(require,module,exports){
 'use strict';
 
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+var myMap = function myMap() {
+  // directive link function
+  var link = function link(scope, element, attrs) {
+    var map, infoWindow;
+    var markers = [];
+
+    // map config
+    var mapOptions = {
+      center: new google.maps.LatLng(50, 2),
+      zoom: 4,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      scrollwheel: false
+    };
+
+    // init the map
+    function initMap() {
+      if (map === void 0) {
+        map = new google.maps.Map(element[0], mapOptions);
+      }
+    }
+
+    // place a marker
+    function setMarker(map, position, title, content) {
+      var marker;
+      var markerOptions = {
+        position: position,
+        map: map,
+        title: title,
+        icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
+      };
+
+      marker = new google.maps.Marker(markerOptions);
+      markers.push(marker); // add marker to array
+
+      google.maps.event.addListener(marker, 'click', function () {
+        // close window if not undefined
+        if (infoWindow !== void 0) {
+          infoWindow.close();
+        }
+        // create new window
+        var infoWindowOptions = {
+          content: content
+        };
+        infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+        infoWindow.open(map, marker);
+      });
+    }
+
+    // show the map and place some markers
+    initMap();
+
+    setMarker(map, new google.maps.LatLng(51.508515, -0.125487), 'London', 'Just some content');
+    setMarker(map, new google.maps.LatLng(52.370216, 4.895168), 'Amsterdam', 'More content');
+    setMarker(map, new google.maps.LatLng(48.856614, 2.352222), 'Paris', 'Text here');
+  };
+
+  return {
+    restrict: 'A',
+    template: '<div id="gmaps"></div>',
+    replace: true,
+    link: link
+  };
+};
+
+exports['default'] = myMap;
+module.exports = exports['default'];
+
+},{}],6:[function(require,module,exports){
+'use strict';
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _angular = require('angular');
@@ -172,14 +245,18 @@ var _controllersLoginController2 = _interopRequireDefault(_controllersLoginContr
 
 // Import Directives
 
+var _directivesMapDirective = require('./directives/map.directive');
+
+var _directivesMapDirective2 = _interopRequireDefault(_directivesMapDirective);
+
 _angular2['default'].module('app', ['ui.router', 'mm.foundation', 'ngCookies']).constant('SERVER', {
   URL: 'https://fathomless-savannah-6575.herokuapp.com',
   CONFIG: {
     headers: {}
   }
-}).config(_config2['default']).controller('HomeController', _controllersHomeController2['default']).controller('NewController', _controllersNewController2['default']).controller('LoginController', _controllersLoginController2['default']).service('UserService', _servicesUserService2['default']);
+}).config(_config2['default']).controller('HomeController', _controllersHomeController2['default']).controller('NewController', _controllersNewController2['default']).controller('LoginController', _controllersLoginController2['default']).service('UserService', _servicesUserService2['default']).directive('myMap', _directivesMapDirective2['default']);
 
-},{"./config":1,"./controllers/home.controller":2,"./controllers/login.controller":3,"./controllers/new.controller":4,"./services/user.service":6,"angular":12,"angular-cookies":8,"angular-foundation":9,"angular-ui-router":10}],6:[function(require,module,exports){
+},{"./config":1,"./controllers/home.controller":2,"./controllers/login.controller":3,"./controllers/new.controller":4,"./directives/map.directive":5,"./services/user.service":7,"angular":13,"angular-cookies":9,"angular-foundation":10,"angular-ui-router":11}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -198,7 +275,7 @@ var UserService = function UserService($http, SERVER, $cookies, $state) {
     if (token) {
       return $http.get(SERVER.URL + 'check', SERVER.CONFIG);
     } else {
-      $state.go('root.login');
+      // $state.go('root.login');
     }
   };
 
@@ -224,7 +301,7 @@ UserService.$inject = ['$http', 'SERVER', '$cookies', '$state'];
 exports['default'] = UserService;
 module.exports = exports['default'];
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.8
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -547,11 +624,11 @@ angular.module('ngCookies').provider('$$cookieWriter', function $$CookieWriterPr
 
 })(window, window.angular);
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 require('./angular-cookies');
 module.exports = 'ngCookies';
 
-},{"./angular-cookies":7}],9:[function(require,module,exports){
+},{"./angular-cookies":8}],10:[function(require,module,exports){
 /*
  * angular-mm-foundation
  * http://pineconellc.github.io/angular-foundation/
@@ -4167,7 +4244,7 @@ angular.module("template/typeahead/typeahead-popup.html", []).run(["$templateCac
     "");
 }]);
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /**
  * State-based routing for AngularJS
  * @version v0.2.15
@@ -8538,7 +8615,7 @@ angular.module('ui.router.state')
   .filter('isState', $IsStateFilter)
   .filter('includedByState', $IncludedByStateFilter);
 })(window, window.angular);
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.8
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -37557,11 +37634,11 @@ $provide.value("$locale", {
 })(window, document);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":11}]},{},[5])
+},{"./angular":12}]},{},[6])
 
 
 //# sourceMappingURL=main.js.map
