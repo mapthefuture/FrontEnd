@@ -98,4 +98,14 @@ div.ng-scope {
     min-height: 500px;
     margin: 15px auto;
   }
+
+  .tours {
+    display: flex;
+
+    div {
+      display: flex;
+      flex-flow: column center;
+    }
+  }
 }
+

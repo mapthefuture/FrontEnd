@@ -6454,5 +6454,10 @@ div.ng-scope {
     max-width: 100%;
     min-height: 500px;
     margin: 15px auto; }
+  .listTourWrapper .tours {
+    display: flex; }
+    .listTourWrapper .tours div {
+      display: flex;
+      flex-flow: column center; }
 
 /*# sourceMappingURL=main.css.map */
