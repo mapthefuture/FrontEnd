@@ -57,6 +57,7 @@ let newMap = function($state) {
           lat: lat,
           lng: lng,
           title: title,
+          content: content
         };
 
         // map.panTo(latLng);
@@ -64,6 +65,21 @@ let newMap = function($state) {
         // adds markers to array
         markers.push(markerData); 
         console.log(markers);
+
+        var contentString = `
+          <div class="markerForm">
+            <form class="new form" ng-submit="newThing()">
+              <input type="text" placeholder="Name">
+              <textarea type="text" placeholder="Description"></textarea>
+              <button>Submit</button>
+            </form>
+          </div>`;
+
+        var infoWindow = new google.maps.InfoWindow({
+          content: contentString
+        });
+
+        infoWindow.open(map, marker);
             
         // google.maps.event.addListener(marker, 'click', function () {
         //   // close window if not undefined
@@ -79,12 +95,14 @@ let newMap = function($state) {
         // });
       }
 
-      // show the map and place some markers
+      // show the map
       initMap();
+
 
       // Place marker where clicked
       map.addListener('click', function(e) {
         setMarker(map, e.latLng);
+        // angular.element(this).children().children(".clicked").toggleClass("display");
       }); 
 
     }
