@@ -1,14 +1,11 @@
 let NewController = function($scope, $http) {
   
+  let vm = this;
   // let map = new google.maps.Map(document.getElementById('map'), {
   //   center: {lat: 33.7679192, lng: -84.5606888},
   //   zoom: 10,
   //   mapTypeId: google.maps.MapTypeId.HYBRID
   // });
-    
-  let initMap = function() {
-    console.log('yup');
-  };
 
   let Thing = function(obj) {
     this.title = obj.title;

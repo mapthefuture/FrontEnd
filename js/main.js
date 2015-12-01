@@ -8,14 +8,17 @@ import config from './config';
 
 // Import Services
 import UserService from './services/user.service';
+import ListTourService from './services/listTours.service';
 
 // Import Controllers
 import HomeController from './controllers/home.controller';
 import NewController from './controllers/new.controller';
+import ListTourController from './controllers/listTours.controller';
 import LoginController from './controllers/login.controller';
 
 // Import Directives
-import myMap from './directives/map.directive';
+import newMap from './directives/newMap.directive';
+import listMap from './directives/listMap.directive';
 
 angular
   .module('app', ['ui.router', 'mm.foundation', 'ngCookies'])
@@ -26,9 +29,12 @@ angular
     }
   })
   .config(config)
+  .service('ListTourService', ListTourService)
   .controller('HomeController', HomeController)
   .controller('NewController', NewController)
   .controller('LoginController', LoginController)
   .service('UserService', UserService)
-  .directive('myMap', myMap)
+  .controller('ListTourController', ListTourController)
+  .directive('newMap', newMap)
+  .directive('listMap', listMap)
 ;

@@ -22,6 +22,11 @@ let config = function($stateProvider, $urlRouterProvider) {
       controller: 'LoginController',
       templateUrl: 'templates/login.tpl.html'
     })
+    .state('root.list', {
+      url: '/list',
+      controller: 'ListTourController',
+      templateUrl: 'templates/listTours.tpl.html'
+    })
   ;
 };
 
