@@ -231,12 +231,13 @@ var newMap = function newMap($state) {
     //   map: '=',
     // },
     link: function link(scope, element, attrs) {
+      var mapCenter = { lat: 50, lng: 2 };
       var map, infoWindow;
       var markers = [];
 
       // map config
       var mapOptions = {
-        center: new google.maps.LatLng(50, 2),
+        center: mapCenter,
         zoom: 10,
         mapTypeId: google.maps.MapTypeId.HYBRID,
         scrollwheel: false
@@ -273,6 +274,17 @@ var newMap = function newMap($state) {
           };
           infoWindow = new google.maps.InfoWindow(infoWindowOptions);
           infoWindow.open(map, marker);
+        });
+
+        map.addListener('click', function () {
+          var marker = new google.maps.Marker({
+            position: mapCenter,
+            map: map,
+            draggable: true,
+            animation: google.maps.Animation.DROP,
+            title: "This a new marker!",
+            icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
+          });
         });
       }
 
