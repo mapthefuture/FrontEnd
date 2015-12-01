@@ -267,16 +267,24 @@ var newMap = function newMap($state) {
         var marker = new google.maps.Marker({
           position: latLng,
           map: map,
-          title: title,
           draggable: true,
           animation: google.maps.Animation.DROP,
           icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
         });
 
+        var lat = marker.getPosition().lat();
+        var lng = marker.getPosition().lng();
+
+        var markerData = {
+          lat: lat,
+          lng: lng,
+          title: title
+        };
+
         // map.panTo(latLng);
 
         // adds markers to array
-        markers.push(marker);
+        markers.push(markerData);
         console.log(markers);
 
         // google.maps.event.addListener(marker, 'click', function () {
