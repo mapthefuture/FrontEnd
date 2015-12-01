@@ -9,14 +9,25 @@ let newMap = function($state) {
     //   map: '=',
     // },
     link: function (scope, element, attrs) {
-      var mapCenter = {lat: 50, lng: 2};
-      var map, infoWindow;
+
+
+      var map, infoWindow; 
+
+      var initialLocation = new google.maps.LatLng(27.9881, 86.9253);
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+          map.setCenter(initialLocation);
+        });
+      } 
+
       var markers = [];
         
       // map config
       var mapOptions = {
-        center: mapCenter,
-        zoom: 10,
+        center: initialLocation,
+        zoom: 30,
         mapTypeId: google.maps.MapTypeId.HYBRID,
         scrollwheel: false
       };
