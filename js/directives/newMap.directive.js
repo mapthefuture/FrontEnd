@@ -54,16 +54,33 @@ let newMap = function($state) {
           infoWindow.open(map, marker);
         });
 
-        map.addListener('click', function() {
-          var marker = new google.maps.Marker({
-            position:mapCenter,
+        // map.addListener('click', function() {
+        //   var marker = new google.maps.Marker({
+        //     position:mapCenter,
+        //     map: map,
+        //     draggable:true,
+        //     animation: google.maps.Animation.DROP,
+        //     title:"This a new marker!",
+        //     icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
+        //   });
+        // });
+
+        map.addListener('click', function(e) {
+          placeMarkerAndPanTo(e.latLng, map);
+        });
+
+        function placeMarkerAndPanTo(latLng, map) {
+
+          var newMarker = new google.maps.Marker({
+            position:latLng,
             map: map,
             draggable:true,
             animation: google.maps.Animation.DROP,
             title:"This a new marker!",
             icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
           });
-        });
+          // map.panTo(latLng);
+        }
       }
 
 
@@ -71,9 +88,10 @@ let newMap = function($state) {
       // show the map and place some markers
       initMap();
       
+      // setMarker(map, mapCenter);
       setMarker(map, new google.maps.LatLng(51.508515, -0.125487), 'London', 'Just some content');
-      setMarker(map, new google.maps.LatLng(52.370216, 4.895168), 'Amsterdam', 'More content');
-      setMarker(map, new google.maps.LatLng(48.856614, 2.352222), 'Paris', 'Text here');
+      // setMarker(map, new google.maps.LatLng(52.370216, 4.895168), 'Amsterdam', 'More content');
+      // setMarker(map, new google.maps.LatLng(48.856614, 2.352222), 'Paris', 'Text here');
     }
   };
 
