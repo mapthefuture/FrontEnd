@@ -1,9 +1,9 @@
-let ListTourController = function() {
+let ListTourController = function($scope, ListTourService) {
   
   
 
 };
 
-ListTourController.$inject = [''];
+ListTourController.$inject = ['$scope', 'ListTourService'];
 
 export default ListTourController;

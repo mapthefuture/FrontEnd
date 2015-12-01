@@ -3675,9 +3675,9 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var ListTourController = function ListTourController() {};
+var ListTourController = function ListTourController($scope, ListTourService) {};
 
-ListTourController.$inject = [''];
+ListTourController.$inject = ['$scope', 'ListTourService'];
 
 exports['default'] = ListTourController;
 module.exports = exports['default'];
@@ -3728,15 +3728,15 @@ var listMap = function listMap($state) {
   return {
     restrict: 'A',
     replace: true,
-    template: '<div id="gmap"></div>',
-    controller: 'FindController as vm',
+    template: '<div id="listmap"></div>',
+    controller: 'ListTourController as vm',
     link: function link(scope, element, attrs) {
       var map, infoWindow;
       var markers = [];
 
       // map config
       var mapOptions = {
-        center: new google.maps.LatLng(0, /*User's Geolocation*/0 /*User's Geolocation*/),
+        center: new google.maps.LatLng(51.508515, -0.125487), /*User's Geolocation*/
         zoom: 10, /*Change based on responsive*/
         mapTypeId: google.maps.MapTypeId.HYBRID,
         scrollwheel: false
