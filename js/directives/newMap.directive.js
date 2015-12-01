@@ -9,13 +9,25 @@ let newMap = function($state) {
     //   map: '=',
     // },
     link: function (scope, element, attrs) {
-      var map, infoWindow;
+
+      var map, infoWindow; 
+
+      var initialLocation = new google.maps.LatLng(27.9881, 86.9253);
+
+      // Find location
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+          map.setCenter(initialLocation);
+        });
+      } 
+
       var markers = [];
         
       // map config
       var mapOptions = {
-        center: new google.maps.LatLng(50, 2),
-        zoom: 10,
+        center: initialLocation,
+        zoom: 30,
         mapTypeId: google.maps.MapTypeId.HYBRID,
         scrollwheel: false
       };
@@ -28,41 +40,48 @@ let newMap = function($state) {
       }    
         
       // place a marker
-      function setMarker(map, position, title, content) {
-        var marker;
-        var markerOptions = {
-          position: position,
+      function setMarker(map, latLng, title, content) {
+
+        var marker = new google.maps.Marker({
+          position:latLng,
           map: map,
           title: title,
-          icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
-        };
-
-        marker = new google.maps.Marker(markerOptions);
-        markers.push(marker); // add marker to array
-            
-        google.maps.event.addListener(marker, 'click', function () {
-          // close window if not undefined
-          if (infoWindow !== void 0) {
-            infoWindow.close();
-          }
-          // create new window
-          var infoWindowOptions = {
-            content: content
-          };
-          infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-          infoWindow.open(map, marker);
+          draggable:true,
+          animation: google.maps.Animation.DROP,
+          icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
         });
-      }
+
+        // map.panTo(latLng);
         
+        // adds markers to array
+        markers.push(marker); 
+        console.log(markers);
+            
+        // google.maps.event.addListener(marker, 'click', function () {
+        //   // close window if not undefined
+        //   if (infoWindow !== void 0) {
+        //     infoWindow.close();
+        //   }
+        //   // create new window
+        //   var infoWindowOptions = {
+        //     content: content
+        //   };
+        //   infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+        //   infoWindow.open(map, marker);
+        // });
+
+      }
+
       // show the map and place some markers
       initMap();
+
+      // Place marker where clicked
+      map.addListener('click', function(e) {
+        setMarker(map, e.latLng);
+      }); 
       
-      setMarker(map, new google.maps.LatLng(51.508515, -0.125487), 'London', 'Just some content');
-      setMarker(map, new google.maps.LatLng(52.370216, 4.895168), 'Amsterdam', 'More content');
-      setMarker(map, new google.maps.LatLng(48.856614, 2.352222), 'Paris', 'Text here');
     }
   };
-
 };
 
 newMap.$inject = ['$state'];

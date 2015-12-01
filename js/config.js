@@ -17,6 +17,11 @@ let config = function($stateProvider, $urlRouterProvider) {
       controller: 'NewController',
       templateUrl: 'templates/new.tpl.html'
     })
+    .state('root.login', {
+      url: '/login',
+      controller: 'LoginController',
+      templateUrl: 'templates/login.tpl.html'
+    })
     .state('root.list', {
       url: '/list',
       controller: 'ListTourController',
