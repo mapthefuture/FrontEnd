@@ -20,6 +20,9 @@ import listMap from './directives/listMap.directive';
 angular
   .module('app', ['ui.router', 'mm.foundation'])
   .config(config)
+  .constant('devURL', ' https://fathomless-savannah-6575.herokuapp.com/')
+  .constant('glocURL', 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBH5nVGZJ9PpIikitg1Q9x11xrSgg3JRlw')
+  .constant('gmapURL', 'url')
   .service('ListTourService', ListTourService)
   .controller('HomeController', HomeController)
   .controller('NewController', NewController)
@@ -27,3 +30,7 @@ angular
   .directive('newMap', newMap)
   .directive('listMap', listMap)
 ;
+
+window.initMap = function () {
+  angular.bootstrap(document, ['app']);
+};

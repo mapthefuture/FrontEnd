@@ -3915,7 +3915,11 @@ var _directivesListMapDirective = require('./directives/listMap.directive');
 
 var _directivesListMapDirective2 = _interopRequireDefault(_directivesListMapDirective);
 
-_angular2['default'].module('app', ['ui.router', 'mm.foundation']).config(_config2['default']).service('ListTourService', _servicesListToursService2['default']).controller('HomeController', _controllersHomeController2['default']).controller('NewController', _controllersNewController2['default']).controller('ListTourController', _controllersListToursController2['default']).directive('newMap', _directivesNewMapDirective2['default']).directive('listMap', _directivesListMapDirective2['default']);
+_angular2['default'].module('app', ['ui.router', 'mm.foundation']).config(_config2['default']).constant('devURL', ' https://fathomless-savannah-6575.herokuapp.com/').constant('glocURL', 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBH5nVGZJ9PpIikitg1Q9x11xrSgg3JRlw').constant('gmapURL', 'url').service('ListTourService', _servicesListToursService2['default']).controller('HomeController', _controllersHomeController2['default']).controller('NewController', _controllersNewController2['default']).controller('ListTourController', _controllersListToursController2['default']).directive('newMap', _directivesNewMapDirective2['default']).directive('listMap', _directivesListMapDirective2['default']);
+
+window.initMap = function () {
+  _angular2['default'].bootstrap(document, ['app']);
+};
 
 },{"./config":2,"./controllers/home.controller":3,"./controllers/listTours.controller":4,"./controllers/new.controller":5,"./directives/listMap.directive":6,"./directives/newMap.directive":7,"./services/listTours.service":9,"angular":12,"angular-foundation":1,"angular-ui-router":10}],9:[function(require,module,exports){
 'use strict';
@@ -3923,7 +3927,12 @@ _angular2['default'].module('app', ['ui.router', 'mm.foundation']).config(_confi
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var ListTourService = function ListTourService($stateParams, $http) {};
+var ListTourService = function ListTourService($stateParams, $http) {
+
+  var areaTours = [];
+
+  this.areaTours = function () {};
+};
 
 ListTourService.$inject = ['$stateParams', '$http'];
 
