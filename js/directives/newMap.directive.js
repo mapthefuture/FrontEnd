@@ -77,7 +77,6 @@ let newMap = function($state) {
         //   infoWindow = new google.maps.InfoWindow(infoWindowOptions);
         //   infoWindow.open(map, marker);
         // });
-
       }
 
       // show the map and place some markers
