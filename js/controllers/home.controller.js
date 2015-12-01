@@ -1,11 +1,10 @@
 let HomeController = function($scope, $state) {
 
   $scope.findTour = function(){
-    console.log('goto findTour');
+    $state.go('root.list');
   };
 
   $scope.newTour = function(){
-    console.log('if logged in, goto newTour; otherwise, goto login.');
     $state.go('root.new');
   };
 
