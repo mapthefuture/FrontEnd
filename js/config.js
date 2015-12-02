@@ -14,13 +14,18 @@ let config = function($stateProvider, $urlRouterProvider) {
     })
     .state('root.new', {
       url: '/new',
-      controller: 'NewController',
+      controller: 'NewTourController',
       templateUrl: 'templates/new.tpl.html'
     })
     .state('root.login', {
       url: '/login',
       controller: 'LoginController',
       templateUrl: 'templates/login.tpl.html'
+    })
+    .state('root.signup', {
+      url: '/signup',
+      controller: 'SignupController',
+      templateUrl: 'templates/signup.tpl.html'
     })
     .state('root.list', {
       url: '/list',

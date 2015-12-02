@@ -6439,6 +6439,9 @@ div.ng-scope {
     .newForm form input {
       max-width: 80%;
       margin: 5px auto; }
+    .newForm form .markerForm {
+      width: 20vw;
+      height: 100%; }
 
 #gmap {
   max-width: 80%;
