@@ -1,10 +1,10 @@
-let newMap = function($state) {
+let newMap = function($state, NewTourService) {
   
   return {
-    restrict: 'A',
+    restrict: 'EA',
     replace: true,
     template: '<div id="gmap"></div>',
-    // controller: 'NewController as vm',
+    controller: 'NewTourController as vm',
     // scope: {
     //   map: '=',
     // },
@@ -15,14 +15,14 @@ let newMap = function($state) {
       var initialLocation = new google.maps.LatLng(27.9881, 86.9253);
 
       // Find location
-      if (navigator.geolocation) {
+      if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(function (position) {
           initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
           map.setCenter(initialLocation);
         });
       } 
 
-      var markers = [];
+      // var sites = [];
         
       // map config
       var mapOptions = {
@@ -40,7 +40,7 @@ let newMap = function($state) {
       }    
         
       // place a marker
-      function setMarker(map, latLng, title, content) {
+      function setMarker(map, latLng, title, description) {
 
         var marker = new google.maps.Marker({
           position:latLng,
@@ -51,26 +51,29 @@ let newMap = function($state) {
         });
 
         var lat = marker.getPosition().lat();
-        var lng = marker.getPosition().lng();
+        var lon = marker.getPosition().lng();
 
-        var markerData = {
-          lat: lat,
-          lng: lng,
-          title: title,
-          content: content
-        };
+        // var site = {
+        //   // id:
+        //   // tour_id:
+        //   title: title,
+        //   description: description,
+        //   lat: lat,
+        //   lon: lon,
+        // };
 
         // map.panTo(latLng);
         
         // adds markers to array
-        markers.push(markerData); 
-        console.log(markers);
+        // sites.push(site); 
+        // console.log(sites);
 
         var contentString = `
           <div class="markerForm">
-            <form class="new form" ng-submit="newThing()">
-              <input type="text" placeholder="Name">
-              <textarea type="text" placeholder="Description"></textarea>
+            <form class="newForm" ng-submit="vm.submitForm(site)">
+              <input ng-model="site.title" type="text" placeholder="Title">
+              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>
+              <input type="checkbox">Is this the tour start?
               <button>Submit</button>
             </form>
           </div>`;
@@ -80,6 +83,8 @@ let newMap = function($state) {
         });
 
         infoWindow.open(map, marker);
+        console.log(scope);
+        scope.$apply();
             
         // google.maps.event.addListener(marker, 'click', function () {
         //   // close window if not undefined
@@ -109,6 +114,6 @@ let newMap = function($state) {
   };
 };
 
-newMap.$inject = ['$state'];
+newMap.$inject = ['$state', 'NewTourService'];
 
 export default newMap;
