@@ -29,7 +29,19 @@ let newMap = function($state, NewTourService) {
         center: initialLocation,
         zoom: 30,
         mapTypeId: google.maps.MapTypeId.HYBRID,
-        scrollwheel: false
+        scrollwheel: false,
+        styles: [{
+          featureType: "poi",
+          stylers: [
+            { visibility: "off" }
+          ]
+        },
+        {
+          featureType: "transit",
+          stylers: [
+            { visibility: "off" }
+          ]
+        }]
       };
         
       // init the map

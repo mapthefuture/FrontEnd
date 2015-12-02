@@ -16,6 +16,7 @@ import HomeController from './controllers/home.controller';
 import NewTourController from './controllers/newTour.controller';
 import ListTourController from './controllers/listTours.controller';
 import LoginController from './controllers/login.controller';
+import SignupController from './controllers/signup.controller';
 
 // Import Directives
 import newMap from './directives/newMap.directive';
@@ -40,6 +41,7 @@ angular
   .controller('HomeController', HomeController)
   .controller('NewTourController', NewTourController)
   .controller('LoginController', LoginController)
+  .controller('SignupController', SignupController)
   .controller('ListTourController', ListTourController)
   .directive('newMap', newMap)
   .directive('listMap', listMap)

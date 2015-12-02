@@ -23,6 +23,10 @@ var config = function config($stateProvider, $urlRouterProvider) {
     url: '/login',
     controller: 'LoginController',
     templateUrl: 'templates/login.tpl.html'
+  }).state('root.signup', {
+    url: '/signup',
+    controller: 'SignupController',
+    templateUrl: 'templates/signup.tpl.html'
   }).state('root.list', {
     url: '/list',
     controller: 'ListTourController',
@@ -157,6 +161,26 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+var SignupController = function SignupController($scope, UserService, $cookies, $state) {
+
+  $scope.signup = function (user) {
+    UserService.sendSignup(user).then(function (res) {
+      UserService.loginSuccess(res);
+    });
+  };
+};
+
+SignupController.$inject = ['$scope', 'UserService', '$cookies', '$state'];
+
+exports['default'] = SignupController;
+module.exports = exports['default'];
+
+},{}],7:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 var listMap = function listMap($state) {
 
   return {
@@ -223,7 +247,7 @@ listMap.$inject = ['$state'];
 exports['default'] = listMap;
 module.exports = exports['default'];
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -260,7 +284,14 @@ var newMap = function newMap($state, NewTourService) {
         center: initialLocation,
         zoom: 30,
         mapTypeId: google.maps.MapTypeId.HYBRID,
-        scrollwheel: false
+        scrollwheel: false,
+        styles: [{
+          featureType: "poi",
+          stylers: [{ visibility: "off" }]
+        }, {
+          featureType: "transit",
+          stylers: [{ visibility: "off" }]
+        }]
       };
 
       // init the map
@@ -340,7 +371,7 @@ newMap.$inject = ['$state', 'NewTourService'];
 exports['default'] = newMap;
 module.exports = exports['default'];
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -393,6 +424,10 @@ var _controllersLoginController = require('./controllers/login.controller');
 
 var _controllersLoginController2 = _interopRequireDefault(_controllersLoginController);
 
+var _controllersSignupController = require('./controllers/signup.controller');
+
+var _controllersSignupController2 = _interopRequireDefault(_controllersSignupController);
+
 // Import Directives
 
 var _directivesNewMapDirective = require('./directives/newMap.directive');
@@ -408,13 +443,13 @@ _angular2['default'].module('app', ['ui.router', 'mm.foundation', 'ngCookies']).
   CONFIG: {
     headers: {}
   }
-}).config(_config2['default']).constant('devURL', ' https://fathomless-savannah-6575.herokuapp.com/').constant('glocURL', 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBH5nVGZJ9PpIikitg1Q9x11xrSgg3JRlw').constant('gmapURL', 'url').service('ListTourService', _servicesListToursService2['default']).service('UserService', _servicesUserService2['default']).service('NewTourService', _servicesNewTourService2['default']).controller('HomeController', _controllersHomeController2['default']).controller('NewTourController', _controllersNewTourController2['default']).controller('LoginController', _controllersLoginController2['default']).controller('ListTourController', _controllersListToursController2['default']).directive('newMap', _directivesNewMapDirective2['default']).directive('listMap', _directivesListMapDirective2['default']);
+}).config(_config2['default']).constant('devURL', ' https://fathomless-savannah-6575.herokuapp.com/').constant('glocURL', 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBH5nVGZJ9PpIikitg1Q9x11xrSgg3JRlw').constant('gmapURL', 'url').service('ListTourService', _servicesListToursService2['default']).service('UserService', _servicesUserService2['default']).service('NewTourService', _servicesNewTourService2['default']).controller('HomeController', _controllersHomeController2['default']).controller('NewTourController', _controllersNewTourController2['default']).controller('LoginController', _controllersLoginController2['default']).controller('SignupController', _controllersSignupController2['default']).controller('ListTourController', _controllersListToursController2['default']).directive('newMap', _directivesNewMapDirective2['default']).directive('listMap', _directivesListMapDirective2['default']);
 
 window.initMap = function () {
   _angular2['default'].bootstrap(document, ['app']);
 };
 
-},{"./config":1,"./controllers/home.controller":2,"./controllers/listTours.controller":3,"./controllers/login.controller":4,"./controllers/newTour.controller":5,"./directives/listMap.directive":6,"./directives/newMap.directive":7,"./services/listTours.service":9,"./services/newTour.service":10,"./services/user.service":11,"angular":17,"angular-cookies":13,"angular-foundation":14,"angular-ui-router":15}],9:[function(require,module,exports){
+},{"./config":1,"./controllers/home.controller":2,"./controllers/listTours.controller":3,"./controllers/login.controller":4,"./controllers/newTour.controller":5,"./controllers/signup.controller":6,"./directives/listMap.directive":7,"./directives/newMap.directive":8,"./services/listTours.service":10,"./services/newTour.service":11,"./services/user.service":12,"angular":18,"angular-cookies":14,"angular-foundation":15,"angular-ui-router":16}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -432,7 +467,7 @@ ListTourService.$inject = ['$stateParams', '$http'];
 exports['default'] = ListTourService;
 module.exports = exports['default'];
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -462,7 +497,7 @@ NewTourService.$inject = ['$http'];
 exports['default'] = NewTourService;
 module.exports = exports['default'];
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -486,10 +521,20 @@ var UserService = function UserService($http, SERVER, $cookies, $state) {
   };
 
   this.sendLogin = function (userObj) {
-    return $http.post(SERVER.URL + 'login', userObj, SERVER.CONFIG);
+    return $http.post(SERVER.URL + '/user/show', userObj, SERVER.CONFIG);
+  };
+
+  this.sendSignup = function (userObj) {
+    return $http.post(SERVER.URL + '/signup', userObj, SERVER.CONFIG);
   };
 
   this.loginSuccess = function (res) {
+    $cookies.put('authToken', res.data.auth_token);
+    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
+    $state.go('root.home');
+  };
+
+  this.signupSuccess = function (res) {
     $cookies.put('authToken', res.data.auth_token);
     SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
     $state.go('root.home');
@@ -507,7 +552,7 @@ UserService.$inject = ['$http', 'SERVER', '$cookies', '$state'];
 exports['default'] = UserService;
 module.exports = exports['default'];
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.8
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -830,11 +875,11 @@ angular.module('ngCookies').provider('$$cookieWriter', function $$CookieWriterPr
 
 })(window, window.angular);
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 require('./angular-cookies');
 module.exports = 'ngCookies';
 
-},{"./angular-cookies":12}],14:[function(require,module,exports){
+},{"./angular-cookies":13}],15:[function(require,module,exports){
 /*
  * angular-mm-foundation
  * http://pineconellc.github.io/angular-foundation/
@@ -4450,7 +4495,7 @@ angular.module("template/typeahead/typeahead-popup.html", []).run(["$templateCac
     "");
 }]);
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 /**
  * State-based routing for AngularJS
  * @version v0.2.15
@@ -8821,7 +8866,7 @@ angular.module('ui.router.state')
   .filter('isState', $IsStateFilter)
   .filter('includedByState', $IncludedByStateFilter);
 })(window, window.angular);
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.8
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -37840,11 +37885,11 @@ $provide.value("$locale", {
 })(window, document);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":16}]},{},[8])
+},{"./angular":17}]},{},[9])
 
 
 //# sourceMappingURL=main.js.map
