@@ -24,7 +24,7 @@ let config = function($stateProvider, $urlRouterProvider) {
     })
     .state('root.list', {
       url: '/list',
-      controller: 'ListTourController',
+      controller: 'ListTourController as vm',
       templateUrl: 'templates/listTours.tpl.html'
     })
   ;

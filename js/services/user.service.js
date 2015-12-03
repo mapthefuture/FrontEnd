@@ -1,6 +1,6 @@
 let UserService = function($http, SERVER, $cookies, $state) {
 
-  console.log(SERVER);
+  // console.log(SERVER);
   
   this.checkAuth = function () {
 

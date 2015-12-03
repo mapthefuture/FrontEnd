@@ -1,4 +1,4 @@
-let listMap = function($state) {
+let listMap = function($state, ListTourService) {
   
   return {
     restrict: 'A',
@@ -25,31 +25,31 @@ let listMap = function($state) {
       }    
         
       // place a marker
-      function setMarker(map, position, title, content) {
-        var marker;
-        var markerOptions = {
-          position: position,
-          map: map,
-          title: title,
-          icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
-        };
+      // function setMarker(map, position, title, content) {
+      //   var marker;
+      //   var markerOptions = {
+      //     position: position,
+      //     map: map,
+      //     title: title,
+      //     icon: 'https://d30y9cdsu7xlg0.cloudfront.net/png/106561-200.png'
+      //   };
 
-        marker = new google.maps.Marker(markerOptions);
-        markers.push(marker); // add marker to array
+      //   marker = new google.maps.Marker(markerOptions);
+      //   markers.push(marker); // add marker to array
             
-        google.maps.event.addListener(marker, 'click', function () {
-          // close window if not undefined
-          if (infoWindow !== void 0) {
-            infoWindow.close();
-          }
-          // create new window
-          var infoWindowOptions = {
-            content: content
-          };
-          infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-          infoWindow.open(map, marker);
-        });
-      }
+      //   google.maps.event.addListener(marker, 'click', function () {
+      //     // close window if not undefined
+      //     if (infoWindow !== void 0) {
+      //       infoWindow.close();
+      //     }
+      //     // create new window
+      //     var infoWindowOptions = {
+      //       content: content
+      //     };
+      //     infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+      //     infoWindow.open(map, marker);
+      //   });
+      // }
         
       // show the map and place some markers
       initMap();
@@ -60,6 +60,6 @@ let listMap = function($state) {
 
 };
 
-listMap.$inject = ['$state'];
+listMap.$inject = ['$state', 'ListTourService'];
 
 export default listMap;

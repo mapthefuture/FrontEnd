@@ -25,7 +25,7 @@ var config = function config($stateProvider, $urlRouterProvider) {
     templateUrl: 'templates/login.tpl.html'
   }).state('root.list', {
     url: '/list',
-    controller: 'ListTourController',
+    controller: 'ListTourController as vm',
     templateUrl: 'templates/listTours.tpl.html'
   });
 };
@@ -80,9 +80,33 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var ListTourController = function ListTourController($scope, ListTourService) {};
+var ListTourController = function ListTourController($stateParams, ListTourService) {
 
-ListTourController.$inject = ['$scope', 'ListTourService'];
+  var vm = this;
+  vm.allTours = [];
+  vm.tourMarkers = [];
+
+  ListTourService.areaTours().then(function (res) {
+    vm.allTours = res.data.tours;
+    console.log(vm.allTours);
+  });
+
+  // Editing CSS Styles on-click
+  vm.selectedIndex = -1;
+
+  vm.clickedTour = function ($index) {
+    console.log($index);
+    vm.selectedIndex = $index;
+  };
+
+  // vm.allTours.forEach(tour, function(tour){
+  //   ListTourService.getMarkers(tour).then((res) =>{
+  //     vm.tourMarkers = res.data;
+  //   });
+  // });
+};
+
+ListTourController.$inject = ['$stateParams', 'ListTourService'];
 
 exports['default'] = ListTourController;
 module.exports = exports['default'];
@@ -148,7 +172,7 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var listMap = function listMap($state) {
+var listMap = function listMap($state, ListTourService) {
 
   return {
     restrict: 'A',
@@ -175,31 +199,31 @@ var listMap = function listMap($state) {
       }
 
       // place a marker
-      function setMarker(map, position, title, content) {
-        var marker;
-        var markerOptions = {
-          position: position,
-          map: map,
-          title: title,
-          icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
-        };
+      // function setMarker(map, position, title, content) {
+      //   var marker;
+      //   var markerOptions = {
+      //     position: position,
+      //     map: map,
+      //     title: title,
+      //     icon: 'https://d30y9cdsu7xlg0.cloudfront.net/png/106561-200.png'
+      //   };
 
-        marker = new google.maps.Marker(markerOptions);
-        markers.push(marker); // add marker to array
+      //   marker = new google.maps.Marker(markerOptions);
+      //   markers.push(marker); // add marker to array
 
-        google.maps.event.addListener(marker, 'click', function () {
-          // close window if not undefined
-          if (infoWindow !== void 0) {
-            infoWindow.close();
-          }
-          // create new window
-          var infoWindowOptions = {
-            content: content
-          };
-          infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-          infoWindow.open(map, marker);
-        });
-      }
+      //   google.maps.event.addListener(marker, 'click', function () {
+      //     // close window if not undefined
+      //     if (infoWindow !== void 0) {
+      //       infoWindow.close();
+      //     }
+      //     // create new window
+      //     var infoWindowOptions = {
+      //       content: content
+      //     };
+      //     infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+      //     infoWindow.open(map, marker);
+      //   });
+      // }
 
       // show the map and place some markers
       initMap();
@@ -209,7 +233,7 @@ var listMap = function listMap($state) {
   };
 };
 
-listMap.$inject = ['$state'];
+listMap.$inject = ['$state', 'ListTourService'];
 
 exports['default'] = listMap;
 module.exports = exports['default'];
@@ -385,14 +409,18 @@ window.initMap = function () {
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var ListTourService = function ListTourService($stateParams, $http) {
+var ListTourService = function ListTourService($stateParams, $http, devURL) {
 
-  var areaTours = [];
-
-  this.areaTours = function () {};
+  this.areaTours = function () {
+    var getURL = devURL + 'tours';
+    return $http({
+      method: 'GET',
+      url: getURL
+    });
+  };
 };
 
-ListTourService.$inject = ['$stateParams', '$http'];
+ListTourService.$inject = ['$stateParams', '$http', 'devURL'];
 
 exports['default'] = ListTourService;
 module.exports = exports['default'];
@@ -405,7 +433,7 @@ Object.defineProperty(exports, '__esModule', {
 });
 var UserService = function UserService($http, SERVER, $cookies, $state) {
 
-  console.log(SERVER);
+  // console.log(SERVER);
 
   this.checkAuth = function () {
 
