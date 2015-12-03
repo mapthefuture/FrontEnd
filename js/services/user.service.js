@@ -17,10 +17,20 @@ let UserService = function($http, SERVER, $cookies, $state) {
   };
 
   this.sendLogin = function (userObj) {
-    return $http.post(SERVER.URL + 'login', userObj, SERVER.CONFIG);
+    return $http.post(SERVER.URL + '/user/show', userObj, SERVER.CONFIG);
+  };
+
+  this.sendSignup = function (userObj) {
+    return $http.post(SERVER.URL + '/signup', userObj, SERVER.CONFIG);
   };
 
   this.loginSuccess = function (res) {
+    $cookies.put('authToken', res.data.auth_token);
+    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
+    $state.go('root.home');
+  };
+
+  this.signupSuccess = function (res) {
     $cookies.put('authToken', res.data.auth_token);
     SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
     $state.go('root.home');
