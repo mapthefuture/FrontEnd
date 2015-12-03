@@ -1,3 +1,5 @@
+import jquery from 'jquery';
+
 let UserService = function($http, SERVER, $cookies, $state) {
 
   console.log(SERVER);
@@ -17,6 +19,7 @@ let UserService = function($http, SERVER, $cookies, $state) {
   };
 
   this.sendLogin = function (userObj) {
+    console.log(userObj);
     return $http.post(SERVER.URL + '/user/show', userObj, SERVER.CONFIG);
   };
 
@@ -28,6 +31,7 @@ let UserService = function($http, SERVER, $cookies, $state) {
     $cookies.put('authToken', res.data.auth_token);
     SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
     $state.go('root.home');
+    jquery(".test").replaceWith('<li class="test">Welcome</li>');
   };
 
   this.signupSuccess = function (res) {
