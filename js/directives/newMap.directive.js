@@ -80,21 +80,34 @@ let newMap = function($state, NewTourService) {
         // sites.push(site); 
         // console.log(sites);
 
-        var contentString = `
-          <div class="markerForm">
-            <form class="newForm" ng-submit="vm.submitForm(site)">
+        // var contentString = `
+        //   <div class="markerForm" ng-bind-html="infoWindow">
+        //     <form class="newForm" ng-submit="vm.submitForm(site)">
+        //       <input ng-model="site.title" type="text" placeholder="Title">
+        //       <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>
+        //       <input type="checkbox">Is this the tour start?
+        //       <button>Submit</button>
+        //     </form>
+        //     {{submitForm}}
+        //   </div>`;
+
+        var infoWindow = new google.maps.InfoWindow({
+          content: `<div class="markerForm" ng-controller="NewTourController">
+            <form class="newForm" ng-submit="vm.submitForm(site)" ng-bind-html="infoWindow">
               <input ng-model="site.title" type="text" placeholder="Title">
               <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>
               <input type="checkbox">Is this the tour start?
               <button>Submit</button>
+              {{10+1}}
             </form>
-          </div>`;
-
-        var infoWindow = new google.maps.InfoWindow({
-          content: contentString
+            
+          </div>`
         });
 
-        infoWindow.open(map, marker);
+        marker.addListener('click', function() {
+          infoWindow.open(map, marker);
+        });
+
         console.log(scope);
         scope.$apply();
             

@@ -330,13 +330,25 @@ var newMap = function newMap($state, NewTourService) {
         // sites.push(site);
         // console.log(sites);
 
-        var contentString = '\n          <div class="markerForm">\n            <form class="newForm" ng-submit="vm.submitForm(site)">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <input type="checkbox">Is this the tour start?\n              <button>Submit</button>\n            </form>\n          </div>';
+        // var contentString = `
+        //   <div class="markerForm" ng-bind-html="infoWindow">
+        //     <form class="newForm" ng-submit="vm.submitForm(site)">
+        //       <input ng-model="site.title" type="text" placeholder="Title">
+        //       <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>
+        //       <input type="checkbox">Is this the tour start?
+        //       <button>Submit</button>
+        //     </form>
+        //     {{submitForm}}
+        //   </div>`;
 
         var infoWindow = new google.maps.InfoWindow({
-          content: contentString
+          content: '<div class="markerForm" ng-controller="NewTourController">\n            <form class="newForm" ng-submit="vm.submitForm(site)" ng-bind-html="infoWindow">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <input type="checkbox">Is this the tour start?\n              <button>Submit</button>\n              {{10+1}}\n            </form>\n            \n          </div>'
         });
 
-        infoWindow.open(map, marker);
+        marker.addListener('click', function () {
+          infoWindow.open(map, marker);
+        });
+
         console.log(scope);
         scope.$apply();
 
@@ -521,6 +533,7 @@ var UserService = function UserService($http, SERVER, $cookies, $state) {
   };
 
   this.sendLogin = function (userObj) {
+    console.log(userObj);
     return $http.post(SERVER.URL + '/user/show', userObj, SERVER.CONFIG);
   };
 
