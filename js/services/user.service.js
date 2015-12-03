@@ -1,3 +1,5 @@
+import jquery from 'jquery';
+
 let UserService = function($http, SERVER, $cookies, $state) {
 
   console.log(SERVER);
@@ -29,6 +31,7 @@ let UserService = function($http, SERVER, $cookies, $state) {
     $cookies.put('authToken', res.data.auth_token);
     SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
     $state.go('root.home');
+    jquery(".test").replaceWith('<li class="test">Welcome</li>');
   };
 
   this.signupSuccess = function (res) {
