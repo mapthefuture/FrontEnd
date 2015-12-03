@@ -120,20 +120,22 @@ Object.defineProperty(exports, '__esModule', {
 var NewTourController = function NewTourController($scope, $http, NewTourService) {
 
   var vm = this;
-  // let map = new google.maps.Map(document.getElementById('map'), {
-  //   center: {lat: 33.7679192, lng: -84.5606888},
-  //   zoom: 10,
-  //   mapTypeId: google.maps.MapTypeId.HYBRID
-  // });
 
   vm.submitForm = submitForm;
 
   function submitForm(siteObj) {
-    console.log(siteObj);
+    console.log("Peanut Butter");
     NewTourService.submitForm(siteObj).then(function (res) {
+      NewTourService.submitFormSuccess(res);
       console.log(res);
     });
   }
+
+  // $scope.login = function (user) {
+  //   UserService.sendLogin(user).then( (res) => {
+  //     UserService.loginSuccess(res);
+  //   });
+  // };
 
   // let Thing = function(obj) {
   //   this.title = obj.title;
@@ -317,26 +319,15 @@ var newMap = function newMap($state, NewTourService, $compile) {
         var lat = marker.getPosition().lat();
         var lon = marker.getPosition().lng();
 
-        // var site = {
-        //   // id:
-        //   // tour_id:
-        //   title: title,
-        //   description: description,
-        //   lat: lat,
-        //   lon: lon,
-        // };
-
         // map.panTo(latLng);
 
         // adds markers to array
         // sites.push(site);
         // console.log(sites);
 
-        var contentString = '<div class="markerForm" ng-controller="NewTourController">\n            <form class="newForm" ng-submit="vm.submitForm(site)">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <input type="checkbox">Is this the tour start?\n              <button>Submit</button>\n              {{10+1}}\n            </form>\n          </div>';
+        var contentString = '<div class="markerForm" ng-controller="NewTourController">\n            <form class="newForm" ng-submit="vm.submitForm(site)">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <input type="checkbox">Is this the tour start?\n              <button>Submit</button>\n              {{lat}}\n            </form>\n          </div>';
         var compiled = $compile(contentString);
         var scopedHTML = compiled(scope);
-
-        console.log(scopedHTML[0]);
 
         var infoWindow = new google.maps.InfoWindow({
           content: scopedHTML[0]
@@ -366,7 +357,6 @@ var newMap = function newMap($state, NewTourService, $compile) {
       // Place marker where clicked
       map.addListener('click', function (e) {
         setMarker(map, e.latLng);
-        // angular.element(this).children().children(".clicked").toggleClass("display");
       });
     }
   };
@@ -479,9 +469,20 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var NewTourService = function NewTourService($http) {
+var NewTourService = function NewTourService($http, SERVER) {
 
-  // let url = PARSE.URL + 'classes/photo';
+  this.checkAuth = function () {
+
+    var token = $cookies.get('authToken');
+
+    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = token;
+
+    if (token) {
+      return $http.get(SERVER.URL + 'check', SERVER.CONFIG);
+    } else {
+      // $state.go('root.login');
+    }
+  };
 
   this.submitForm = submitForm;
 
@@ -493,12 +494,18 @@ var NewTourService = function NewTourService($http) {
   }
 
   function submitForm(siteObj) {
+    console.log(siteObj);
     var s = new Site(siteObj);
-    // return $http.post(url, s, PARSE.CONFIG);
+    return $http.post(SERVER.URL + '/tours/:id/sites', siteObj, SERVER.CONFIG);
   }
+
+  this.submitFormSuccess = function (res) {
+    $cookies.put('authToken', res.data.auth_token);
+    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
+  };
 };
 
-NewTourService.$inject = ['$http'];
+NewTourService.$inject = ['$http', 'SERVER'];
 
 exports['default'] = NewTourService;
 module.exports = exports['default'];
@@ -546,7 +553,9 @@ var UserService = function UserService($http, SERVER, $cookies, $state) {
     $cookies.put('authToken', res.data.auth_token);
     SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
     $state.go('root.home');
-    (0, _jquery2['default'])(".test").replaceWith('<li class="test">Welcome</li>');
+    (0, _jquery2['default'])('.logout').toggleClass("display");
+    (0, _jquery2['default'])('.login').toggleClass("donotdisplay");
+    (0, _jquery2['default'])('.signup').toggleClass("donotdisplay");
   };
 
   this.signupSuccess = function (res) {
