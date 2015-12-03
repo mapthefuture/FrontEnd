@@ -6,7 +6,7 @@ let ListTourController = function($stateParams, ListTourService) {
 
   ListTourService.areaTours().then((res) => {
     vm.allTours = res.data.tours;
-    console.log(vm.allTours);
+    // console.log(vm.allTours);
   });
 
 
@@ -14,7 +14,7 @@ let ListTourController = function($stateParams, ListTourService) {
   vm.selectedIndex = -1;
 
   vm.clickedTour = function($index) {
-    console.log($index);
+    // console.log($index);
     vm.selectedIndex = $index;
   };
 

@@ -37,7 +37,6 @@ angular
   .service('ListTourService', ListTourService)
   .service('UserService', UserService)
   .service('NewTourService', NewTourService)
-
   .controller('HomeController', HomeController)
   .controller('NewTourController', NewTourController)
   .controller('LoginController', LoginController)

@@ -8,13 +8,34 @@ let listMap = function($state, ListTourService) {
     link: function (scope, element, attrs) {
       var map, infoWindow;
       var markers = [];
+      var initialLocation;
+
+      // Find location
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(function (pos) {
+          initialLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+          map.setCenter(initialLocation);
+        });
+      }
         
       // map config
       var mapOptions = {
-        center: new google.maps.LatLng(51.508515, -0.125487),/*User's Geolocation*/
-        zoom: 10, /*Change based on responsive*/
+        center: initialLocation,/*User's Geolocation*/
+        zoom: 12, /*Change based on responsive*/
         mapTypeId: google.maps.MapTypeId.HYBRID,
-        scrollwheel: false
+        scrollwheel: false,
+        styles: [{
+          featureType: "poi",
+          stylers: [
+            { visibility: "off" }
+          ]
+        },
+        {
+          featureType: "transit",
+          stylers: [
+            { visibility: "off" }
+          ]
+        }]
       };
         
       // Map initialization
@@ -25,36 +46,44 @@ let listMap = function($state, ListTourService) {
       }    
         
       // place a marker
-      // function setMarker(map, position, title, content) {
-      //   var marker;
-      //   var markerOptions = {
-      //     position: position,
-      //     map: map,
-      //     title: title,
-      //     icon: 'https://d30y9cdsu7xlg0.cloudfront.net/png/106561-200.png'
-      //   };
+      function setMarker(map, pos, title, content) {
+        var marker;
+        var markerOptions = {
+          position: pos,
+          map: map,
+          title: title,
+          icon: 'https://d30y9cdsu7xlg0.cloudfront.net/png/106561-200.png'
+        };
 
-      //   marker = new google.maps.Marker(markerOptions);
-      //   markers.push(marker); // add marker to array
-            
-      //   google.maps.event.addListener(marker, 'click', function () {
-      //     // close window if not undefined
-      //     if (infoWindow !== void 0) {
-      //       infoWindow.close();
-      //     }
-      //     // create new window
-      //     var infoWindowOptions = {
-      //       content: content
-      //     };
-      //     infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-      //     infoWindow.open(map, marker);
-      //   });
-      // }
+        marker = new google.maps.Marker(markerOptions);
+        markers.push(marker); // add marker to array
+              
+        google.maps.event.addListener(marker, 'click', function () {
+          // close window if not undefined
+          if (infoWindow !== void 0) {
+            infoWindow.close();
+          }
+          // create new window
+          var infoWindowOptions = {
+            content: content
+          };
+          infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+          infoWindow.open(map, marker);
+        });
+      }
         
       // show the map and place some markers
       initMap();
 
       /* Load markers code */
+      ListTourService.areaTours().then((res) =>{
+        console.log(res);
+        var tours = res.data.tours;
+
+        tours.forEach(function (tour) {
+          setMarker(map, new google.maps.LatLng(tour.start_lat,tour.start_lon),tour.title,tour.description);
+        });
+      });
     }
   };
 
