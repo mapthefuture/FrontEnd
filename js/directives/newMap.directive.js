@@ -67,15 +67,6 @@ let newMap = function($state, NewTourService, $compile) {
         var lat = marker.getPosition().lat();
         var lon = marker.getPosition().lng();
 
-        // var site = {
-        //   // id:
-        //   // tour_id:
-        //   title: title,
-        //   description: description,
-        //   lat: lat,
-        //   lon: lon,
-        // };
-
         // map.panTo(latLng);
         
         // adds markers to array
@@ -89,13 +80,11 @@ let newMap = function($state, NewTourService, $compile) {
               <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>
               <input type="checkbox">Is this the tour start?
               <button>Submit</button>
-              {{10+1}}
+              {{lat}}
             </form>
           </div>`;
         var compiled = $compile(contentString);
         var scopedHTML = compiled(scope);
-
-        console.log(scopedHTML[0]);
 
         var infoWindow = new google.maps.InfoWindow({
           content: scopedHTML[0]
@@ -127,7 +116,6 @@ let newMap = function($state, NewTourService, $compile) {
       // Place marker where clicked
       map.addListener('click', function(e) {
         setMarker(map, e.latLng);
-        // angular.element(this).children().children(".clicked").toggleClass("display");
       }); 
 
     }

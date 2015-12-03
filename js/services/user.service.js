@@ -31,7 +31,9 @@ let UserService = function($http, SERVER, $cookies, $state) {
     $cookies.put('authToken', res.data.auth_token);
     SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
     $state.go('root.home');
-    jquery(".test").replaceWith('<li class="test">Welcome</li>');
+    jquery('.logout').toggleClass("display");
+    jquery('.login').toggleClass("donotdisplay");
+    jquery('.signup').toggleClass("donotdisplay");
   };
 
   this.signupSuccess = function (res) {
