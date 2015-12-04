@@ -227,8 +227,8 @@ var listMap = function listMap($state, ListTourService) {
 
       // map config
       var mapOptions = {
-        center: initialLocation, /*User's Geolocation*/
-        zoom: 12, /*Change based on responsive*/
+        center: initialLocation,
+        zoom: 12,
         mapTypeId: google.maps.MapTypeId.HYBRID,
         scrollwheel: false,
         styles: [{
@@ -255,7 +255,7 @@ var listMap = function listMap($state, ListTourService) {
           map: map,
           title: title,
           draggable: true,
-          icon: 'https://d30y9cdsu7xlg0.cloudfront.net/noun-svg/106561.svg?Expires=1449182108&Signature=gkdTF5u4~q03OwNhihL5ECqO84HOENuuul0B1yywnXsbuiLdFhc5IW3buZKn~eU~s29QW5El8bUpMhgnEAOD~xI~jPmN5I3hZ2IaPGM4FzXxc9rDsBB6aV3P0Hf7kUDJiN9GkjXesqXAE8gXwfXQFXhwtUwbW0fcue6EC2wYPVU_&Key-Pair-Id=APKAI5ZVHAXN65CHVU2Q'
+          icon: 'https://d30y9cdsu7xlg0.cloudfront.net/noun-svg/106561.svg?Expires=1449253440&Signature=W261UUAAP0zYUJxKPHstQUXpyZg40iy8p8nvBHJcqSzpW-A1isKPMsngJWXkW5EgxhHHDYL-K3-WEpKqUEhj82OIIC0mk6unxiTD0ZWVGR3SPo~02IinHKq-8O16gCFUly25Hs~wVuQs5716TZocmrWHdnr8EmJx0NX0AJgZFOU_&Key-Pair-Id=APKAI5ZVHAXN65CHVU2Q'
         };
 
         marker = new google.maps.Marker(markerOptions);
@@ -263,6 +263,7 @@ var listMap = function listMap($state, ListTourService) {
 
         google.maps.event.addListener(marker, 'click', function () {
           // close window if not undefined
+          var pos = marker.position;
           if (infoWindow !== void 0) {
             infoWindow.close();
           }
@@ -272,8 +273,25 @@ var listMap = function listMap($state, ListTourService) {
           };
           infoWindow = new google.maps.InfoWindow(infoWindowOptions);
           infoWindow.open(map, marker);
+
+          function clearOtherMarkers(pos) {
+            setMapOnAll(null);
+            for (var i = 0; i < markers.length; i++) {
+              if (markers[i].position !== position) {
+                //Remove the marker from Map                 
+                markers[i].setMap(null);
+                return;
+              }
+            }
+          }
         });
       }
+
+      // function setMapOnAll(map) {
+      //   for (var i = 0; i < markers.length; i++) {
+      //     markers[i].setMap(map);
+      //   }
+      // }
 
       // show the map and place some markers
       initMap();
@@ -492,7 +510,10 @@ _angular2['default'].module('app', ['ui.router', 'mm.foundation', 'ngCookies']).
   CONFIG: {
     headers: {}
   }
-}).config(_config2['default']).constant('devURL', ' https://fathomless-savannah-6575.herokuapp.com/').constant('glocURL', 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBH5nVGZJ9PpIikitg1Q9x11xrSgg3JRlw').constant('gmapURL', 'url').service('ListTourService', _servicesListToursService2['default']).service('UserService', _servicesUserService2['default']).service('NewTourService', _servicesNewTourService2['default']).controller('HomeController', _controllersHomeController2['default']).controller('NewTourController', _controllersNewTourController2['default']).controller('LoginController', _controllersLoginController2['default']).controller('SignupController', _controllersSignupController2['default']).controller('ListTourController', _controllersListToursController2['default']).directive('newMap', _directivesNewMapDirective2['default']).directive('listMap', _directivesListMapDirective2['default']);
+}).config(_config2['default']).constant('devURL', ' https://fathomless-savannah-6575.herokuapp.com/')
+// .constant('glocURL', 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBH5nVGZJ9PpIikitg1Q9x11xrSgg3JRlw')
+// .constant('gmapURL', 'url')
+.service('ListTourService', _servicesListToursService2['default']).service('UserService', _servicesUserService2['default']).service('NewTourService', _servicesNewTourService2['default']).controller('HomeController', _controllersHomeController2['default']).controller('NewTourController', _controllersNewTourController2['default']).controller('LoginController', _controllersLoginController2['default']).controller('SignupController', _controllersSignupController2['default']).controller('ListTourController', _controllersListToursController2['default']).directive('newMap', _directivesNewMapDirective2['default']).directive('listMap', _directivesListMapDirective2['default']);
 
 window.initMap = function () {
   _angular2['default'].bootstrap(document, ['app']);
