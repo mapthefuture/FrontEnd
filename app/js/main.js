@@ -9,7 +9,7 @@ var config = function config($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/');
 
   $stateProvider.state('root', {
-    abstract: true,
+    controller: 'LogoutController',
     templateUrl: 'templates/layout.tpl.html'
   }).state('root.home', {
     url: '/',
@@ -117,6 +117,24 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+var LogoutController = function LogoutController($scope, UserService, $cookies, $state) {
+
+  $scope.logout = function () {
+    UserService.logout();
+  };
+};
+
+LogoutController.$inject = ['$scope', 'UserService', '$cookies', '$state'];
+
+exports['default'] = LogoutController;
+module.exports = exports['default'];
+
+},{}],6:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 var NewTourController = function NewTourController($scope, $http, NewTourService) {
 
   var vm = this;
@@ -157,7 +175,7 @@ NewTourController.$inject = ['$scope', '$http', 'NewTourService'];
 exports['default'] = NewTourController;
 module.exports = exports['default'];
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -177,7 +195,7 @@ SignupController.$inject = ['$scope', 'UserService', '$cookies', '$state'];
 exports['default'] = SignupController;
 module.exports = exports['default'];
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -249,7 +267,7 @@ listMap.$inject = ['$state'];
 exports['default'] = listMap;
 module.exports = exports['default'];
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -278,8 +296,6 @@ var newMap = function newMap($state, NewTourService, $compile) {
           map.setCenter(initialLocation);
         });
       }
-
-      // var sites = [];
 
       // map config
       var mapOptions = {
@@ -320,10 +336,6 @@ var newMap = function newMap($state, NewTourService, $compile) {
         var lon = marker.getPosition().lng();
 
         // map.panTo(latLng);
-
-        // adds markers to array
-        // sites.push(site);
-        // console.log(sites);
 
         var contentString = '<div class="markerForm" ng-controller="NewTourController">\n            <form class="newForm" ng-submit="vm.submitForm(site)">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <input type="checkbox">Is this the tour start?\n              <button>Submit</button>\n              {{lat}}\n            </form>\n          </div>';
         var compiled = $compile(contentString);
@@ -367,7 +379,7 @@ newMap.$inject = ['$state', 'NewTourService', '$compile'];
 exports['default'] = newMap;
 module.exports = exports['default'];
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -420,6 +432,10 @@ var _controllersLoginController = require('./controllers/login.controller');
 
 var _controllersLoginController2 = _interopRequireDefault(_controllersLoginController);
 
+var _controllersLogoutController = require('./controllers/logout.controller');
+
+var _controllersLogoutController2 = _interopRequireDefault(_controllersLogoutController);
+
 var _controllersSignupController = require('./controllers/signup.controller');
 
 var _controllersSignupController2 = _interopRequireDefault(_controllersSignupController);
@@ -439,13 +455,13 @@ _angular2['default'].module('app', ['ui.router', 'mm.foundation', 'ngCookies']).
   CONFIG: {
     headers: {}
   }
-}).config(_config2['default']).constant('devURL', ' https://fathomless-savannah-6575.herokuapp.com/').constant('glocURL', 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBH5nVGZJ9PpIikitg1Q9x11xrSgg3JRlw').constant('gmapURL', 'url').service('ListTourService', _servicesListToursService2['default']).service('UserService', _servicesUserService2['default']).service('NewTourService', _servicesNewTourService2['default']).controller('HomeController', _controllersHomeController2['default']).controller('NewTourController', _controllersNewTourController2['default']).controller('LoginController', _controllersLoginController2['default']).controller('SignupController', _controllersSignupController2['default']).controller('ListTourController', _controllersListToursController2['default']).directive('newMap', _directivesNewMapDirective2['default']).directive('listMap', _directivesListMapDirective2['default']);
+}).config(_config2['default']).constant('devURL', ' https://fathomless-savannah-6575.herokuapp.com/').constant('glocURL', 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBH5nVGZJ9PpIikitg1Q9x11xrSgg3JRlw').constant('gmapURL', 'url').service('ListTourService', _servicesListToursService2['default']).service('UserService', _servicesUserService2['default']).service('NewTourService', _servicesNewTourService2['default']).controller('HomeController', _controllersHomeController2['default']).controller('NewTourController', _controllersNewTourController2['default']).controller('LoginController', _controllersLoginController2['default']).controller('LogoutController', _controllersLogoutController2['default']).controller('SignupController', _controllersSignupController2['default']).controller('ListTourController', _controllersListToursController2['default']).directive('newMap', _directivesNewMapDirective2['default']).directive('listMap', _directivesListMapDirective2['default']);
 
 window.initMap = function () {
   _angular2['default'].bootstrap(document, ['app']);
 };
 
-},{"./config":1,"./controllers/home.controller":2,"./controllers/listTours.controller":3,"./controllers/login.controller":4,"./controllers/newTour.controller":5,"./controllers/signup.controller":6,"./directives/listMap.directive":7,"./directives/newMap.directive":8,"./services/listTours.service":10,"./services/newTour.service":11,"./services/user.service":12,"angular":18,"angular-cookies":14,"angular-foundation":15,"angular-ui-router":16}],10:[function(require,module,exports){
+},{"./config":1,"./controllers/home.controller":2,"./controllers/listTours.controller":3,"./controllers/login.controller":4,"./controllers/logout.controller":5,"./controllers/newTour.controller":6,"./controllers/signup.controller":7,"./directives/listMap.directive":8,"./directives/newMap.directive":9,"./services/listTours.service":11,"./services/newTour.service":12,"./services/user.service":13,"angular":19,"angular-cookies":15,"angular-foundation":16,"angular-ui-router":17}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -463,7 +479,7 @@ ListTourService.$inject = ['$stateParams', '$http'];
 exports['default'] = ListTourService;
 module.exports = exports['default'];
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -480,7 +496,7 @@ var NewTourService = function NewTourService($http, SERVER) {
     if (token) {
       return $http.get(SERVER.URL + 'check', SERVER.CONFIG);
     } else {
-      // $state.go('root.login');
+      $state.go('root.login');
     }
   };
 
@@ -496,13 +512,9 @@ var NewTourService = function NewTourService($http, SERVER) {
   function submitForm(siteObj) {
     console.log(siteObj);
     var s = new Site(siteObj);
-    return $http.post(SERVER.URL + '/tours/:id/sites', siteObj, SERVER.CONFIG);
+    console.log(s);
+    return $http.post(SERVER.URL + '/tours/:id/sites', s, SERVER.CONFIG);
   }
-
-  this.submitFormSuccess = function (res) {
-    $cookies.put('authToken', res.data.auth_token);
-    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
-  };
 };
 
 NewTourService.$inject = ['$http', 'SERVER'];
@@ -510,7 +522,7 @@ NewTourService.$inject = ['$http', 'SERVER'];
 exports['default'] = NewTourService;
 module.exports = exports['default'];
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -524,8 +536,6 @@ var _jquery = require('jquery');
 var _jquery2 = _interopRequireDefault(_jquery);
 
 var UserService = function UserService($http, SERVER, $cookies, $state) {
-
-  console.log(SERVER);
 
   this.checkAuth = function () {
 
@@ -567,7 +577,9 @@ var UserService = function UserService($http, SERVER, $cookies, $state) {
   this.logout = function () {
     $cookies.remove('authToken');
     SERVER.CONFIG.headers['X-AUTH-TOKEN'] = null;
-    $state.go('root.login');
+    (0, _jquery2['default'])('.logout').toggleClass("display");
+    (0, _jquery2['default'])('.login').toggleClass("donotdisplay");
+    (0, _jquery2['default'])('.signup').toggleClass("donotdisplay");
   };
 };
 
@@ -576,7 +588,7 @@ UserService.$inject = ['$http', 'SERVER', '$cookies', '$state'];
 exports['default'] = UserService;
 module.exports = exports['default'];
 
-},{"jquery":19}],13:[function(require,module,exports){
+},{"jquery":20}],14:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.8
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -899,11 +911,11 @@ angular.module('ngCookies').provider('$$cookieWriter', function $$CookieWriterPr
 
 })(window, window.angular);
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 require('./angular-cookies');
 module.exports = 'ngCookies';
 
-},{"./angular-cookies":13}],15:[function(require,module,exports){
+},{"./angular-cookies":14}],16:[function(require,module,exports){
 /*
  * angular-mm-foundation
  * http://pineconellc.github.io/angular-foundation/
@@ -4519,7 +4531,7 @@ angular.module("template/typeahead/typeahead-popup.html", []).run(["$templateCac
     "");
 }]);
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 /**
  * State-based routing for AngularJS
  * @version v0.2.15
@@ -8890,7 +8902,7 @@ angular.module('ui.router.state')
   .filter('isState', $IsStateFilter)
   .filter('includedByState', $IncludedByStateFilter);
 })(window, window.angular);
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.8
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -37909,11 +37921,11 @@ $provide.value("$locale", {
 })(window, document);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":17}],19:[function(require,module,exports){
+},{"./angular":18}],20:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.4
  * http://jquery.com/
@@ -47125,7 +47137,7 @@ return jQuery;
 
 }));
 
-},{}]},{},[9])
+},{}]},{},[10])
 
 
 //# sourceMappingURL=main.js.map

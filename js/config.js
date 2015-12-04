@@ -4,7 +4,7 @@ let config = function($stateProvider, $urlRouterProvider) {
 
   $stateProvider
     .state('root', {
-      abstract: true,
+      controller: 'LogoutController',
       templateUrl: 'templates/layout.tpl.html'
     })
     .state('root.home', {
