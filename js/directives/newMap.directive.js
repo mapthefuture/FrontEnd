@@ -21,6 +21,9 @@ let newMap = function($state, NewTourService, $compile) {
           map.setCenter(initialLocation);
         });
       } 
+
+      var markers = [];
+      var uniqueId = 1;
         
       // map config
       var mapOptions = {
@@ -62,11 +65,24 @@ let newMap = function($state, NewTourService, $compile) {
           icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
         });
 
+        // set unique id
+        marker.id = uniqueId;
+        uniqueId++;
+
         var lat = marker.getPosition().lat();
         var lon = marker.getPosition().lng();
 
+        NewTourService.markerData = {
+          latitude: lat,
+          longitude: lon,
+          id: marker.id
+        };
+
         // map.panTo(latLng);
         
+        // adds markers to array
+        markers.push(marker); 
+
         var contentString = 
         `<div class="markerForm" ng-controller="NewTourController">
             <form class="newForm" ng-submit="vm.submitForm(site)">
@@ -74,7 +90,6 @@ let newMap = function($state, NewTourService, $compile) {
               <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>
               <input type="checkbox">Is this the tour start?
               <button>Submit</button>
-              {{lat}}
             </form>
           </div>`;
         var compiled = $compile(contentString);
@@ -88,19 +103,6 @@ let newMap = function($state, NewTourService, $compile) {
           infoWindow.open(map, marker);
         });
  
-            
-        // google.maps.event.addListener(marker, 'click', function () {
-        //   // close window if not undefined
-        //   if (infoWindow !== void 0) {
-        //     infoWindow.close();
-        //   }
-        //   // create new window
-        //   var infoWindowOptions = {
-        //     content: content
-        //   };
-        //   infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-        //   infoWindow.open(map, marker);
-        // });
       }
 
       // show the map

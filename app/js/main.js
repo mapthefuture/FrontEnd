@@ -142,7 +142,6 @@ var NewTourController = function NewTourController($scope, $http, NewTourService
   vm.submitForm = submitForm;
 
   function submitForm(siteObj) {
-    console.log("Peanut Butter");
     NewTourService.submitForm(siteObj).then(function (res) {
       NewTourService.submitFormSuccess(res);
       console.log(res);
@@ -297,6 +296,9 @@ var newMap = function newMap($state, NewTourService, $compile) {
         });
       }
 
+      var markers = [];
+      var uniqueId = 1;
+
       // map config
       var mapOptions = {
         center: initialLocation,
@@ -332,12 +334,25 @@ var newMap = function newMap($state, NewTourService, $compile) {
           icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
         });
 
+        // set unique id
+        marker.id = uniqueId;
+        uniqueId++;
+
         var lat = marker.getPosition().lat();
         var lon = marker.getPosition().lng();
 
+        NewTourService.markerData = {
+          latitude: lat,
+          longitude: lon,
+          id: marker.id
+        };
+
         // map.panTo(latLng);
 
-        var contentString = '<div class="markerForm" ng-controller="NewTourController">\n            <form class="newForm" ng-submit="vm.submitForm(site)">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <input type="checkbox">Is this the tour start?\n              <button>Submit</button>\n              {{lat}}\n            </form>\n          </div>';
+        // adds markers to array
+        markers.push(marker);
+
+        var contentString = '<div class="markerForm" ng-controller="NewTourController">\n            <form class="newForm" ng-submit="vm.submitForm(site)">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <input type="checkbox">Is this the tour start?\n              <button>Submit</button>\n            </form>\n          </div>';
         var compiled = $compile(contentString);
         var scopedHTML = compiled(scope);
 
@@ -348,19 +363,6 @@ var newMap = function newMap($state, NewTourService, $compile) {
         marker.addListener('click', function () {
           infoWindow.open(map, marker);
         });
-
-        // google.maps.event.addListener(marker, 'click', function () {
-        //   // close window if not undefined
-        //   if (infoWindow !== void 0) {
-        //     infoWindow.close();
-        //   }
-        //   // create new window
-        //   var infoWindowOptions = {
-        //     content: content
-        //   };
-        //   infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-        //   infoWindow.open(map, marker);
-        // });
       }
 
       // show the map
@@ -485,11 +487,14 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var NewTourService = function NewTourService($http, SERVER) {
+var NewTourService = function NewTourService($http, SERVER, $cookies) {
+
+  this.markerData = {};
 
   this.checkAuth = function () {
 
     var token = $cookies.get('authToken');
+    console.log(token);
 
     SERVER.CONFIG.headers['X-AUTH-TOKEN'] = token;
 
@@ -502,22 +507,27 @@ var NewTourService = function NewTourService($http, SERVER) {
 
   this.submitForm = submitForm;
 
-  function Site(siteObj) {
+  function site(siteObj) {
     this.title = siteObj.title;
     this.description = siteObj.description;
-    // this.lat = siteObj.lat;
-    // this.lon = siteObj.lon;
   }
 
   function submitForm(siteObj) {
-    console.log(siteObj);
-    var s = new Site(siteObj);
-    console.log(s);
-    return $http.post(SERVER.URL + '/tours/:id/sites', s, SERVER.CONFIG);
+    var s = new site(siteObj);
+    var c = this.markerData;
+
+    for (var latitude in c) {
+      s[latitude] = c[latitude];
+    }
+    for (var longitude in c) {
+      s[longitude] = c[longitude];
+    }
+
+    return $http.post(SERVER.URL + '/tours/:' + c.id + '/sites', s, SERVER.CONFIG);
   }
 };
 
-NewTourService.$inject = ['$http', 'SERVER'];
+NewTourService.$inject = ['$http', 'SERVER', '$cookies'];
 
 exports['default'] = NewTourService;
 module.exports = exports['default'];
