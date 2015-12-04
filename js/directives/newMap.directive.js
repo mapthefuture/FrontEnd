@@ -108,7 +108,6 @@ let newMap = function($state, NewTourService, $compile) {
       // show the map
       initMap();
 
-
       // Place marker where clicked
       map.addListener('click', function(e) {
         setMarker(map, e.latLng);

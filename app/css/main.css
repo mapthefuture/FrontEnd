@@ -6440,7 +6440,8 @@ div.ng-scope {
       width: 250px; }
 
 .newForm {
-  margin: 15px auto; }
+  margin: 15px auto;
+  text-align: center; }
   .newForm form {
     border-radius: 5px;
     padding: 25px; }

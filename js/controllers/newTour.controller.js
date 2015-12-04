@@ -11,6 +11,13 @@ let NewTourController = function($scope, $http, NewTourService) {
     });
   }
 
+  // function submitTourForm (siteObj) {
+  //   NewTourService.submitTourForm(siteObj).then( (res) => {
+  //     NewTourService.submitFormSuccess(res);
+  //     console.log(res);
+  //   });
+  // }
+
   // $scope.login = function (user) {
   //   UserService.sendLogin(user).then( (res) => {
   //     UserService.loginSuccess(res);
