@@ -30,7 +30,7 @@ let NewTourService = function($http, SERVER, $cookies) {
 
     for (var latitude in c) { s[latitude] = c[latitude]; }
     for (var longitude in c) { s[longitude] = c[longitude]; }
-
+    console.log(s);
     return $http.post(SERVER.URL + '/tours/:' + c.id + '/sites', s, SERVER.CONFIG);
   }
 
