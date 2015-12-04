@@ -1,4 +1,4 @@
-let newMap = function($state, NewTourService, $compile) {
+let newMap = function($state, TourService, $compile) {
   
   return {
     restrict: 'EA',
@@ -72,7 +72,7 @@ let newMap = function($state, NewTourService, $compile) {
         var lat = marker.getPosition().lat();
         var lon = marker.getPosition().lng();
 
-        NewTourService.markerData = {
+        TourService.markerData = {
           latitude: lat,
           longitude: lon,
           id: marker.id
@@ -117,6 +117,6 @@ let newMap = function($state, NewTourService, $compile) {
   };
 };
 
-newMap.$inject = ['$state', 'NewTourService', '$compile'];
+newMap.$inject = ['$state', 'TourService', '$compile'];
 
 export default newMap;

@@ -1,4 +1,4 @@
-let listMap = function($state, ListTourService) {
+let listMap = function($state, TourService) {
   
   return {
     restrict: 'A',
@@ -95,7 +95,7 @@ let listMap = function($state, ListTourService) {
       initMap();
 
       /* Load markers code */
-      ListTourService.areaTours().then((res) =>{
+      TourService.areaTours().then((res) =>{
         console.log(res);
         var tours = res.data.tours;
 
@@ -108,6 +108,6 @@ let listMap = function($state, ListTourService) {
 
 };
 
-listMap.$inject = ['$state', 'ListTourService'];
+listMap.$inject = ['$state', 'TourService'];
 
 export default listMap;

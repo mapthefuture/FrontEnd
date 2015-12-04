@@ -8,8 +8,7 @@ import config from './config';
 
 // Import Services
 import UserService from './services/user.service';
-import ListTourService from './services/listTours.service';
-import NewTourService from './services/newTour.service';
+import TourService from './services/tour.service';
 
 // Import Controllers
 import HomeController from './controllers/home.controller';
@@ -35,9 +34,8 @@ angular
   .constant('devURL', ' https://fathomless-savannah-6575.herokuapp.com/')
   // .constant('glocURL', 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBH5nVGZJ9PpIikitg1Q9x11xrSgg3JRlw')
   // .constant('gmapURL', 'url')
-  .service('ListTourService', ListTourService)
+  .service('TourService', TourService)
   .service('UserService', UserService)
-  .service('NewTourService', NewTourService)
   .controller('HomeController', HomeController)
   .controller('NewTourController', NewTourController)
   .controller('LoginController', LoginController)

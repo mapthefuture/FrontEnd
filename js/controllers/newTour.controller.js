@@ -1,19 +1,19 @@
-let NewTourController = function($scope, $http, NewTourService) {
+let NewTourController = function($scope, $http, TourService) {
   
   let vm = this;
 
   vm.submitForm = submitForm;
 
   function submitForm (siteObj) {
-    NewTourService.submitForm(siteObj).then( (res) => {
-      NewTourService.submitFormSuccess(res);
+    TourService.submitForm(siteObj).then( (res) => {
+      TourService.submitFormSuccess(res);
       console.log(res);
     });
   }
 
   // function submitTourForm (siteObj) {
-  //   NewTourService.submitTourForm(siteObj).then( (res) => {
-  //     NewTourService.submitFormSuccess(res);
+  //   TourService.submitTourForm(siteObj).then( (res) => {
+  //     TourService.submitFormSuccess(res);
   //     console.log(res);
   //   });
   // }
@@ -40,6 +40,6 @@ let NewTourController = function($scope, $http, NewTourService) {
 
 };
 
-NewTourController.$inject = ['$scope', '$http', 'NewTourService'];
+NewTourController.$inject = ['$scope', '$http', 'TourService'];
 
 export default NewTourController;
