@@ -5,7 +5,6 @@ let NewTourController = function($scope, $http, NewTourService) {
   vm.submitForm = submitForm;
 
   function submitForm (siteObj) {
-    console.log("Peanut Butter");
     NewTourService.submitForm(siteObj).then( (res) => {
       NewTourService.submitFormSuccess(res);
       console.log(res);
