@@ -46,6 +46,18 @@ div.ng-scope {
   height: 100%;
 }
 
+.logout {
+  display: none;
+}
+
+.display {
+  display: inline-block;
+}
+
+.donotdisplay {
+  display: none;
+}
+
 .homeWrapper {
   height: 100%;
 
@@ -72,9 +84,10 @@ div.ng-scope {
 
 .newForm {
   margin: 15px auto;
+  text-align: center;
 
   form {
-    border: 3px solid black;
+    // border: 3px solid black;
     border-radius: 5px;
     padding: 25px;
 
@@ -87,7 +100,6 @@ div.ng-scope {
       width: 20vw;
       height: 100%;
     }
-
   }
 }
 

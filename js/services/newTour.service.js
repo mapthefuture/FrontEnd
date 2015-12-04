@@ -1,23 +1,41 @@
-let NewTourService = function($http) {
+let NewTourService = function($http, SERVER, $cookies) {
+
+  this.markerData = {};
   
-  // let url = PARSE.URL + 'classes/photo';
+  this.checkAuth = function () {
+
+    let token = $cookies.get('authToken');
+    console.log(token);
+
+    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = token;
+    
+    if (token) {
+      return $http.get(SERVER.URL + 'check', SERVER.CONFIG);
+    } else {
+      $state.go('root.login');
+    }
+
+  };
 
   this.submitForm = submitForm;
 
-  function Site (siteObj) {
+  function site (siteObj) {
     this.title = siteObj.title;
     this.description = siteObj.description;
-    // this.lat = siteObj.lat;
-    // this.lon = siteObj.lon;
   }
 
   function submitForm (siteObj) {
-    let s = new Site(siteObj);
-    // return $http.post(url, s, PARSE.CONFIG);
+    let s = new site(siteObj);
+    let c = this.markerData;
+
+    for (var latitude in c) { s[latitude] = c[latitude]; }
+    for (var longitude in c) { s[longitude] = c[longitude]; }
+    console.log(s);
+    return $http.post(SERVER.URL + '/tours/:' + c.id + '/sites', s, SERVER.CONFIG);
   }
 
 };
 
-NewTourService.$inject = ['$http'];
+NewTourService.$inject = ['$http', 'SERVER', '$cookies'];
 
 export default NewTourService;

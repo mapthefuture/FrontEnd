@@ -1,6 +1,7 @@
-let UserService = function($http, SERVER, $cookies, $state) {
+import jquery from 'jquery';
 
-  // console.log(SERVER);
+
+let UserService = function($http, SERVER, $cookies, $state) {
   
   this.checkAuth = function () {
 
@@ -17,6 +18,7 @@ let UserService = function($http, SERVER, $cookies, $state) {
   };
 
   this.sendLogin = function (userObj) {
+    console.log(userObj);
     return $http.post(SERVER.URL + '/user/show', userObj, SERVER.CONFIG);
   };
 
@@ -28,6 +30,9 @@ let UserService = function($http, SERVER, $cookies, $state) {
     $cookies.put('authToken', res.data.auth_token);
     SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
     $state.go('root.home');
+    jquery('.logout').toggleClass("display");
+    jquery('.login').toggleClass("donotdisplay");
+    jquery('.signup').toggleClass("donotdisplay");
   };
 
   this.signupSuccess = function (res) {
@@ -39,7 +44,9 @@ let UserService = function($http, SERVER, $cookies, $state) {
   this.logout = function () {
     $cookies.remove('authToken');
     SERVER.CONFIG.headers['X-AUTH-TOKEN'] = null;
-    $state.go('root.login');
+    jquery('.logout').toggleClass("display");
+    jquery('.login').toggleClass("donotdisplay");
+    jquery('.signup').toggleClass("donotdisplay");
   };
 
 };

@@ -1,4 +1,4 @@
-let newMap = function($state, NewTourService) {
+let newMap = function($state, NewTourService, $compile) {
   
   return {
     restrict: 'EA',
@@ -22,14 +22,17 @@ let newMap = function($state, NewTourService) {
         });
       }
 
-      // var sites = [];
+      var markers = [];
+      var uniqueId = 1;
         
       // map config
       var mapOptions = {
         center: initialLocation,
         zoom: 30,
         mapTypeId: google.maps.MapTypeId.HYBRID,
-        scrollwheel: false,
+        // scrollwheel: false,
+        streetViewControl: false,
+
         styles: [{
           featureType: "poi",
           stylers: [
@@ -62,26 +65,26 @@ let newMap = function($state, NewTourService) {
           icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
         });
 
+        // set unique id
+        marker.id = uniqueId;
+        uniqueId++;
+
         var lat = marker.getPosition().lat();
         var lon = marker.getPosition().lng();
 
-        // var site = {
-        //   // id:
-        //   // tour_id:
-        //   title: title,
-        //   description: description,
-        //   lat: lat,
-        //   lon: lon,
-        // };
+        NewTourService.markerData = {
+          latitude: lat,
+          longitude: lon,
+          id: marker.id
+        };
 
         // map.panTo(latLng);
         
         // adds markers to array
-        // sites.push(site); 
-        // console.log(sites);
+        markers.push(marker); 
 
-        var contentString = `
-          <div class="markerForm">
+        var contentString = 
+        `<div class="markerForm" ng-controller="NewTourController">
             <form class="newForm" ng-submit="vm.submitForm(site)">
               <input ng-model="site.title" type="text" placeholder="Title">
               <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>
@@ -89,43 +92,31 @@ let newMap = function($state, NewTourService) {
               <button>Submit</button>
             </form>
           </div>`;
+        var compiled = $compile(contentString);
+        var scopedHTML = compiled(scope);
 
         var infoWindow = new google.maps.InfoWindow({
-          content: contentString
+          content: scopedHTML[0]
         });
 
-        infoWindow.open(map, marker);
-        console.log(scope);
-        scope.$apply();
-            
-        // google.maps.event.addListener(marker, 'click', function () {
-        //   // close window if not undefined
-        //   if (infoWindow !== void 0) {
-        //     infoWindow.close();
-        //   }
-        //   // create new window
-        //   var infoWindowOptions = {
-        //     content: content
-        //   };
-        //   infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-        //   infoWindow.open(map, marker);
-        // });
+        marker.addListener('click', function() {
+          infoWindow.open(map, marker);
+        });
+ 
       }
 
       // show the map
       initMap();
 
-
       // Place marker where clicked
       map.addListener('click', function(e) {
         setMarker(map, e.latLng);
-        // angular.element(this).children().children(".clicked").toggleClass("display");
       }); 
 
     }
   };
 };
 
-newMap.$inject = ['$state', 'NewTourService'];
+newMap.$inject = ['$state', 'NewTourService', '$compile'];
 
 export default newMap;

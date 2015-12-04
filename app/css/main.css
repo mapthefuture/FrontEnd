@@ -6416,6 +6416,15 @@ body {
 div.ng-scope {
   height: 100%; }
 
+.logout {
+  display: none; }
+
+.display {
+  display: inline-block; }
+
+.donotdisplay {
+  display: none; }
+
 .homeWrapper {
   height: 100%; }
   .homeWrapper h2 {
@@ -6432,9 +6441,9 @@ div.ng-scope {
       width: 250px; }
 
 .newForm {
-  margin: 15px auto; }
+  margin: 15px auto;
+  text-align: center; }
   .newForm form {
-    border: 3px solid black;
     border-radius: 5px;
     padding: 25px; }
     .newForm form input {
