@@ -9,7 +9,7 @@ let NewTourService = function($http, SERVER) {
     if (token) {
       return $http.get(SERVER.URL + 'check', SERVER.CONFIG);
     } else {
-      // $state.go('root.login');
+      $state.go('root.login');
     }
 
   };
@@ -26,13 +26,9 @@ let NewTourService = function($http, SERVER) {
   function submitForm (siteObj) {
     console.log(siteObj);
     let s = new Site(siteObj);
-    return $http.post(SERVER.URL + '/tours/:id/sites', siteObj, SERVER.CONFIG);
+    console.log(s);
+    return $http.post(SERVER.URL + '/tours/:id/sites', s, SERVER.CONFIG);
   }
-
-  this.submitFormSuccess = function (res) {
-    $cookies.put('authToken', res.data.auth_token);
-    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
-  };
 
 };
 

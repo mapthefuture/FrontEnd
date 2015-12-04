@@ -21,8 +21,6 @@ let newMap = function($state, NewTourService, $compile) {
           map.setCenter(initialLocation);
         });
       } 
-
-      // var sites = [];
         
       // map config
       var mapOptions = {
@@ -69,10 +67,6 @@ let newMap = function($state, NewTourService, $compile) {
 
         // map.panTo(latLng);
         
-        // adds markers to array
-        // sites.push(site); 
-        // console.log(sites);
-
         var contentString = 
         `<div class="markerForm" ng-controller="NewTourController">
             <form class="newForm" ng-submit="vm.submitForm(site)">

@@ -1,8 +1,6 @@
 import jquery from 'jquery';
 
 let UserService = function($http, SERVER, $cookies, $state) {
-
-  console.log(SERVER);
   
   this.checkAuth = function () {
 
@@ -45,7 +43,9 @@ let UserService = function($http, SERVER, $cookies, $state) {
   this.logout = function () {
     $cookies.remove('authToken');
     SERVER.CONFIG.headers['X-AUTH-TOKEN'] = null;
-    $state.go('root.login');
+    jquery('.logout').toggleClass("display");
+    jquery('.login').toggleClass("donotdisplay");
+    jquery('.signup').toggleClass("donotdisplay");
   };
 
 };
