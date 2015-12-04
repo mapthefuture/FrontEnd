@@ -254,7 +254,8 @@ var listMap = function listMap($state, ListTourService) {
           position: pos,
           map: map,
           title: title,
-          icon: 'https://d30y9cdsu7xlg0.cloudfront.net/png/106561-200.png'
+          draggable: true,
+          icon: 'https://d30y9cdsu7xlg0.cloudfront.net/noun-svg/106561.svg?Expires=1449182108&Signature=gkdTF5u4~q03OwNhihL5ECqO84HOENuuul0B1yywnXsbuiLdFhc5IW3buZKn~eU~s29QW5El8bUpMhgnEAOD~xI~jPmN5I3hZ2IaPGM4FzXxc9rDsBB6aV3P0Hf7kUDJiN9GkjXesqXAE8gXwfXQFXhwtUwbW0fcue6EC2wYPVU_&Key-Pair-Id=APKAI5ZVHAXN65CHVU2Q'
         };
 
         marker = new google.maps.Marker(markerOptions);
