@@ -277,7 +277,7 @@ var listMap = function listMap($state, ListTourService) {
           function clearOtherMarkers(pos) {
             setMapOnAll(null);
             for (var i = 0; i < markers.length; i++) {
-              if (markers[i].position !== position) {
+              if (markers[i].pos !== pos) {
                 //Remove the marker from Map                 
                 markers[i].setMap(null);
                 return;
