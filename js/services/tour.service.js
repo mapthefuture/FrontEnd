@@ -1,23 +1,16 @@
-let NewTourService = function($http, SERVER, $cookies) {
-
-  this.markerData = {};
+let TourService = function(UserService, $stateParams, $http, devURL, SERVER) {
   
-  this.checkAuth = function () {
-
-    let token = $cookies.get('authToken');
-    console.log(token);
-
-    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = token;
-    
-    if (token) {
-      return $http.get(SERVER.URL + 'check', SERVER.CONFIG);
-    } else {
-      $state.go('root.login');
-    }
-
-  };
-
+  this.areaTours = areaTours;
+  this.markerData = {};
   this.submitForm = submitForm;
+
+  function areaTours() {
+    let getURL = devURL + 'tours';
+    return $http({
+      method: 'GET',
+      url: getURL
+    });
+  }
 
   function site (siteObj) {
     this.title = siteObj.title;
@@ -36,6 +29,6 @@ let NewTourService = function($http, SERVER, $cookies) {
 
 };
 
-NewTourService.$inject = ['$http', 'SERVER', '$cookies'];
+TourService.$inject = ['UserService', '$stateParams', '$http', 'devURL', 'SERVER'];
 
-export default NewTourService;
+export default TourService;

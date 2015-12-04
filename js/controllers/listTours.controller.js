@@ -1,10 +1,10 @@
-let ListTourController = function($stateParams, ListTourService) {
+let ListTourController = function($stateParams, TourService) {
   
   let vm = this;
   vm.allTours = [];
   vm.tourMarkers = [];
 
-  ListTourService.areaTours().then((res) => {
+  TourService.areaTours().then((res) => {
     vm.allTours = res.data.tours;
     // console.log(vm.allTours);
   });
@@ -19,13 +19,13 @@ let ListTourController = function($stateParams, ListTourService) {
   };
 
   // vm.allTours.forEach(tour, function(tour){
-  //   ListTourService.getMarkers(tour).then((res) =>{
+  //   TourService.getMarkers(tour).then((res) =>{
   //     vm.tourMarkers = res.data;
   //   });
   // });
 
 };
 
-ListTourController.$inject = ['$stateParams', 'ListTourService'];
+ListTourController.$inject = ['$stateParams', 'TourService'];
 
 export default ListTourController;
