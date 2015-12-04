@@ -29,7 +29,7 @@ var config = function config($stateProvider, $urlRouterProvider) {
     templateUrl: 'templates/signup.tpl.html'
   }).state('root.list', {
     url: '/list',
-    controller: 'ListTourController',
+    controller: 'ListTourController as vm',
     templateUrl: 'templates/listTours.tpl.html'
   });
 };
@@ -84,9 +84,33 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var ListTourController = function ListTourController($scope, ListTourService) {};
+var ListTourController = function ListTourController($stateParams, ListTourService) {
 
-ListTourController.$inject = ['$scope', 'ListTourService'];
+  var vm = this;
+  vm.allTours = [];
+  vm.tourMarkers = [];
+
+  ListTourService.areaTours().then(function (res) {
+    vm.allTours = res.data.tours;
+    // console.log(vm.allTours);
+  });
+
+  // Editing CSS Styles on-click
+  vm.selectedIndex = -1;
+
+  vm.clickedTour = function ($index) {
+    // console.log($index);
+    vm.selectedIndex = $index;
+  };
+
+  // vm.allTours.forEach(tour, function(tour){
+  //   ListTourService.getMarkers(tour).then((res) =>{
+  //     vm.tourMarkers = res.data;
+  //   });
+  // });
+};
+
+ListTourController.$inject = ['$stateParams', 'ListTourService'];
 
 exports['default'] = ListTourController;
 module.exports = exports['default'];
@@ -207,7 +231,7 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var listMap = function listMap($state) {
+var listMap = function listMap($state, ListTourService) {
 
   return {
     restrict: 'A',
@@ -217,13 +241,29 @@ var listMap = function listMap($state) {
     link: function link(scope, element, attrs) {
       var map, infoWindow;
       var markers = [];
+      var initialLocation;
+
+      // Find location
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(function (pos) {
+          initialLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+          map.setCenter(initialLocation);
+        });
+      }
 
       // map config
       var mapOptions = {
-        center: new google.maps.LatLng(51.508515, -0.125487), /*User's Geolocation*/
-        zoom: 10, /*Change based on responsive*/
+        center: initialLocation,
+        zoom: 12,
         mapTypeId: google.maps.MapTypeId.HYBRID,
-        scrollwheel: false
+        scrollwheel: false,
+        styles: [{
+          featureType: "poi",
+          stylers: [{ visibility: "off" }]
+        }, {
+          featureType: "transit",
+          stylers: [{ visibility: "off" }]
+        }]
       };
 
       // Map initialization
@@ -234,13 +274,14 @@ var listMap = function listMap($state) {
       }
 
       // place a marker
-      function setMarker(map, position, title, content) {
+      function setMarker(map, pos, title, content) {
         var marker;
         var markerOptions = {
-          position: position,
+          position: pos,
           map: map,
           title: title,
-          icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
+          draggable: true,
+          icon: 'https://d30y9cdsu7xlg0.cloudfront.net/noun-svg/106561.svg?Expires=1449253440&Signature=W261UUAAP0zYUJxKPHstQUXpyZg40iy8p8nvBHJcqSzpW-A1isKPMsngJWXkW5EgxhHHDYL-K3-WEpKqUEhj82OIIC0mk6unxiTD0ZWVGR3SPo~02IinHKq-8O16gCFUly25Hs~wVuQs5716TZocmrWHdnr8EmJx0NX0AJgZFOU_&Key-Pair-Id=APKAI5ZVHAXN65CHVU2Q'
         };
 
         marker = new google.maps.Marker(markerOptions);
@@ -248,6 +289,7 @@ var listMap = function listMap($state) {
 
         google.maps.event.addListener(marker, 'click', function () {
           // close window if not undefined
+          var pos = marker.position;
           if (infoWindow !== void 0) {
             infoWindow.close();
           }
@@ -257,18 +299,43 @@ var listMap = function listMap($state) {
           };
           infoWindow = new google.maps.InfoWindow(infoWindowOptions);
           infoWindow.open(map, marker);
+
+          function clearOtherMarkers(pos) {
+            setMapOnAll(null);
+            for (var i = 0; i < markers.length; i++) {
+              if (markers[i].pos !== pos) {
+                //Remove the marker from Map                 
+                markers[i].setMap(null);
+                return;
+              }
+            }
+          }
         });
       }
+
+      // function setMapOnAll(map) {
+      //   for (var i = 0; i < markers.length; i++) {
+      //     markers[i].setMap(map);
+      //   }
+      // }
 
       // show the map and place some markers
       initMap();
 
       /* Load markers code */
+      ListTourService.areaTours().then(function (res) {
+        console.log(res);
+        var tours = res.data.tours;
+
+        tours.forEach(function (tour) {
+          setMarker(map, new google.maps.LatLng(tour.start_lat, tour.start_lon), tour.title, tour.description);
+        });
+      });
     }
   };
 };
 
-listMap.$inject = ['$state'];
+listMap.$inject = ['$state', 'ListTourService'];
 
 exports['default'] = listMap;
 module.exports = exports['default'];
@@ -464,7 +531,10 @@ _angular2['default'].module('app', ['ui.router', 'mm.foundation', 'ngCookies']).
   CONFIG: {
     headers: {}
   }
-}).config(_config2['default']).constant('devURL', ' https://fathomless-savannah-6575.herokuapp.com/').constant('glocURL', 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBH5nVGZJ9PpIikitg1Q9x11xrSgg3JRlw').constant('gmapURL', 'url').service('ListTourService', _servicesListToursService2['default']).service('UserService', _servicesUserService2['default']).service('NewTourService', _servicesNewTourService2['default']).controller('HomeController', _controllersHomeController2['default']).controller('NewTourController', _controllersNewTourController2['default']).controller('LoginController', _controllersLoginController2['default']).controller('LogoutController', _controllersLogoutController2['default']).controller('SignupController', _controllersSignupController2['default']).controller('ListTourController', _controllersListToursController2['default']).directive('newMap', _directivesNewMapDirective2['default']).directive('listMap', _directivesListMapDirective2['default']);
+}).config(_config2['default']).constant('devURL', ' https://fathomless-savannah-6575.herokuapp.com/')
+// .constant('glocURL', 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBH5nVGZJ9PpIikitg1Q9x11xrSgg3JRlw')
+// .constant('gmapURL', 'url')
+.service('ListTourService', _servicesListToursService2['default']).service('UserService', _servicesUserService2['default']).service('NewTourService', _servicesNewTourService2['default']).controller('HomeController', _controllersHomeController2['default']).controller('NewTourController', _controllersNewTourController2['default']).controller('LoginController', _controllersLoginController2['default']).controller('LogoutController', _controllersLogoutController2['default']).controller('SignupController', _controllersSignupController2['default']).controller('ListTourController', _controllersListToursController2['default']).directive('newMap', _directivesNewMapDirective2['default']).directive('listMap', _directivesListMapDirective2['default']);
 
 window.initMap = function () {
   _angular2['default'].bootstrap(document, ['app']);
@@ -476,14 +546,18 @@ window.initMap = function () {
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var ListTourService = function ListTourService($stateParams, $http) {
+var ListTourService = function ListTourService($stateParams, $http, devURL) {
 
-  var areaTours = [];
-
-  this.areaTours = function () {};
+  this.areaTours = function () {
+    var getURL = devURL + 'tours';
+    return $http({
+      method: 'GET',
+      url: getURL
+    });
+  };
 };
 
-ListTourService.$inject = ['$stateParams', '$http'];
+ListTourService.$inject = ['$stateParams', '$http', 'devURL'];
 
 exports['default'] = ListTourService;
 module.exports = exports['default'];

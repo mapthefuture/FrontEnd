@@ -6404,7 +6404,8 @@ html {
 
 body {
   width: 100%;
-  height: 100%; }
+  height: 100%;
+  background-color: #C1CAD6; }
 
 .container {
   width: 80%;
@@ -6467,9 +6468,24 @@ div.ng-scope {
     min-height: 500px;
     margin: 15px auto; }
   .listTourWrapper .tours {
-    display: flex; }
-    .listTourWrapper .tours div {
-      display: flex;
-      flex-flow: column center; }
+    display: flex;
+    flex-direction: column;
+    align-items: center; }
+    .listTourWrapper .tours .tourbox {
+      background-color: #FFFFFF;
+      padding: 2px;
+      width: 90%; }
+      .listTourWrapper .tours .tourbox .tour:hover {
+        background-color: #EEEEEE;
+        cursor: pointer; }
+      .listTourWrapper .tours .tourbox .tour {
+        display: flex;
+        margin: 0 auto;
+        padding: 3px;
+        -moz-box-shadow: inset 0 0 10px #000000;
+        -webkit-box-shadow: inset 0 0 10px #000000;
+        box-shadow: inset 0 0 10px #000000; }
+      .listTourWrapper .tours .tourbox .clicked {
+        background-color: #CCCCCC; }
 
 /*# sourceMappingURL=main.css.map */

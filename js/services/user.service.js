@@ -1,5 +1,6 @@
 import jquery from 'jquery';
 
+
 let UserService = function($http, SERVER, $cookies, $state) {
   
   this.checkAuth = function () {

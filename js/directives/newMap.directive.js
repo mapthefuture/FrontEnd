@@ -20,7 +20,7 @@ let newMap = function($state, NewTourService, $compile) {
           initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
           map.setCenter(initialLocation);
         });
-      } 
+      }
 
       var markers = [];
       var uniqueId = 1;
