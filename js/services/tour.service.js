@@ -1,7 +1,6 @@
-let TourService = function(UserService, $stateParams, $http, devURL, SERVER) {
+let TourService = function(UserService, MapService, $stateParams, $http, devURL, SERVER) {
   
   this.areaTours = areaTours;
-  this.markerData = {};
   this.submitForm = submitForm;
 
   function areaTours() {
@@ -29,6 +28,6 @@ let TourService = function(UserService, $stateParams, $http, devURL, SERVER) {
 
 };
 
-TourService.$inject = ['UserService', '$stateParams', '$http', 'devURL', 'SERVER'];
+TourService.$inject = ['UserService', 'MapService', '$stateParams', '$http', 'devURL', 'SERVER'];
 
 export default TourService;
