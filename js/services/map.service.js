@@ -60,6 +60,32 @@ let MapService = function(UserService, $stateParams, $http) {
       infoWindow.open(map, marker);
     });
 
+    // These^^^^ two listeners vvvvvvv are the same, written differently, and including my clear function.  Need to be unified and split into appropriate functions (to be called on appropriate pages)
+    google.maps.event.addListener(marker, 'click', function () {
+      // close window if not undefined
+      var pos = marker.position;
+      if (infoWindow !== void 0) {
+        infoWindow.close();
+      }
+      // create new window
+      var infoWindowOptions = {
+        content: content
+      };
+      infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+      infoWindow.open(map, marker);
+
+      function clearOtherMarkers(pos) {
+        setMapOnAll(null);
+        for (var i = 0; i < markers.length; i++) {
+          if (markers[i].pos !== pos) {
+            //Remove the marker from Map                  
+            markers[i].setMap(null);
+            return;
+          }
+        }
+      }
+    });
+
   }
   /* --------------------------------------------------------------- */
 

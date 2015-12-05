@@ -59,30 +59,7 @@ let listMap = function($state, TourService) {
         marker = new google.maps.Marker(markerOptions);
         markers.push(marker); // add marker to array
               
-        google.maps.event.addListener(marker, 'click', function () {
-          // close window if not undefined
-          var pos = marker.position;
-          if (infoWindow !== void 0) {
-            infoWindow.close();
-          }
-          // create new window
-          var infoWindowOptions = {
-            content: content
-          };
-          infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-          infoWindow.open(map, marker);
-
-          function clearOtherMarkers(pos) {
-            setMapOnAll(null);
-            for (var i = 0; i < markers.length; i++) {
-              if (markers[i].pos !== pos) {
-                //Remove the marker from Map                  
-                markers[i].setMap(null);
-                return;
-              }
-            }
-          }
-        });
+        
       }
 
       // function setMapOnAll(map) {
