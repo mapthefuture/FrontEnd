@@ -1,12 +1,24 @@
-let MapService = function(UserService, $stateParams, $http) {
+let MapService = function(UserService, $state, $stateParams, $http, $compile) {
   
   this.markerData = {};
+  this.initMap = initMap;
+  this.setMarker = setMarker;
+  var map, infoWindow;
+  var initialLocation;
+  var markers = [];
 
   // init the map
-  function initMap() {
+  function initMap(element, mapOptions) {
     if (map === void 0) {
       map = new google.maps.Map(element[0], mapOptions);
     }
+    // if ("geolocation" in navigator) {
+    //   navigator.geolocation.getCurrentPosition(function (pos) {
+    //     initialLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+    //     console.log();
+    //     map.setCenter(initialLocation);
+    //   });
+    // }
   } 
 
   // This is the largest part that needs refactoring - the contentstring and marker-calling need to be separated from the setMarker function, just not sure how/where yet
@@ -14,7 +26,8 @@ let MapService = function(UserService, $stateParams, $http) {
   function setMarker(map, latLng, title, description) {
 
     var marker = new google.maps.Marker({
-      position:latLng,
+      center: initialLocation,
+      position: latLng,
       map: map,
       draggable:true,
       animation: google.maps.Animation.DROP,
@@ -40,21 +53,21 @@ let MapService = function(UserService, $stateParams, $http) {
     // adds markers to array
     markers.push(marker); 
 
-    var contentString = 
-    `<div class="markerForm" ng-controller="NewTourController">
-        <form class="newForm" ng-submit="vm.submitForm(site)">
-          <input ng-model="site.title" type="text" placeholder="Title">
-          <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>
-          <input type="checkbox">Is this the tour start?
-          <button>Submit</button>
-        </form>
-      </div>`;
-    var compiled = $compile(contentString);
-    var scopedHTML = compiled(scope);
+    // var contentString = 
+    // `<div class="markerForm" ng-controller="NewTourController">
+    //     <form class="newForm" ng-submit="vm.submitForm(site)">
+    //       <input ng-model="site.title" type="text" placeholder="Title">
+    //       <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>
+    //       <input type="checkbox">Is this the tour start?
+    //       <button>Submit</button>
+    //     </form>
+    //   </div>`;
+    // var compiled = $compile(contentString);
+    // var scopedHTML = compiled(scope);
 
-    var infoWindow = new google.maps.InfoWindow({
-      content: scopedHTML[0]
-    });
+    // var infoWindow = new google.maps.InfoWindow({
+    //   content: scopedHTML[0]
+    // });
 
     marker.addListener('click', function() {
       infoWindow.open(map, marker);
@@ -91,6 +104,6 @@ let MapService = function(UserService, $stateParams, $http) {
 
 };
 
-MapService.$inject = ['UserService', '$stateParams', '$http'];
+MapService.$inject = ['UserService', '$state', '$stateParams', '$http', '$compile'];
 
 export default MapService;

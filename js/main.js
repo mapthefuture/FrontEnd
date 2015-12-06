@@ -8,6 +8,8 @@ import config from './config';
 
 // Import Services
 import UserService from './services/user.service';
+import MapService from './services/map.service';
+import SiteService from './services/site.service';
 import TourService from './services/tour.service';
 
 // Import Controllers
@@ -36,6 +38,8 @@ angular
   // .constant('gmapURL', 'url')
   .service('TourService', TourService)
   .service('UserService', UserService)
+  .service('MapService', MapService)
+  .service('SitService', SiteService)
   .controller('HomeController', HomeController)
   .controller('NewTourController', NewTourController)
   .controller('LoginController', LoginController)

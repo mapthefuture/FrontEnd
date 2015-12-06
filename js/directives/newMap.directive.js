@@ -10,9 +10,9 @@ let newMap = function($state, MapService, TourService, $compile) {
     // },
     link: function (scope, element, attrs) {
 
-      var map, infoWindow; 
-
+      var map, infoWindow;
       var initialLocation = new google.maps.LatLng(27.9881, 86.9253);
+      MapService.initMap(mapOptions);
 
       // Find location
       if ("geolocation" in navigator) {
@@ -43,17 +43,9 @@ let newMap = function($state, MapService, TourService, $compile) {
           ]
         }]
       };
-        
-   
 
       var markers = [];
       var uniqueId = 1;
-        
-      // place a marker
-      
-
-      // show the map
-      initMap();
 
       // Place marker where clicked
       map.addListener('click', function(e) {

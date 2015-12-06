@@ -231,7 +231,7 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var listMap = function listMap($state, TourService) {
+var listMap = function listMap($state, TourService, MapService) {
 
   return {
     restrict: 'A',
@@ -240,13 +240,20 @@ var listMap = function listMap($state, TourService) {
     controller: 'ListTourController as vm',
     link: function link(scope, element, attrs) {
       var map, infoWindow;
-      var markers = [];
       var initialLocation;
+
+      function initMap() {
+        if (map === void 0) {
+          map = new google.maps.Map(element[0], mapOptions);
+        }
+      }
+
+      initMap();
 
       // Find location
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(function (pos) {
-          initialLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+          MapService.initialLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
           map.setCenter(initialLocation);
         });
       }
@@ -266,52 +273,20 @@ var listMap = function listMap($state, TourService) {
         }]
       };
 
-      // Map initialization
-      function initMap() {
-        if (map === void 0) {
-          map = new google.maps.Map(element[0], mapOptions);
-        }
-      }
-
       // place a marker
-      function setMarker(map, pos, title, content) {
-        var marker;
-        var markerOptions = {
-          position: pos,
-          map: map,
-          title: title,
-          draggable: true,
-          icon: 'https://d30y9cdsu7xlg0.cloudfront.net/noun-svg/106561.svg?Expires=1449253440&Signature=W261UUAAP0zYUJxKPHstQUXpyZg40iy8p8nvBHJcqSzpW-A1isKPMsngJWXkW5EgxhHHDYL-K3-WEpKqUEhj82OIIC0mk6unxiTD0ZWVGR3SPo~02IinHKq-8O16gCFUly25Hs~wVuQs5716TZocmrWHdnr8EmJx0NX0AJgZFOU_&Key-Pair-Id=APKAI5ZVHAXN65CHVU2Q'
-        };
+      // function setMarker(map, pos, title, content) {
+      //   var marker;
+      //   var markerOptions = {
+      //     position: pos,
+      //     map: map,
+      //     title: title,
+      //     draggable:true,
+      //     icon: icon,
+      //   };
 
-        marker = new google.maps.Marker(markerOptions);
-        markers.push(marker); // add marker to array
-
-        google.maps.event.addListener(marker, 'click', function () {
-          // close window if not undefined
-          var pos = marker.position;
-          if (infoWindow !== void 0) {
-            infoWindow.close();
-          }
-          // create new window
-          var infoWindowOptions = {
-            content: content
-          };
-          infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-          infoWindow.open(map, marker);
-
-          function clearOtherMarkers(pos) {
-            setMapOnAll(null);
-            for (var i = 0; i < markers.length; i++) {
-              if (markers[i].pos !== pos) {
-                //Remove the marker from Map                 
-                markers[i].setMap(null);
-                return;
-              }
-            }
-          }
-        });
-      }
+      //   marker = new google.maps.Marker(markerOptions);
+      //   markers.push(marker); // add marker to array
+      // }
 
       // function setMapOnAll(map) {
       //   for (var i = 0; i < markers.length; i++) {
@@ -319,23 +294,20 @@ var listMap = function listMap($state, TourService) {
       //   }
       // }
 
-      // show the map and place some markers
-      initMap();
-
       /* Load markers code */
       TourService.areaTours().then(function (res) {
         console.log(res);
         var tours = res.data.tours;
 
         tours.forEach(function (tour) {
-          setMarker(map, new google.maps.LatLng(tour.start_lat, tour.start_lon), tour.title, tour.description);
+          MapService.setMarker(MapService.map, new google.maps.LatLng(tour.start_lat, tour.start_lon), tour.title, tour.description);
         });
       });
     }
   };
 };
 
-listMap.$inject = ['$state', 'TourService'];
+listMap.$inject = ['$state', 'TourService', 'MapService'];
 
 exports['default'] = listMap;
 module.exports = exports['default'];
@@ -346,7 +318,7 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var newMap = function newMap($state, TourService, $compile) {
+var newMap = function newMap($state, MapService, TourService, $compile) {
 
   return {
     restrict: 'EA',
@@ -359,8 +331,8 @@ var newMap = function newMap($state, TourService, $compile) {
     link: function link(scope, element, attrs) {
 
       var map, infoWindow;
-
       var initialLocation = new google.maps.LatLng(27.9881, 86.9253);
+      MapService.initMap(mapOptions);
 
       // Find location
       if ("geolocation" in navigator) {
@@ -369,9 +341,6 @@ var newMap = function newMap($state, TourService, $compile) {
           map.setCenter(initialLocation);
         });
       }
-
-      var markers = [];
-      var uniqueId = 1;
 
       // map config
       var mapOptions = {
@@ -390,57 +359,8 @@ var newMap = function newMap($state, TourService, $compile) {
         }]
       };
 
-      // init the map
-      function initMap() {
-        if (map === void 0) {
-          map = new google.maps.Map(element[0], mapOptions);
-        }
-      }
-
-      // place a marker
-      function setMarker(map, latLng, title, description) {
-
-        var marker = new google.maps.Marker({
-          position: latLng,
-          map: map,
-          draggable: true,
-          animation: google.maps.Animation.DROP,
-          icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
-        });
-
-        // set unique id
-        marker.id = uniqueId;
-        uniqueId++;
-
-        var lat = marker.getPosition().lat();
-        var lon = marker.getPosition().lng();
-
-        TourService.markerData = {
-          latitude: lat,
-          longitude: lon,
-          id: marker.id
-        };
-
-        // map.panTo(latLng);
-
-        // adds markers to array
-        markers.push(marker);
-
-        var contentString = '<div class="markerForm" ng-controller="NewTourController">\n            <form class="newForm" ng-submit="vm.submitForm(site)">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <input type="checkbox">Is this the tour start?\n              <button>Submit</button>\n            </form>\n          </div>';
-        var compiled = $compile(contentString);
-        var scopedHTML = compiled(scope);
-
-        var infoWindow = new google.maps.InfoWindow({
-          content: scopedHTML[0]
-        });
-
-        marker.addListener('click', function () {
-          infoWindow.open(map, marker);
-        });
-      }
-
-      // show the map
-      initMap();
+      var markers = [];
+      var uniqueId = 1;
 
       // Place marker where clicked
       map.addListener('click', function (e) {
@@ -450,7 +370,7 @@ var newMap = function newMap($state, TourService, $compile) {
   };
 };
 
-newMap.$inject = ['$state', 'TourService', '$compile'];
+newMap.$inject = ['$state', 'MapService', 'TourService', '$compile'];
 
 exports['default'] = newMap;
 module.exports = exports['default'];
@@ -481,6 +401,14 @@ var _config2 = _interopRequireDefault(_config);
 var _servicesUserService = require('./services/user.service');
 
 var _servicesUserService2 = _interopRequireDefault(_servicesUserService);
+
+var _servicesMapService = require('./services/map.service');
+
+var _servicesMapService2 = _interopRequireDefault(_servicesMapService);
+
+var _servicesSiteService = require('./services/site.service');
+
+var _servicesSiteService2 = _interopRequireDefault(_servicesSiteService);
 
 var _servicesTourService = require('./services/tour.service');
 
@@ -530,22 +458,139 @@ _angular2['default'].module('app', ['ui.router', 'mm.foundation', 'ngCookies']).
 }).config(_config2['default']).constant('devURL', ' https://fathomless-savannah-6575.herokuapp.com/')
 // .constant('glocURL', 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBH5nVGZJ9PpIikitg1Q9x11xrSgg3JRlw')
 // .constant('gmapURL', 'url')
-.service('TourService', _servicesTourService2['default']).service('UserService', _servicesUserService2['default']).controller('HomeController', _controllersHomeController2['default']).controller('NewTourController', _controllersNewTourController2['default']).controller('LoginController', _controllersLoginController2['default']).controller('LogoutController', _controllersLogoutController2['default']).controller('SignupController', _controllersSignupController2['default']).controller('ListTourController', _controllersListToursController2['default']).directive('newMap', _directivesNewMapDirective2['default']).directive('listMap', _directivesListMapDirective2['default']);
+.service('TourService', _servicesTourService2['default']).service('UserService', _servicesUserService2['default']).service('MapService', _servicesMapService2['default']).service('SitService', _servicesSiteService2['default']).controller('HomeController', _controllersHomeController2['default']).controller('NewTourController', _controllersNewTourController2['default']).controller('LoginController', _controllersLoginController2['default']).controller('LogoutController', _controllersLogoutController2['default']).controller('SignupController', _controllersSignupController2['default']).controller('ListTourController', _controllersListToursController2['default']).directive('newMap', _directivesNewMapDirective2['default']).directive('listMap', _directivesListMapDirective2['default']);
 
 window.initMap = function () {
   _angular2['default'].bootstrap(document, ['app']);
 };
 
-},{"./config":1,"./controllers/home.controller":2,"./controllers/listTours.controller":3,"./controllers/login.controller":4,"./controllers/logout.controller":5,"./controllers/newTour.controller":6,"./controllers/signup.controller":7,"./directives/listMap.directive":8,"./directives/newMap.directive":9,"./services/tour.service":11,"./services/user.service":12,"angular":18,"angular-cookies":14,"angular-foundation":15,"angular-ui-router":16}],11:[function(require,module,exports){
+},{"./config":1,"./controllers/home.controller":2,"./controllers/listTours.controller":3,"./controllers/login.controller":4,"./controllers/logout.controller":5,"./controllers/newTour.controller":6,"./controllers/signup.controller":7,"./directives/listMap.directive":8,"./directives/newMap.directive":9,"./services/map.service":11,"./services/site.service":12,"./services/tour.service":13,"./services/user.service":14,"angular":20,"angular-cookies":16,"angular-foundation":17,"angular-ui-router":18}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var TourService = function TourService(UserService, $stateParams, $http, devURL, SERVER) {
+var MapService = function MapService(UserService, $state, $stateParams, $http, $compile) {
+
+  this.markerData = {};
+  this.initMap = initMap;
+  this.setMarker = setMarker;
+  var map, infoWindow;
+  var initialLocation;
+  var markers = [];
+
+  // init the map
+  function initMap(element, mapOptions) {
+    if (map === void 0) {
+      map = new google.maps.Map(element[0], mapOptions);
+    }
+    // if ("geolocation" in navigator) {
+    //   navigator.geolocation.getCurrentPosition(function (pos) {
+    //     initialLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+    //     console.log();
+    //     map.setCenter(initialLocation);
+    //   });
+    // }
+  }
+
+  // This is the largest part that needs refactoring - the contentstring and marker-calling need to be separated from the setMarker function, just not sure how/where yet
+
+  function setMarker(map, latLng, title, description) {
+
+    var marker = new google.maps.Marker({
+      center: initialLocation,
+      position: latLng,
+      map: map,
+      draggable: true,
+      animation: google.maps.Animation.DROP,
+      icon: "http://maps.google.com/mapfiles/ms/micons/blue.png",
+      id: uniqueId
+    });
+
+    // set unique id
+    var uniqueId = 1;
+    uniqueId++;
+
+    var lat = marker.getPosition().lat();
+    var lon = marker.getPosition().lng();
+
+    MapService.markerData = {
+      latitude: lat,
+      longitude: lon,
+      id: marker.id
+    };
+
+    // map.panTo(latLng);
+
+    // adds markers to array
+    markers.push(marker);
+
+    // var contentString =
+    // `<div class="markerForm" ng-controller="NewTourController">
+    //     <form class="newForm" ng-submit="vm.submitForm(site)">
+    //       <input ng-model="site.title" type="text" placeholder="Title">
+    //       <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>
+    //       <input type="checkbox">Is this the tour start?
+    //       <button>Submit</button>
+    //     </form>
+    //   </div>`;
+    // var compiled = $compile(contentString);
+    // var scopedHTML = compiled(scope);
+
+    // var infoWindow = new google.maps.InfoWindow({
+    //   content: scopedHTML[0]
+    // });
+
+    marker.addListener('click', function () {
+      infoWindow.open(map, marker);
+    });
+
+    // These^^^^ two listeners vvvvvvv are the same, written differently, and including my clear function.  Need to be unified and split into appropriate functions (to be called on appropriate pages)
+    google.maps.event.addListener(marker, 'click', function () {
+      // close window if not undefined
+      var pos = marker.position;
+      if (infoWindow !== void 0) {
+        infoWindow.close();
+      }
+      // create new window
+      var infoWindowOptions = {
+        content: content
+      };
+      infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+      infoWindow.open(map, marker);
+
+      function clearOtherMarkers(pos) {
+        setMapOnAll(null);
+        for (var i = 0; i < markers.length; i++) {
+          if (markers[i].pos !== pos) {
+            //Remove the marker from Map                 
+            markers[i].setMap(null);
+            return;
+          }
+        }
+      }
+    });
+  }
+  /* --------------------------------------------------------------- */
+};
+
+MapService.$inject = ['UserService', '$state', '$stateParams', '$http', '$compile'];
+
+exports['default'] = MapService;
+module.exports = exports['default'];
+
+},{}],12:[function(require,module,exports){
+"use strict";
+
+},{}],13:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+var TourService = function TourService(UserService, MapService, $stateParams, $http, devURL, SERVER) {
 
   this.areaTours = areaTours;
-  this.markerData = {};
   this.submitForm = submitForm;
 
   function areaTours() {
@@ -576,12 +621,12 @@ var TourService = function TourService(UserService, $stateParams, $http, devURL,
   }
 };
 
-TourService.$inject = ['UserService', '$stateParams', '$http', 'devURL', 'SERVER'];
+TourService.$inject = ['UserService', 'MapService', '$stateParams', '$http', 'devURL', 'SERVER'];
 
 exports['default'] = TourService;
 module.exports = exports['default'];
 
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -647,7 +692,7 @@ UserService.$inject = ['$http', 'SERVER', '$cookies', '$state'];
 exports['default'] = UserService;
 module.exports = exports['default'];
 
-},{"jquery":19}],13:[function(require,module,exports){
+},{"jquery":21}],15:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.8
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -970,11 +1015,11 @@ angular.module('ngCookies').provider('$$cookieWriter', function $$CookieWriterPr
 
 })(window, window.angular);
 
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 require('./angular-cookies');
 module.exports = 'ngCookies';
 
-},{"./angular-cookies":13}],15:[function(require,module,exports){
+},{"./angular-cookies":15}],17:[function(require,module,exports){
 /*
  * angular-mm-foundation
  * http://pineconellc.github.io/angular-foundation/
@@ -4590,7 +4635,7 @@ angular.module("template/typeahead/typeahead-popup.html", []).run(["$templateCac
     "");
 }]);
 
-},{}],16:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 /**
  * State-based routing for AngularJS
  * @version v0.2.15
@@ -8961,7 +9006,7 @@ angular.module('ui.router.state')
   .filter('isState', $IsStateFilter)
   .filter('includedByState', $IncludedByStateFilter);
 })(window, window.angular);
-},{}],17:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.8
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -37980,11 +38025,11 @@ $provide.value("$locale", {
 })(window, document);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],18:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":17}],19:[function(require,module,exports){
+},{"./angular":19}],21:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.4
  * http://jquery.com/
