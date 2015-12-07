@@ -6488,4 +6488,8 @@ div.ng-scope {
       .listTourWrapper .tours .tourbox .clicked {
         background-color: #CCCCCC; }
 
+.angular-google-map-container {
+  height: 500px;
+  width: 80vw; }
+
 /*# sourceMappingURL=main.css.map */
