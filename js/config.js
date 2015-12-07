@@ -37,6 +37,11 @@ let config = function($stateProvider, $urlRouterProvider) {
       controller: 'TestController',
       templateUrl: 'templates/test.tpl.html'
     })
+    .state('root.newnew', {
+      url: '/newnew',
+      controller: 'NewNewController',
+      templateUrl: 'templates/newnew.tpl.html'
+    })
   ;
 };
 

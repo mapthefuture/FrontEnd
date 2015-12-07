@@ -35,6 +35,10 @@ var config = function config($stateProvider, $urlRouterProvider) {
     url: '/test',
     controller: 'TestController',
     templateUrl: 'templates/test.tpl.html'
+  }).state('root.newnew', {
+    url: '/newnew',
+    controller: 'NewNewController',
+    templateUrl: 'templates/newnew.tpl.html'
   });
 };
 
@@ -564,8 +568,6 @@ require('angular-foundation');
 
 require('angular-cookies');
 
-require('lodash');
-
 require('angular-simple-logger');
 
 require('angular-google-maps');
@@ -625,6 +627,8 @@ var _directivesNewMapDirective2 = _interopRequireDefault(_directivesNewMapDirect
 var _directivesListMapDirective = require('./directives/listMap.directive');
 
 var _directivesListMapDirective2 = _interopRequireDefault(_directivesListMapDirective);
+
+window._ = require('lodash');
 
 _angular2['default'].module('app', ['ui.router', 'mm.foundation', 'ngCookies', 'uiGmapgoogle-maps']).constant('SERVER', {
   URL: 'https://fathomless-savannah-6575.herokuapp.com',
