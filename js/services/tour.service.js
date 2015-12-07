@@ -24,7 +24,13 @@ let TourService = function(UserService, $stateParams, $http, devURL, SERVER) {
     for (var latitude in c) { s[latitude] = c[latitude]; }
     for (var longitude in c) { s[longitude] = c[longitude]; }
     console.log(s);
+    alert("Submitted");
     return $http.post(SERVER.URL + '/tours/:' + c.id + '/sites', s, SERVER.CONFIG);
+  }
+
+  function submitTourForm (tourObj) {
+
+    
   }
 
 };

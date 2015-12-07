@@ -23,7 +23,7 @@ let newMap = function($state, TourService, $compile) {
       }
 
       var markers = [];
-      var uniqueId = 1;
+      var uniqueId = Math.floor(Math.random() * 500) + 1 ;
         
       // map config
       var mapOptions = {
@@ -91,6 +91,7 @@ let newMap = function($state, TourService, $compile) {
               <input type="checkbox">Is this the tour start?
               <button>Submit</button>
             </form>
+            <button class="deleteButton">Delete marker</button>
           </div>`;
         var compiled = $compile(contentString);
         var scopedHTML = compiled(scope);
@@ -102,6 +103,15 @@ let newMap = function($state, TourService, $compile) {
         marker.addListener('click', function() {
           infoWindow.open(map, marker);
         });
+
+        infoWindow.addListener('domready', function() {
+
+
+        });
+
+
+
+
  
       }
 
