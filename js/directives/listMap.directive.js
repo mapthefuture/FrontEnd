@@ -53,7 +53,7 @@ let listMap = function($state, TourService) {
           map: map,
           title: title,
           draggable:true,
-          icon: 'https://d30y9cdsu7xlg0.cloudfront.net/noun-svg/106561.svg?Expires=1449253440&Signature=W261UUAAP0zYUJxKPHstQUXpyZg40iy8p8nvBHJcqSzpW-A1isKPMsngJWXkW5EgxhHHDYL-K3-WEpKqUEhj82OIIC0mk6unxiTD0ZWVGR3SPo~02IinHKq-8O16gCFUly25Hs~wVuQs5716TZocmrWHdnr8EmJx0NX0AJgZFOU_&Key-Pair-Id=APKAI5ZVHAXN65CHVU2Q',
+          icon: 'http://maps.google.com/mapfiles/ms/micons/blue.png',
         };
 
         marker = new google.maps.Marker(markerOptions);
