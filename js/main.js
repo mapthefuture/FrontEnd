@@ -1,7 +1,12 @@
 import angular from 'angular';
 import 'angular-ui-router';
+
 import 'angular-foundation';
 import 'angular-cookies';
+import 'lodash';
+import 'angular-simple-logger';
+
+import 'angular-google-maps';
 
 // Import Config
 import config from './config';
@@ -17,13 +22,14 @@ import ListTourController from './controllers/listTours.controller';
 import LoginController from './controllers/login.controller';
 import LogoutController from './controllers/logout.controller';
 import SignupController from './controllers/signup.controller';
+import TestController from './controllers/test.controller';
 
 // Import Directives
 import newMap from './directives/newMap.directive';
 import listMap from './directives/listMap.directive';
 
 angular
-  .module('app', ['ui.router', 'mm.foundation', 'ngCookies'])
+  .module('app', ['ui.router', 'mm.foundation', 'ngCookies', 'uiGmapgoogle-maps'])
   .constant('SERVER', {
     URL: 'https://fathomless-savannah-6575.herokuapp.com',
     CONFIG: {
@@ -42,6 +48,7 @@ angular
   .controller('LogoutController', LogoutController)
   .controller('SignupController', SignupController)
   .controller('ListTourController', ListTourController)
+  .controller('TestController', TestController)
   .directive('newMap', newMap)
   .directive('listMap', listMap)
 ;
