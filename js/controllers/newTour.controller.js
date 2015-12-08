@@ -8,14 +8,14 @@ let NewTourController = function($scope, $http, TourService) {
 
   function submitForm (siteObj) {
     TourService.submitForm(siteObj).then( (res) => {
-      TourService.submitFormSuccess(res);
+      // TourService.submitFormSuccess(res);
       console.log(res);
     });
   }
 
   function submitTourForm (tourObj) {
     TourService.submitTourForm(tourObj).then( (res) => {
-      TourService.submitFormSuccess(res);
+      // TourService.submitFormSuccess(res);
       console.log(res);
     });
   }

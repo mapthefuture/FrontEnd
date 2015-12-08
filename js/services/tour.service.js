@@ -3,6 +3,7 @@ let TourService = function(UserService, $stateParams, $http, devURL, SERVER) {
   this.areaTours = areaTours;
   this.markerData = {};
   this.submitForm = submitForm;
+  this.submitTourForm = submitTourForm;
 
   function areaTours() {
     let getURL = devURL + 'tours';
@@ -17,6 +18,11 @@ let TourService = function(UserService, $stateParams, $http, devURL, SERVER) {
     this.description = siteObj.description;
   }
 
+  function tour (tourObj) {
+    this.title = tourObj.title;
+    this.description = tourObj.description;
+  }
+
   function submitForm (siteObj) {
     let s = new site(siteObj);
     let c = this.markerData;
@@ -24,13 +30,13 @@ let TourService = function(UserService, $stateParams, $http, devURL, SERVER) {
     for (var latitude in c) { s[latitude] = c[latitude]; }
     for (var longitude in c) { s[longitude] = c[longitude]; }
     console.log(s);
-    alert("Submitted");
     return $http.post(SERVER.URL + '/tours/:' + c.id + '/sites', s, SERVER.CONFIG);
   }
 
   function submitTourForm (tourObj) {
-
-    
+    let t = new tour(tourObj);
+    console.log(t);
+    return $http.post(SERVER.URL + '/tours', t, SERVER.CONFIG);
   }
 
 };

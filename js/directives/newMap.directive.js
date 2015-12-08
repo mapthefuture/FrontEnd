@@ -23,7 +23,7 @@ let newMap = function($state, TourService, $compile) {
       }
 
       var markers = [];
-      var uniqueId = Math.floor(Math.random() * 500) + 1 ;
+      var uniqueId = Date.now();
         
       // map config
       var mapOptions = {

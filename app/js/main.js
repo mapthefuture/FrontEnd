@@ -177,14 +177,14 @@ var NewTourController = function NewTourController($scope, $http, TourService) {
 
   function submitForm(siteObj) {
     TourService.submitForm(siteObj).then(function (res) {
-      TourService.submitFormSuccess(res);
+      // TourService.submitFormSuccess(res);
       console.log(res);
     });
   }
 
   function submitTourForm(tourObj) {
     TourService.submitTourForm(tourObj).then(function (res) {
-      TourService.submitFormSuccess(res);
+      // TourService.submitFormSuccess(res);
       console.log(res);
     });
   }
@@ -467,7 +467,7 @@ var newMap = function newMap($state, TourService, $compile) {
       }
 
       var markers = [];
-      var uniqueId = Math.floor(Math.random() * 500) + 1;
+      var uniqueId = Date.now();
 
       // map config
       var mapOptions = {
@@ -655,6 +655,7 @@ var TourService = function TourService(UserService, $stateParams, $http, devURL,
   this.areaTours = areaTours;
   this.markerData = {};
   this.submitForm = submitForm;
+  this.submitTourForm = submitTourForm;
 
   function areaTours() {
     var getURL = devURL + 'tours';
@@ -669,6 +670,11 @@ var TourService = function TourService(UserService, $stateParams, $http, devURL,
     this.description = siteObj.description;
   }
 
+  function tour(tourObj) {
+    this.title = tourObj.title;
+    this.description = tourObj.description;
+  }
+
   function submitForm(siteObj) {
     var s = new site(siteObj);
     var c = this.markerData;
@@ -680,11 +686,14 @@ var TourService = function TourService(UserService, $stateParams, $http, devURL,
       s[longitude] = c[longitude];
     }
     console.log(s);
-    alert("Submitted");
     return $http.post(SERVER.URL + '/tours/:' + c.id + '/sites', s, SERVER.CONFIG);
   }
 
-  function submitTourForm(tourObj) {}
+  function submitTourForm(tourObj) {
+    var t = new tour(tourObj);
+    console.log(t);
+    return $http.post(SERVER.URL + '/tours', t, SERVER.CONFIG);
+  }
 };
 
 TourService.$inject = ['UserService', '$stateParams', '$http', 'devURL', 'SERVER'];
@@ -711,12 +720,10 @@ var UserService = function UserService($http, SERVER, $cookies, $state) {
 
     var token = $cookies.get('authToken');
 
-    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = token;
+    SERVER.CONFIG.headers['Access-Token'] = token;
 
-    if (token) {
-      return $http.get(SERVER.URL + 'check', SERVER.CONFIG);
-    } else {
-      // $state.go('root.login');
+    if (!token) {
+      $state.go('root.login');
     }
   };
 
@@ -730,8 +737,9 @@ var UserService = function UserService($http, SERVER, $cookies, $state) {
   };
 
   this.loginSuccess = function (res) {
-    $cookies.put('authToken', res.data.auth_token);
-    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
+    $cookies.put('authToken', res.data.user.access_token);
+    SERVER.CONFIG.headers['Access-Token'] = res.data.user.access_token;
+    console.log(res.data);
     $state.go('root.home');
     (0, _jquery2['default'])('.logout').toggleClass("display");
     (0, _jquery2['default'])('.login').toggleClass("donotdisplay");
@@ -740,13 +748,13 @@ var UserService = function UserService($http, SERVER, $cookies, $state) {
 
   this.signupSuccess = function (res) {
     $cookies.put('authToken', res.data.auth_token);
-    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
+    SERVER.CONFIG.headers['Access-Token'] = res.data.auth_token;
     $state.go('root.home');
   };
 
   this.logout = function () {
     $cookies.remove('authToken');
-    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = null;
+    SERVER.CONFIG.headers['Access-Token'] = null;
     (0, _jquery2['default'])('.logout').toggleClass("display");
     (0, _jquery2['default'])('.login').toggleClass("donotdisplay");
     (0, _jquery2['default'])('.signup').toggleClass("donotdisplay");

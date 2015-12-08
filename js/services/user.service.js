@@ -7,13 +7,11 @@ let UserService = function($http, SERVER, $cookies, $state) {
 
     let token = $cookies.get('authToken');
 
-    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = token;
+    SERVER.CONFIG.headers['Access-Token'] = token;
     
-    if (token) {
-      return $http.get(SERVER.URL + 'check', SERVER.CONFIG);
-    } else {
-      // $state.go('root.login');
-    }
+    if (!token) {
+      $state.go('root.login');
+    } 
 
   };
 
@@ -27,8 +25,9 @@ let UserService = function($http, SERVER, $cookies, $state) {
   };
 
   this.loginSuccess = function (res) {
-    $cookies.put('authToken', res.data.auth_token);
-    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
+    $cookies.put('authToken', res.data.user.access_token);
+    SERVER.CONFIG.headers['Access-Token'] = res.data.user.access_token;
+    console.log(res.data);
     $state.go('root.home');
     jquery('.logout').toggleClass("display");
     jquery('.login').toggleClass("donotdisplay");
@@ -37,13 +36,13 @@ let UserService = function($http, SERVER, $cookies, $state) {
 
   this.signupSuccess = function (res) {
     $cookies.put('authToken', res.data.auth_token);
-    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
+    SERVER.CONFIG.headers['Access-Token'] = res.data.auth_token;
     $state.go('root.home');
   };
 
   this.logout = function () {
     $cookies.remove('authToken');
-    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = null;
+    SERVER.CONFIG.headers['Access-Token'] = null;
     jquery('.logout').toggleClass("display");
     jquery('.login').toggleClass("donotdisplay");
     jquery('.signup').toggleClass("donotdisplay");
