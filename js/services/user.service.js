@@ -16,7 +16,6 @@ let UserService = function($http, SERVER, $cookies, $state) {
   };
 
   this.sendLogin = function (userObj) {
-    console.log(userObj);
     return $http.post(SERVER.URL + '/user/show', userObj, SERVER.CONFIG);
   };
 
