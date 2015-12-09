@@ -171,12 +171,14 @@ var NewTourController = function NewTourController($scope, $http, TourService) {
 
   var vm = this;
 
-  vm.submitForm = submitForm;
+  vm.submitSiteForm = submitSiteForm;
 
   vm.submitTourForm = submitTourForm;
 
-  function submitForm(siteObj) {
-    TourService.submitForm(siteObj).then(function (res) {
+  vm.tourId = {};
+
+  function submitSiteForm(siteObj) {
+    TourService.submitSiteForm(siteObj).then(function (res) {
       // TourService.submitFormSuccess(res);
       console.log(res);
     });
@@ -185,9 +187,15 @@ var NewTourController = function NewTourController($scope, $http, TourService) {
   function submitTourForm(tourObj) {
     TourService.submitTourForm(tourObj).then(function (res) {
       // TourService.submitFormSuccess(res);
-      console.log(res);
+      // console.log(res);
+      vm.tourId = res.data.tour.id;
+      console.log(vm.tourId);
     });
   }
+
+  // function getTourId () {
+  //   return tourId;
+  // }
 
   // $scope.login = function (user) {
   //   UserService.sendLogin(user).then( (res) => {
@@ -452,7 +460,7 @@ var newMap = function newMap($state, TourService, $compile) {
     // scope: {
     //   map: '=',
     // },
-    link: function link(scope, element, attrs) {
+    link: function link(scope, element, attrs, vm) {
 
       var map, infoWindow;
 
@@ -467,7 +475,7 @@ var newMap = function newMap($state, TourService, $compile) {
       }
 
       var markers = [];
-      var uniqueId = Date.now();
+      // var uniqueId = Date.now();
 
       // map config
       var mapOptions = {
@@ -504,9 +512,9 @@ var newMap = function newMap($state, TourService, $compile) {
           icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
         });
 
-        // set unique id
-        marker.id = uniqueId;
-        uniqueId++;
+        // // set unique id
+        // marker.id = uniqueId;
+        // uniqueId++;
 
         var lat = marker.getPosition().lat();
         var lon = marker.getPosition().lng();
@@ -514,7 +522,7 @@ var newMap = function newMap($state, TourService, $compile) {
         TourService.markerData = {
           latitude: lat,
           longitude: lon,
-          id: marker.id
+          id: vm.tourId
         };
 
         // map.panTo(latLng);
@@ -522,7 +530,7 @@ var newMap = function newMap($state, TourService, $compile) {
         // adds markers to array
         markers.push(marker);
 
-        var contentString = '<div class="markerForm" ng-controller="NewTourController">\n            <form class="newForm" ng-submit="vm.submitForm(site)">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <input type="checkbox">Is this the tour start?\n              <button>Submit</button>\n            </form>\n            <button class="deleteButton">Delete marker</button>\n          </div>';
+        var contentString = '<div class="markerForm" ng-controller="NewTourController">\n            <form class="newForm" ng-submit="vm.submitSiteForm(site)">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <input type="checkbox">Is this the tour start?\n              <button>Submit</button>\n            </form>\n            <button class="deleteButton">Delete marker</button>\n          </div>';
         var compiled = $compile(contentString);
         var scopedHTML = compiled(scope);
 
@@ -654,7 +662,7 @@ var TourService = function TourService(UserService, $stateParams, $http, devURL,
 
   this.areaTours = areaTours;
   this.markerData = {};
-  this.submitForm = submitForm;
+  this.submitSiteForm = submitSiteForm;
   this.submitTourForm = submitTourForm;
 
   function areaTours() {
@@ -675,9 +683,10 @@ var TourService = function TourService(UserService, $stateParams, $http, devURL,
     this.description = tourObj.description;
   }
 
-  function submitForm(siteObj) {
+  function submitSiteForm(siteObj) {
     var s = new site(siteObj);
     var c = this.markerData;
+    console.log(c);
 
     for (var latitude in c) {
       s[latitude] = c[latitude];
@@ -686,7 +695,7 @@ var TourService = function TourService(UserService, $stateParams, $http, devURL,
       s[longitude] = c[longitude];
     }
     console.log(s);
-    return $http.post(SERVER.URL + '/tours/:' + c.id + '/sites', s, SERVER.CONFIG);
+    return $http.post(SERVER.URL + '/tours/' + c.id + '/sites', s, SERVER.CONFIG);
   }
 
   function submitTourForm(tourObj) {
@@ -728,7 +737,6 @@ var UserService = function UserService($http, SERVER, $cookies, $state) {
   };
 
   this.sendLogin = function (userObj) {
-    console.log(userObj);
     return $http.post(SERVER.URL + '/user/show', userObj, SERVER.CONFIG);
   };
 

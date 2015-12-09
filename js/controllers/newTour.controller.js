@@ -2,12 +2,14 @@ let NewTourController = function($scope, $http, TourService) {
   
   let vm = this;
 
-  vm.submitForm = submitForm;
+  vm.submitSiteForm = submitSiteForm;
 
   vm.submitTourForm = submitTourForm;
 
-  function submitForm (siteObj) {
-    TourService.submitForm(siteObj).then( (res) => {
+  vm.tourId = {}; 
+
+  function submitSiteForm (siteObj) {
+    TourService.submitSiteForm(siteObj).then( (res) => {
       // TourService.submitFormSuccess(res);
       console.log(res);
     });
@@ -16,9 +18,15 @@ let NewTourController = function($scope, $http, TourService) {
   function submitTourForm (tourObj) {
     TourService.submitTourForm(tourObj).then( (res) => {
       // TourService.submitFormSuccess(res);
-      console.log(res);
+      // console.log(res);
+      vm.tourId = res.data.tour.id;
+      console.log(vm.tourId);
     });
   }
+
+  // function getTourId () {
+  //   return tourId;
+  // }
 
   // $scope.login = function (user) {
   //   UserService.sendLogin(user).then( (res) => {

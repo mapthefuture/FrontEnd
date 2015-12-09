@@ -8,7 +8,7 @@ let newMap = function($state, TourService, $compile) {
     // scope: {
     //   map: '=',
     // },
-    link: function (scope, element, attrs) {
+    link: function (scope, element, attrs, vm) {
 
       var map, infoWindow; 
 
@@ -23,7 +23,7 @@ let newMap = function($state, TourService, $compile) {
       }
 
       var markers = [];
-      var uniqueId = Date.now();
+      // var uniqueId = Date.now();
         
       // map config
       var mapOptions = {
@@ -65,9 +65,9 @@ let newMap = function($state, TourService, $compile) {
           icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
         });
 
-        // set unique id
-        marker.id = uniqueId;
-        uniqueId++;
+        // // set unique id
+        // marker.id = uniqueId;
+        // uniqueId++;
 
         var lat = marker.getPosition().lat();
         var lon = marker.getPosition().lng();
@@ -75,7 +75,7 @@ let newMap = function($state, TourService, $compile) {
         TourService.markerData = {
           latitude: lat,
           longitude: lon,
-          id: marker.id
+          id: vm.tourId
         };
 
         // map.panTo(latLng);
@@ -85,7 +85,7 @@ let newMap = function($state, TourService, $compile) {
 
         var contentString = 
         `<div class="markerForm" ng-controller="NewTourController">
-            <form class="newForm" ng-submit="vm.submitForm(site)">
+            <form class="newForm" ng-submit="vm.submitSiteForm(site)">
               <input ng-model="site.title" type="text" placeholder="Title">
               <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>
               <input type="checkbox">Is this the tour start?
