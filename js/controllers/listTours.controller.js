@@ -1,31 +1,31 @@
-let ListTourController = function($stateParams, TourService) {
+let ListTourController = function($scope, $stateParams, TourService) {
   
   let vm = this;
-  vm.allTours = [];
-  vm.tourMarkers = [];
+  $scope.allTours = [];
+  $scope.tourMarkers = [];
 
   TourService.areaTours().then((res) => {
-    vm.allTours = res.data.tours;
-    // console.log(vm.allTours);
+    $scope.allTours = res.data.tours;
+    // console.log($scope.allTours);
   });
 
 
   // Editing CSS Styles on-click
-  vm.selectedIndex = -1;
+  $scope.selectedIndex = -1;
 
-  vm.clickedTour = function($index) {
-    // console.log($index);
-    vm.selectedIndex = $index;
+  $scope.clickedTour = function($index,t.id) {
+    console.log(t.id);
+    $scope.selectedIndex = $index;
   };
 
-  // vm.allTours.forEach(tour, function(tour){
+  // $scope.allTours.forEach(tour, function(tour){
   //   TourService.getMarkers(tour).then((res) =>{
-  //     vm.tourMarkers = res.data;
+  //     $scope.tourMarkers = res.data;
   //   });
   // });
 
 };
 
-ListTourController.$inject = ['$stateParams', 'TourService'];
+ListTourController.$inject = ['$scope', '$stateParams', 'TourService'];
 
 export default ListTourController;

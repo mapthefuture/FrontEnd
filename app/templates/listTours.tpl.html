@@ -3,17 +3,17 @@
   <div list-map="" class="list map"></div>
   <div class="list tours">
     <div class="tourbox">
-      <div 
-      ng-repeat="t in vm.allTours" 
+      <ul 
+      ng-repeat="t in allTours" 
       class="list tour" 
-      ng-class="{'clicked': $index == vm.selectedIndex}" 
-      ng-click="vm.clickedTour($index)"
+      ng-class="{'clicked': $index == selectedIndex}" 
+      ng-click="clickedTour($index, t.id)"
       >
-        <p>{{ t.title }}</p>
-        <p>{{ t.distance }}</p>
-        <p>{{ t.duration }}</p>
-        <p class="list hidden">{{ t.description }}</p>
-      </div>
+        <li>{{ t.title }}</li>
+        <li>{{ t.distance }}</li>
+        <li>{{ t.duration }}</li>
+        <li class="list hidden">{{ t.description }}</li>
+      </ul>
     </div>
   </div>
 </div>
