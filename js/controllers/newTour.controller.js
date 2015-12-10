@@ -1,4 +1,4 @@
-let NewTourController = function($scope, $http, TourService) {
+let NewTourController = function($scope, $http, TourService, SERVER) {
   
   let vm = this;
 
@@ -8,10 +8,29 @@ let NewTourController = function($scope, $http, TourService) {
 
   vm.tourId = {}; 
 
+  vm.tourStart = [];
+
   function submitSiteForm (siteObj) {
     TourService.submitSiteForm(siteObj).then( (res) => {
-      // TourService.submitFormSuccess(res);
-      console.log(res);
+
+      // Set start of tour to first site
+      let tourStartObj = {};
+      var newTourStart = function () {
+        let c = TourService.markerData;
+        let t = tourStartObj;
+        console.log(c);
+        return $http.patch(SERVER.URL + '/tours/' + c.id, t, SERVER.CONFIG);  
+      };
+
+      vm.tourStart.push(res.data.site);
+      if (vm.tourStart.length === 1) {
+        tourStartObj = {
+          start_lat: vm.tourStart[0].latitude,
+          start_lon: vm.tourStart[0].longitude
+        };
+        newTourStart();
+        console.log(vm.tourStart.length);
+      }
     });
   }
 
@@ -50,6 +69,6 @@ let NewTourController = function($scope, $http, TourService) {
 
 };
 
-NewTourController.$inject = ['$scope', '$http', 'TourService'];
+NewTourController.$inject = ['$scope', '$http', 'TourService', 'SERVER'];
 
 export default NewTourController;
