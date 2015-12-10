@@ -3,7 +3,7 @@ let newMap = function($state, TourService, $compile) {
   return {
     restrict: 'EA',
     replace: true,
-    template: '<div id="gmap"></div>',
+    template: '<div id="newMap"></div>',
     controller: 'NewTourController as vm',
     // scope: {
     //   map: '=',
@@ -65,10 +65,6 @@ let newMap = function($state, TourService, $compile) {
           icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
         });
 
-        // // set unique id
-        // marker.id = uniqueId;
-        // uniqueId++;
-
         var lat = marker.getPosition().lat();
         var lon = marker.getPosition().lng();
 
@@ -81,14 +77,13 @@ let newMap = function($state, TourService, $compile) {
         // map.panTo(latLng);
         
         // adds markers to array
-        markers.push(marker); 
+        markers.push(marker);
 
         var contentString = 
         `<div class="markerForm" ng-controller="NewTourController">
             <form class="newForm" ng-submit="vm.submitSiteForm(site)">
               <input ng-model="site.title" type="text" placeholder="Title">
               <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>
-              <input type="checkbox">Is this the tour start?
               <button>Submit</button>
             </form>
             <button class="deleteButton">Delete marker</button>

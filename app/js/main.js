@@ -167,7 +167,7 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var NewTourController = function NewTourController($scope, $http, TourService) {
+var NewTourController = function NewTourController($scope, $http, TourService, SERVER) {
 
   var vm = this;
 
@@ -177,10 +177,29 @@ var NewTourController = function NewTourController($scope, $http, TourService) {
 
   vm.tourId = {};
 
+  vm.tourStart = [];
+
   function submitSiteForm(siteObj) {
     TourService.submitSiteForm(siteObj).then(function (res) {
-      // TourService.submitFormSuccess(res);
-      console.log(res);
+
+      // Set start of tour to first site
+      var tourStartObj = {};
+      var newTourStart = function newTourStart() {
+        var c = TourService.markerData;
+        var t = tourStartObj;
+        console.log(c);
+        return $http.patch(SERVER.URL + '/tours/' + c.id, t, SERVER.CONFIG);
+      };
+
+      vm.tourStart.push(res.data.site);
+      if (vm.tourStart.length === 1) {
+        tourStartObj = {
+          start_lat: vm.tourStart[0].latitude,
+          start_lon: vm.tourStart[0].longitude
+        };
+        newTourStart();
+        console.log(vm.tourStart.length);
+      }
     });
   }
 
@@ -218,7 +237,7 @@ var NewTourController = function NewTourController($scope, $http, TourService) {
   // };
 };
 
-NewTourController.$inject = ['$scope', '$http', 'TourService'];
+NewTourController.$inject = ['$scope', '$http', 'TourService', 'SERVER'];
 
 exports['default'] = NewTourController;
 module.exports = exports['default'];
@@ -455,7 +474,7 @@ var newMap = function newMap($state, TourService, $compile) {
   return {
     restrict: 'EA',
     replace: true,
-    template: '<div id="gmap"></div>',
+    template: '<div id="newMap"></div>',
     controller: 'NewTourController as vm',
     // scope: {
     //   map: '=',
@@ -512,10 +531,6 @@ var newMap = function newMap($state, TourService, $compile) {
           icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
         });
 
-        // // set unique id
-        // marker.id = uniqueId;
-        // uniqueId++;
-
         var lat = marker.getPosition().lat();
         var lon = marker.getPosition().lng();
 
@@ -530,7 +545,7 @@ var newMap = function newMap($state, TourService, $compile) {
         // adds markers to array
         markers.push(marker);
 
-        var contentString = '<div class="markerForm" ng-controller="NewTourController">\n            <form class="newForm" ng-submit="vm.submitSiteForm(site)">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <input type="checkbox">Is this the tour start?\n              <button>Submit</button>\n            </form>\n            <button class="deleteButton">Delete marker</button>\n          </div>';
+        var contentString = '<div class="markerForm" ng-controller="NewTourController">\n            <form class="newForm" ng-submit="vm.submitSiteForm(site)">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <button>Submit</button>\n            </form>\n            <button class="deleteButton">Delete marker</button>\n          </div>';
         var compiled = $compile(contentString);
         var scopedHTML = compiled(scope);
 
@@ -662,6 +677,7 @@ var TourService = function TourService(UserService, $stateParams, $http, devURL,
 
   this.areaTours = areaTours;
   this.markerData = {};
+  this.tourStartObj = {};
   this.submitSiteForm = submitSiteForm;
   this.submitTourForm = submitTourForm;
 
@@ -686,7 +702,6 @@ var TourService = function TourService(UserService, $stateParams, $http, devURL,
   function submitSiteForm(siteObj) {
     var s = new site(siteObj);
     var c = this.markerData;
-    console.log(c);
 
     for (var latitude in c) {
       s[latitude] = c[latitude];
@@ -702,6 +717,13 @@ var TourService = function TourService(UserService, $stateParams, $http, devURL,
     var t = new tour(tourObj);
     console.log(t);
     return $http.post(SERVER.URL + '/tours', t, SERVER.CONFIG);
+  }
+
+  function newTourStart() {
+    var c = this.markerData;
+    var t = this.tourStartObj;
+    console.log(t);
+    return $http.patch(SERVER.URL + '/tours/' + c.id, t, SERVER.CONFIG);
   }
 };
 
