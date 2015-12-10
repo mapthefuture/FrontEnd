@@ -7,7 +7,7 @@
       ng-repeat="t in allTours" 
       class="list tour" 
       ng-class="{'clicked': $index == selectedIndex}" 
-      ng-click="clickedTour($index, t.id)"
+      ng-click="clickedTour($index, t)"
       >
         <li>{{ t.title }}</li>
         <li>{{ t.distance }}</li>

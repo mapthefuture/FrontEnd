@@ -6407,6 +6407,15 @@ body {
   height: 100%;
   background-color: #C1CAD6; }
 
+.top-bar {
+  background-color: #4A4A4A;
+  color: #FFFFFF; }
+
+@media (min-width: 40.0625em) {
+  .top-bar-section li:not(.has-form) a:not(.button) {
+    background: #4A4A4A;
+    color: #FFFFFF; } }
+
 .container {
   width: 80%;
   max-width: 1000px;

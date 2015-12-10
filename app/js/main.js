@@ -31,6 +31,10 @@ var config = function config($stateProvider, $urlRouterProvider) {
     url: '/list',
     controller: 'ListTourController as vm',
     templateUrl: 'templates/listTours.tpl.html'
+  }).state('root.sites', {
+    // url: '/tour/',
+    controller: 'ListSiteController as vm',
+    templateUrl: 'templates/listSites.tpl.html'
   }).state('root.test', {
     url: '/test',
     controller: 'TestController',
@@ -88,33 +92,33 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var ListTourController = function ListTourController($stateParams, TourService) {
+var ListTourController = function ListTourController($scope, $stateParams, TourService) {
 
   var vm = this;
-  vm.allTours = [];
-  vm.tourMarkers = [];
+  $scope.allTours = [];
+  $scope.tourMarkers = [];
 
   TourService.areaTours().then(function (res) {
-    vm.allTours = res.data.tours;
-    // console.log(vm.allTours);
+    $scope.allTours = res.data.tours;
+    // console.log($scope.allTours);
   });
 
   // Editing CSS Styles on-click
-  vm.selectedIndex = -1;
+  $scope.selectedIndex = -1;
 
-  vm.clickedTour = function ($index) {
-    // console.log($index);
-    vm.selectedIndex = $index;
+  $scope.clickedTour = function ($index, t) {
+    console.log(t.id);
+    $scope.selectedIndex = $index;
   };
 
-  // vm.allTours.forEach(tour, function(tour){
+  // $scope.allTours.forEach(tour, function(tour){
   //   TourService.getMarkers(tour).then((res) =>{
-  //     vm.tourMarkers = res.data;
+  //     $scope.tourMarkers = res.data;
   //   });
   // });
 };
 
-ListTourController.$inject = ['$stateParams', 'TourService'];
+ListTourController.$inject = ['$scope', '$stateParams', 'TourService'];
 
 exports['default'] = ListTourController;
 module.exports = exports['default'];
@@ -631,7 +635,7 @@ _angular2['default'].module('app', ['ui.router', 'mm.foundation', 'ngCookies', '
   CONFIG: {
     headers: {}
   }
-}).config(_config2['default']).constant('devURL', ' https://fathomless-savannah-6575.herokuapp.com/')
+}).config(_config2['default'])
 // .constant('glocURL', 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBH5nVGZJ9PpIikitg1Q9x11xrSgg3JRlw')
 // .constant('gmapURL', 'url')
 .service('TourService', _servicesTourService2['default']).service('UserService', _servicesUserService2['default']).controller('HomeController', _controllersHomeController2['default']).controller('NewTourController', _controllersNewTourController2['default']).controller('LoginController', _controllersLoginController2['default']).controller('LogoutController', _controllersLogoutController2['default']).controller('SignupController', _controllersSignupController2['default']).controller('ListTourController', _controllersListToursController2['default']).controller('TestController', _controllersTestController2['default']).directive('newMap', _directivesNewMapDirective2['default']).directive('listMap', _directivesListMapDirective2['default']);
@@ -646,14 +650,14 @@ window.initMap = function () {
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var TourService = function TourService(UserService, $stateParams, $http, devURL, SERVER) {
+var TourService = function TourService(UserService, $stateParams, $http, SERVER) {
 
   this.areaTours = areaTours;
   this.markerData = {};
   this.submitForm = submitForm;
 
   function areaTours() {
-    var getURL = devURL + 'tours';
+    var getURL = SERVER.URL + '/tours';
     return $http({
       method: 'GET',
       url: getURL
@@ -683,7 +687,7 @@ var TourService = function TourService(UserService, $stateParams, $http, devURL,
   function submitTourForm(tourObj) {}
 };
 
-TourService.$inject = ['UserService', '$stateParams', '$http', 'devURL', 'SERVER'];
+TourService.$inject = ['UserService', '$stateParams', '$http', 'SERVER'];
 
 exports['default'] = TourService;
 module.exports = exports['default'];

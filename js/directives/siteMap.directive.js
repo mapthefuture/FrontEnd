@@ -1,9 +1,22 @@
-let listMap = function($state, TourService, SiteService) {
+let siteMap = function($state, TourService, SiteService) {
   
   return {
     restrict: 'A',
     replace: true,
-    template: '<div id="listmap"></div>',
+    template: 
+      `<div class="sitebox">
+        <div class="map" id="sitemap"></div>
+        <ul 
+        ng-repeat="s in sites" 
+        class="list tour" 
+        ng-class="{'clicked': $index == vm.selectedIndex}"
+        >
+          <li>{{ s.title }}</li>
+          <li>{{ s.location }}</li>
+          <li>{{ s.distance }}</li>
+          <li class="list hidden">{{ s.description }}</li>
+        </ul>
+      </div>`,
     controller: 'ListSiteController as vm',
     link: function (scope, element, attrs) {
       var map, infoWindow;
@@ -95,7 +108,7 @@ let listMap = function($state, TourService, SiteService) {
       initMap();
 
       /* Load markers code */
-      SiteService.getSites(${id}).then((res) =>{
+      SiteService.getSites(id).then((res) =>{
         console.log(res);
         var sites = res.data.sites;
 
@@ -108,6 +121,6 @@ let listMap = function($state, TourService, SiteService) {
 
 };
 
-listMap.$inject = ['$state', 'TourService', 'SiteService'];
+siteMap.$inject = ['$state', 'TourService', 'SiteService'];
 
-export default listMap;
+export default siteMap;

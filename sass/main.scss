@@ -35,6 +35,16 @@ body {
   background-color: $grey;
 }
 
+.top-bar {
+  background-color: $black;
+  color: $white;
+}
+
+@media(min-width: 40.0625em) {.top-bar-section li:not(.has-form) a:not(.button) {
+    background: $black;
+    color: $white;
+}}
+
 .container {
   width: 80%;
   max-width: 1000px;

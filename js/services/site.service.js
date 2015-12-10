@@ -1,6 +1,6 @@
 let SiteService = function(UserService, $stateParams, $http, SERVER) {
   
-function getSites(tour) {
+  function getSites(tour) {
     let getURL = SERVER.URL + 'tours/' + tour.id + '/sites';
     return $http({
       method: 'GET',

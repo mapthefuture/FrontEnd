@@ -13,7 +13,7 @@ let ListTourController = function($scope, $stateParams, TourService) {
   // Editing CSS Styles on-click
   $scope.selectedIndex = -1;
 
-  $scope.clickedTour = function($index,t.id) {
+  $scope.clickedTour = function($index,t) {
     console.log(t.id);
     $scope.selectedIndex = $index;
   };

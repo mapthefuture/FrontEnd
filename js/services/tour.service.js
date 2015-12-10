@@ -5,7 +5,7 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
   this.submitForm = submitForm;
 
   function areaTours() {
-    let getURL = SERVER.URL + 'tours';
+    let getURL = SERVER.URL + '/tours';
     return $http({
       method: 'GET',
       url: getURL
