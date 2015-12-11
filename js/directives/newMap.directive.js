@@ -5,9 +5,7 @@ let newMap = function($state, TourService, $compile) {
     replace: true,
     template: '<div id="newMap"></div>',
     controller: 'NewTourController as vm',
-    // scope: {
-    //   map: '=',
-    // },
+
     link: function (scope, element, attrs, vm) {
 
       var map, infoWindow; 
@@ -114,7 +112,6 @@ let newMap = function($state, TourService, $compile) {
       map.addListener('click', function(e) {
         setMarker(map, e.latLng);
       }); 
-
     }
   };
 };
