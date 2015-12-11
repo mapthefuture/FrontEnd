@@ -1,19 +1,23 @@
 <div class="listTourWrapper">
   <h2>Choose a new adventure!</h2>
   <div list-map="" class="list map"></div>
-  <div class="list tours">
-    <div class="tourbox">
-      <div 
-      ng-repeat="t in vm.allTours" 
+  <div class="list tours parallax">
+    <div class="tourbox parallax__layer parallax__layer--back">
+      <ul 
+      ng-repeat="t in allTours" 
       class="list tour" 
-      ng-class="{'clicked': $index == vm.selectedIndex}" 
-      ng-click="vm.clickedTour($index)"
+      ng-class="{'clicked': $index == selectedIndex}" 
+      ng-click="clickedTour($index, t)"
+      ng-mouseover="hoverTour(t)"
       >
-        <p>{{ t.title }}</p>
-        <p>{{ t.distance }}</p>
-        <p>{{ t.duration }}</p>
-        <p class="list hidden">{{ t.description }}</p>
-      </div>
+        <li>{{ t.title }}</li>
+        <li>{{ t.distance }}</li>
+        <li>{{ t.duration }}</li>
+        <li class="list hidden">{{ t.description }}</li>
+      </ul>
     </div>
   </div>
+  <site-map>
+
+  </site-map>
 </div>

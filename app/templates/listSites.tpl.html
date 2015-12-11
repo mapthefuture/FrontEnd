@@ -1,0 +1,16 @@
+<div class="listSiteWrapper">
+  <div class="list sites">
+    <div class="sitebox">
+      <div 
+      ng-repeat="s in sites" 
+      class="list tour" 
+      ng-class="{'clicked': $index == vm.selectedIndex}"
+      >
+        <p>{{ s.title }}</p>
+        <p>{{ s.location }}</p>
+        <p>{{ s.distance }}</p>
+        <p class="list hidden">{{ s.description }}</p>
+      </div>
+    </div>
+  </div>
+</div>
