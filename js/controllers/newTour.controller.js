@@ -1,16 +1,18 @@
+import jquery from 'jquery';
+
 let NewTourController = function($scope, $http, TourService, SERVER) {
   
   let vm = this;
 
   vm.submitSiteForm = submitSiteForm;
-
   vm.submitTourForm = submitTourForm;
-
+  vm.showImageUpload = false;
+  vm.uploadImage = uploadImage;
   vm.tourId = {}; 
-
   vm.tourStart = [];
 
   function submitSiteForm (siteObj) {
+
     TourService.submitSiteForm(siteObj).then( (res) => {
 
       // Set start of tour to first site
@@ -29,7 +31,6 @@ let NewTourController = function($scope, $http, TourService, SERVER) {
           start_lon: vm.tourStart[0].longitude
         };
         newTourStart();
-        console.log(vm.tourStart.length);
       }
     });
   }
@@ -38,9 +39,15 @@ let NewTourController = function($scope, $http, TourService, SERVER) {
     TourService.submitTourForm(tourObj).then( (res) => {
       // TourService.submitFormSuccess(res);
       // console.log(res);
+      // jquery('.newMap').toggleClass("display");
+      // jquery('.newForm').toggleClass("donotdisplay");
       vm.tourId = res.data.tour.id;
       console.log(vm.tourId);
     });
+  }
+
+  function uploadImage (data) {
+    console.log(data);
   }
 
   // function getTourId () {

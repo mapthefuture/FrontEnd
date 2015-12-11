@@ -80,10 +80,11 @@ let newMap = function($state, TourService, $compile) {
         markers.push(marker);
 
         var contentString = 
-        `<div class="markerForm" ng-controller="NewTourController">
+        `<div class="markerForm" ng-controller="NewTourController as vm">
             <form class="newForm" ng-submit="vm.submitSiteForm(site)">
               <input ng-model="site.title" type="text" placeholder="Title">
               <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>
+              <div>Add image<input type="file" id="siteImage"></div>
               <button>Submit</button>
             </form>
             <button class="deleteButton">Delete marker</button>
@@ -104,10 +105,6 @@ let newMap = function($state, TourService, $compile) {
 
         });
 
-
-
-
- 
       }
 
       // show the map

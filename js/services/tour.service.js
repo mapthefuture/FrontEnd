@@ -28,10 +28,47 @@ let TourService = function(UserService, $stateParams, $http, devURL, SERVER) {
     let s = new site(siteObj);
     let c = this.markerData;
 
+    // Get file field
+    var fileField = document.getElementById('siteImage');
+
+    // Get file
+    var imageFile = fileField.files[0];
+    console.log(imageFile);
+
+    // Create an instance of FormData
+    var formData = new FormData();
+
+    // Add image
+    formData.append('image', imageFile);
+
+    // Add lat/lon to s
     for (var latitude in c) { s[latitude] = c[latitude]; }
     for (var longitude in c) { s[longitude] = c[longitude]; }
     console.log(s);
-    return $http.post(SERVER.URL + '/tours/' + c.id + '/sites', s, SERVER.CONFIG);
+
+    // Add other data to FormData
+    formData.append('title', s.title);
+    formData.append('description', s.description);
+    formData.append('latitude', s.latitude);
+    formData.append('longitude', s.longitude);
+    formData.append('id', s.id);
+
+
+
+    // Set up server to accept image
+
+    // var url = 'https://fathomless-savannah-6575.herokuapp.com';
+    // var config = {
+    //   headers: {
+    //     'Content-Type': undefined
+    //   }
+    // };
+
+    // return $http.post(url + '/tours/' + c.id + '/sites', formData, config);
+
+    SERVER.CONFIG.headers['Content-Type'] = undefined;
+
+    return $http.post(SERVER.URL + '/tours/' + c.id + '/sites', formData, SERVER.CONFIG);
   }
 
   function submitTourForm (tourObj) {
