@@ -1,7 +1,6 @@
 let TourService = function(UserService, $stateParams, $http, SERVER) {
   
   this.areaTours = areaTours;
-  this.markerData = {};
   this.submitForm = submitForm;
 
   function areaTours() {

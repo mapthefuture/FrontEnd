@@ -1,5 +1,5 @@
-let listMap = function($state, TourService) {
-  
+let listMap = function($state, TourService, MapService) {
+
   return {
     restrict: 'A',
     replace: true,
@@ -7,13 +7,18 @@ let listMap = function($state, TourService) {
     controller: 'ListTourController as vm',
     link: function (scope, element, attrs) {
       var map, infoWindow;
-      var markers = [];
       var initialLocation;
+
+      function initMap() {
+        if (map === void 0) {
+          map = new google.maps.Map(element[0], mapOptions);
+        }
+      }
 
       // Find location
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(function (pos) {
-          initialLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+          MapService.initialLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
           map.setCenter(initialLocation);
         });
       }
@@ -36,14 +41,7 @@ let listMap = function($state, TourService) {
             { visibility: "off" }
           ]
         }]
-      };
-        
-      // Map initialization
-      function initMap() {
-        if (map === void 0) {
-          map = new google.maps.Map(element[0], mapOptions);
-        }
-      }    
+      };   
         
       // place a marker
       function setMarker(map, pos, title, content) {
@@ -72,42 +70,27 @@ let listMap = function($state, TourService) {
           infoWindow = new google.maps.InfoWindow(infoWindowOptions);
           infoWindow.open(map, marker);
 
-          function clearOtherMarkers(pos) {
-            setMapOnAll(null);
+          function setMapOnAll(map) {
             for (var i = 0; i < markers.length; i++) {
-              if (markers[i].pos !== pos) {
-                //Remove the marker from Map                  
-                markers[i].setMap(null);
-                return;
-              }
+              markers[i].setMap(map);
             }
           }
         });
       }
 
-      // function setMapOnAll(map) {
-      //   for (var i = 0; i < markers.length; i++) {
-      //     markers[i].setMap(map);
-      //   }
-      // }
-        
-      // show the map and place some markers
-      initMap();
-
       /* Load markers code */
       TourService.areaTours().then((res) =>{
-        console.log(res);
         var tours = res.data.tours;
-
         tours.forEach(function (tour) {
-          setMarker(map, new google.maps.LatLng(tour.start_lat,tour.start_lon),tour.title,tour.description);
+          MapService.setMarker(MapService.map, new google.maps.LatLng(tour.start_lat,tour.start_lon),tour.title,tour.description);
         });
       });
+
+      initMap();
     }
   };
-
 };
 
-listMap.$inject = ['$state', 'TourService'];
+listMap.$inject = ['$state', 'TourService', 'MapService'];
 
 export default listMap;

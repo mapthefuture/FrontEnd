@@ -1,4 +1,4 @@
-let newMap = function($state, TourService, $compile) {
+let newMap = function($state, MapService, TourService, $compile) {
   
   return {
     restrict: 'EA',
@@ -10,9 +10,9 @@ let newMap = function($state, TourService, $compile) {
     // },
     link: function (scope, element, attrs) {
 
-      var map, infoWindow; 
-
+      var map, infoWindow;
       var initialLocation = new google.maps.LatLng(27.9881, 86.9253);
+      MapService.initMap(mapOptions);
 
       // Find location
       if ("geolocation" in navigator) {
@@ -46,77 +46,40 @@ let newMap = function($state, TourService, $compile) {
           ]
         }]
       };
-        
-      // init the map
-      function initMap() {
-        if (map === void 0) {
-          map = new google.maps.Map(element[0], mapOptions);
-        }
-      }    
-        
-      // place a marker
-      function setMarker(map, latLng, title, description) {
 
-        var marker = new google.maps.Marker({
-          position:latLng,
-          map: map,
-          draggable:true,
-          animation: google.maps.Animation.DROP,
-          icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
-        });
+      // map.panTo(latLng);
+      
+      // adds markers to array
+      markers.push(marker); 
 
-        // set unique id
-        marker.id = uniqueId;
-        uniqueId++;
+      var contentString = 
+      `<div class="markerForm" ng-controller="NewTourController">
+          <form class="newForm" ng-submit="vm.submitForm(site)">
+            <input ng-model="site.title" type="text" placeholder="Title">
+            <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>
+            <input type="checkbox">Is this the tour start?
+            <button>Submit</button>
+          </form>
+          <button class="deleteButton">Delete marker</button>
+        </div>`;
+      var compiled = $compile(contentString);
+      var scopedHTML = compiled(scope);
 
-        var lat = marker.getPosition().lat();
-        var lon = marker.getPosition().lng();
+      var infoWindow = new google.maps.InfoWindow({
+        content: scopedHTML[0]
+      });
 
-        TourService.markerData = {
-          latitude: lat,
-          longitude: lon,
-          id: marker.id
-        };
+      marker.addListener('click', function() {
+        infoWindow.open(map, marker);
+      });
 
-        // map.panTo(latLng);
-        
-        // adds markers to array
-        markers.push(marker); 
-
-        var contentString = 
-        `<div class="markerForm" ng-controller="NewTourController">
-            <form class="newForm" ng-submit="vm.submitForm(site)">
-              <input ng-model="site.title" type="text" placeholder="Title">
-              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>
-              <input type="checkbox">Is this the tour start?
-              <button>Submit</button>
-            </form>
-            <button class="deleteButton">Delete marker</button>
-          </div>`;
-        var compiled = $compile(contentString);
-        var scopedHTML = compiled(scope);
-
-        var infoWindow = new google.maps.InfoWindow({
-          content: scopedHTML[0]
-        });
-
-        marker.addListener('click', function() {
-          infoWindow.open(map, marker);
-        });
-
-        infoWindow.addListener('domready', function() {
+      infoWindow.addListener('domready', function() {
 
 
-        });
-
-
-
-
- 
-      }
+      });
 
       // show the map
-      initMap();
+      MapService.initMap();
 
       // Place marker where clicked
       map.addListener('click', function(e) {
@@ -127,6 +90,6 @@ let newMap = function($state, TourService, $compile) {
   };
 };
 
-newMap.$inject = ['$state', 'TourService', '$compile'];
+newMap.$inject = ['$state', 'MapService', 'TourService', '$compile'];
 
 export default newMap;
