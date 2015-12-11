@@ -1,17 +1,21 @@
+import jquery from 'jquery';
+
 let HomeController = function($scope, UserService, $state) {
 
-  let promise = UserService.checkAuth();
+  // let promise = UserService.checkAuth();
 
-  if (promise) {
-    promise.then( (res) => {
-      console.log(res);
-      if (res.data.status === 'Authentication failed.') {
-        $state.go('root.login');
-      } else {
-        $scope.message = 'I am logged in';
-      }
-    });
-  }
+  // if (promise) {
+  //   promise.then( (res) => {
+  //     console.log(res);
+  //     if (res.data.status === 'Authentication failed.') {
+  //       // $state.go('root.login');
+  //     } else {
+  //       $scope.message = 'I am logged in';
+  //     }
+  //   });
+  // }
+
+  // jquery('.container').addClass("homePage");
 
   $scope.logmeout = function() {
     UserService.logout();
@@ -35,9 +39,20 @@ let HomeController = function($scope, UserService, $state) {
       mapTypeControl: false,
       streetViewControl:false,
       draggable: false,
+      styles: [{
+        featureType: "poi",
+        elementType: "labels",
+        stylers: [
+        { visibility: "off" }]
+      },
+        {
+          featureType: "transit",
+          stylers: [
+            { visibility: "off" }
+          ]
+        }],
       scrollwheel: false
     },
-
     mapTypeControl: true,
     zoom: 18,
   };

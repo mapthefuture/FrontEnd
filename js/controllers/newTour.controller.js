@@ -1,6 +1,19 @@
 import jquery from 'jquery';
 
-let NewTourController = function($scope, $http, TourService, SERVER) {
+let NewTourController = function($scope, $http, TourService, SERVER, UserService) {
+
+  let promise = UserService.checkAuth();
+
+  if (promise) {
+    promise.then( (res) => {
+      console.log(res);
+      if (res.data.status === 'Authentication failed.') {
+        $state.go('root.login');
+      } else {
+        $scope.message = 'I am logged in';
+      }
+    });
+  }
   
   let vm = this;
 
@@ -43,6 +56,6 @@ let NewTourController = function($scope, $http, TourService, SERVER) {
   }
 };
 
-NewTourController.$inject = ['$scope', '$http', 'TourService', 'SERVER'];
+NewTourController.$inject = ['$scope', '$http', 'TourService', 'SERVER', 'UserService'];
 
 export default NewTourController;

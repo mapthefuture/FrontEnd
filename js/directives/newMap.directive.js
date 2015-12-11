@@ -21,14 +21,13 @@ let newMap = function($state, TourService, $compile) {
       }
 
       var markers = [];
-      // var uniqueId = Date.now();
         
       // map config
       var mapOptions = {
         center: initialLocation,
         zoom: 30,
         mapTypeId: google.maps.MapTypeId.HYBRID,
-        // scrollwheel: false,
+        scrollwheel: false,
         streetViewControl: false,
 
         styles: [{

@@ -6410,6 +6410,11 @@ body {
 li {
   list-style-type: none; }
 
+.mainContainer {
+  position: relative;
+  width: 100%;
+  height: 100%; }
+
 .top-bar {
   background-color: #4A4A4A;
   color: #FFFFFF; }
@@ -6425,8 +6430,9 @@ li {
 .container {
   width: 80%;
   max-width: 1000px;
-  height: 100%;
-  margin: 0 auto; }
+  height: 86.7%;
+  margin: 0 auto;
+  z-index: 1; }
 
 .parallax {
   perspective: 1px;
@@ -6454,28 +6460,60 @@ li {
   display: none; }
 
 .homeWrapper {
-  height: 100%;
-  width: 100%;
-  margin: 0; }
+  height: 94%;
+  margin: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0; }
   .homeWrapper h2 {
     margin: 0 auto;
     text-align: center; }
+  .homeWrapper .homeOverlay {
+    background-color: #494949;
+    position: absolute;
+    z-index: 98;
+    width: 100%;
+    height: 100%;
+    opacity: 0.6; }
   .homeWrapper .homeRedirect {
-    display: block;
-    margin: 0 auto; }
+    margin: 0 auto;
+    position: absolute;
+    z-index: 99;
+    width: 100%;
+    height: 100%;
+    opacity: 0.91; }
+    .homeWrapper .homeRedirect h2 {
+      color: white; }
     .homeWrapper .homeRedirect button {
       margin: 15px auto;
-      display: block; }
+      display: block;
+      opacity: 1; }
     .homeWrapper .homeRedirect div {
       margin: 15% auto;
       width: 250px; }
   .homeWrapper .homeMap {
-    width: 100vw;
+    width: 100%;
+    height: 100%;
     margin: 0; }
+    .homeWrapper .homeMap .angular-google-map-container {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute; }
+
+.newWrapper {
+  width: 100%;
+  height: 95%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute; }
 
 .newForm {
   margin: 15px auto;
-  text-align: center; }
+  text-align: center;
+  width: 50%; }
   .newForm form {
     border-radius: 5px;
     padding: 25px; }
@@ -6487,9 +6525,10 @@ li {
       height: 100%; }
 
 #newMap {
-  max-width: 90vw;
-  height: 500px;
-  margin: 5px auto; }
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute; }
 
 .listTourWrapper {
   width: 100%;
@@ -6529,10 +6568,6 @@ li {
         background-color: #CCCCCC; }
   .listTourWrapper .sitebox {
     margin: 50 auto; }
-
-.angular-google-map-container {
-  height: 500px;
-  width: 80vw; }
 
 .uploadForm {
   clear: both;
