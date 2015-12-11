@@ -39,6 +39,10 @@ var config = function config($stateProvider, $urlRouterProvider) {
     url: '/test',
     controller: 'TestController',
     templateUrl: 'templates/test.tpl.html'
+  }).state('root.newnew', {
+    url: '/newnew',
+    controller: 'NewNewController',
+    templateUrl: 'templates/newnew.tpl.html'
   });
 };
 
@@ -78,6 +82,36 @@ var HomeController = function HomeController($scope, UserService, $state) {
 
   $scope.newTour = function () {
     $state.go('root.new');
+  };
+
+  var initialLocation = new google.maps.LatLng(27.9881, 86.9253);
+
+  var lat = 27.9881;
+  var lon = 86.9253;
+  var coords;
+  // Find location
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      lat = position.coords.latitude;
+      lon = position.coords.longitude;
+      initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    });
+  }
+
+  $scope.map = {
+    center: {
+      latitude: 40.1451,
+      longitude: -99.6680
+    },
+    options: {
+      zoomControl: false,
+      mapTypeControl: false,
+      streetViewControl: false,
+      scrollwheel: false
+    },
+
+    mapTypeControl: true,
+    zoom: 8
   };
 };
 
@@ -169,55 +203,62 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var NewTourController = function NewTourController($scope, $http, TourService) {
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var NewTourController = function NewTourController($scope, $http, TourService, SERVER) {
 
   var vm = this;
 
-  vm.submitForm = submitForm;
-
+  vm.submitSiteForm = submitSiteForm;
   vm.submitTourForm = submitTourForm;
+  vm.tourId = {};
+  vm.tourStart = [];
 
-  function submitForm(siteObj) {
-    TourService.submitForm(siteObj).then(function (res) {
-      TourService.submitFormSuccess(res);
-      console.log(res);
+  function submitSiteForm(siteObj) {
+
+    TourService.submitSiteForm(siteObj).then(function (res) {
+
+      // Set start of tour to first site
+      var tourStartObj = {};
+      var newTourStart = function newTourStart() {
+        var c = TourService.markerData;
+        var t = tourStartObj;
+        console.log(c);
+        return $http.patch(SERVER.URL + '/tours/' + c.id, t, SERVER.CONFIG);
+      };
+
+      vm.tourStart.push(res.data.site);
+      if (vm.tourStart.length === 1) {
+        tourStartObj = {
+          start_lat: vm.tourStart[0].latitude,
+          start_lon: vm.tourStart[0].longitude
+        };
+        newTourStart();
+      }
     });
   }
 
   function submitTourForm(tourObj) {
     TourService.submitTourForm(tourObj).then(function (res) {
-      TourService.submitFormSuccess(res);
-      console.log(res);
+      // jquery('.newMap').toggleClass("display");
+      // jquery('.newForm').toggleClass("donotdisplay");
+      vm.tourId = res.data.tour.id;
+      console.log(vm.tourId);
     });
   }
-
-  // $scope.login = function (user) {
-  //   UserService.sendLogin(user).then( (res) => {
-  //     UserService.loginSuccess(res);
-  //   });
-  // };
-
-  // let Thing = function(obj) {
-  //   this.title = obj.title;
-  //   this.author = obj.author || 'function not built';
-  //   this.length = 'function not built';
-  //   this.duration = 'function not built';
-  //   // this.points
-  // };
-
-  // $scope.newThing = (obj) => {
-  //   let t = new Thing(obj);
-
-  //   $http.post(requestInfo);
-  // };
 };
 
-NewTourController.$inject = ['$scope', '$http', 'TourService'];
+NewTourController.$inject = ['$scope', '$http', 'TourService', 'SERVER'];
 
 exports['default'] = NewTourController;
 module.exports = exports['default'];
 
-},{}],7:[function(require,module,exports){
+},{"jquery":27}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -423,89 +464,7 @@ exports['default'] = listMap;
 module.exports = exports['default'];
 
 },{}],10:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-var newMap = function newMap($state, MapService, TourService, $compile) {
-
-  return {
-    restrict: 'EA',
-    replace: true,
-    template: '<div id="gmap"></div>',
-    controller: 'NewTourController as vm',
-    // scope: {
-    //   map: '=',
-    // },
-    link: function link(scope, element, attrs) {
-
-      var map, infoWindow;
-      var initialLocation = new google.maps.LatLng(27.9881, 86.9253);
-      MapService.initMap(mapOptions);
-
-      // Find location
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-          initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-          map.setCenter(initialLocation);
-        });
-      }
-
-      var markers = [];
-      var uniqueId = Math.floor(Math.random() * 500) + 1;
-
-      // map config
-      var mapOptions = {
-        center: initialLocation,
-        zoom: 30,
-        mapTypeId: google.maps.MapTypeId.HYBRID,
-        // scrollwheel: false,
-        streetViewControl: false,
-
-        styles: [{
-          featureType: "poi",
-          stylers: [{ visibility: "off" }]
-        }, {
-          featureType: "transit",
-          stylers: [{ visibility: "off" }]
-        }]
-      };
-
-      // map.panTo(latLng);
-
-      // adds markers to array
-      markers.push(marker);
-
-      var contentString = '<div class="markerForm" ng-controller="NewTourController">\n          <form class="newForm" ng-submit="vm.submitForm(site)">\n            <input ng-model="site.title" type="text" placeholder="Title">\n            <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n            <input type="checkbox">Is this the tour start?\n            <button>Submit</button>\n          </form>\n          <button class="deleteButton">Delete marker</button>\n        </div>';
-      var compiled = $compile(contentString);
-      var scopedHTML = compiled(scope);
-
-      var infoWindow = new google.maps.InfoWindow({
-        content: scopedHTML[0]
-      });
-
-      marker.addListener('click', function () {
-        infoWindow.open(map, marker);
-      });
-
-      infoWindow.addListener('domready', function () {});
-
-      // show the map
-      MapService.initMap();
-
-      // Place marker where clicked
-      map.addListener('click', function (e) {
-        setMarker(map, e.latLng);
-      });
-    }
-  };
-};
-
-newMap.$inject = ['$state', 'MapService', 'TourService', '$compile'];
-
-exports['default'] = newMap;
-module.exports = exports['default'];
+"use strict";
 
 },{}],11:[function(require,module,exports){
 'use strict';
@@ -521,8 +480,6 @@ require('angular-ui-router');
 require('angular-foundation');
 
 require('angular-cookies');
-
-require('lodash');
 
 require('angular-simple-logger');
 
@@ -591,6 +548,8 @@ var _directivesNewMapDirective2 = _interopRequireDefault(_directivesNewMapDirect
 var _directivesListMapDirective = require('./directives/listMap.directive');
 
 var _directivesListMapDirective2 = _interopRequireDefault(_directivesListMapDirective);
+
+window._ = require('lodash');
 
 _angular2['default'].module('app', ['ui.router', 'mm.foundation', 'ngCookies', 'uiGmapgoogle-maps']).constant('SERVER', {
   URL: 'https://fathomless-savannah-6575.herokuapp.com',
@@ -752,7 +711,10 @@ Object.defineProperty(exports, '__esModule', {
 var TourService = function TourService(UserService, $stateParams, $http, SERVER) {
 
   this.areaTours = areaTours;
-  this.submitForm = submitForm;
+  this.markerData = {};
+  this.tourStartObj = {};
+  this.submitSiteForm = submitSiteForm;
+  this.submitTourForm = submitTourForm;
 
   function areaTours() {
     var getURL = SERVER.URL + '/tours';
@@ -767,10 +729,29 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
     this.description = siteObj.description;
   }
 
-  function submitForm(siteObj) {
+  function tour(tourObj) {
+    this.title = tourObj.title;
+    this.description = tourObj.description;
+  }
+
+  function submitSiteForm(siteObj) {
     var s = new site(siteObj);
     var c = this.markerData;
 
+    // Get file field
+    var fileField = document.getElementById('siteImage');
+
+    // Get file
+    var imageFile = fileField.files[0];
+    console.log(imageFile);
+
+    // Create an instance of FormData
+    var formData = new FormData();
+
+    // Add image
+    formData.append('image', imageFile);
+
+    // Add lat/lon to s
     for (var latitude in c) {
       s[latitude] = c[latitude];
     }
@@ -778,11 +759,32 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
       s[longitude] = c[longitude];
     }
     console.log(s);
-    alert("Submitted");
-    return $http.post(SERVER.URL + '/tours/:' + c.id + '/sites', s, SERVER.CONFIG);
+
+    // Add other data to FormData
+    formData.append('title', s.title);
+    formData.append('description', s.description);
+    formData.append('latitude', s.latitude);
+    formData.append('longitude', s.longitude);
+    formData.append('id', s.id);
+
+    // Set up server to accept image/formdata
+    SERVER.CONFIG.headers['Content-Type'] = undefined;
+
+    return $http.post(SERVER.URL + '/tours/' + c.id + '/sites', formData, SERVER.CONFIG);
   }
 
-  function submitTourForm(tourObj) {}
+  function submitTourForm(tourObj) {
+    var t = new tour(tourObj);
+    console.log(t);
+    return $http.post(SERVER.URL + '/tours', t, SERVER.CONFIG);
+  }
+
+  function newTourStart() {
+    var c = this.markerData;
+    var t = this.tourStartObj;
+    console.log(t);
+    return $http.patch(SERVER.URL + '/tours/' + c.id, t, SERVER.CONFIG);
+  }
 };
 
 TourService.$inject = ['UserService', '$stateParams', '$http', 'SERVER'];
@@ -809,17 +811,14 @@ var UserService = function UserService($http, SERVER, $cookies, $state) {
 
     var token = $cookies.get('authToken');
 
-    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = token;
+    SERVER.CONFIG.headers['Access-Token'] = token;
 
-    if (token) {
-      return $http.get(SERVER.URL + 'check', SERVER.CONFIG);
-    } else {
-      // $state.go('root.login');
+    if (!token) {
+      $state.go('root.login');
     }
   };
 
   this.sendLogin = function (userObj) {
-    console.log(userObj);
     return $http.post(SERVER.URL + '/user/show', userObj, SERVER.CONFIG);
   };
 
@@ -828,8 +827,9 @@ var UserService = function UserService($http, SERVER, $cookies, $state) {
   };
 
   this.loginSuccess = function (res) {
-    $cookies.put('authToken', res.data.auth_token);
-    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
+    $cookies.put('authToken', res.data.user.access_token);
+    SERVER.CONFIG.headers['Access-Token'] = res.data.user.access_token;
+    console.log(res.data);
     $state.go('root.home');
     (0, _jquery2['default'])('.logout').toggleClass("display");
     (0, _jquery2['default'])('.login').toggleClass("donotdisplay");
@@ -838,13 +838,13 @@ var UserService = function UserService($http, SERVER, $cookies, $state) {
 
   this.signupSuccess = function (res) {
     $cookies.put('authToken', res.data.auth_token);
-    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = res.data.auth_token;
+    SERVER.CONFIG.headers['Access-Token'] = res.data.auth_token;
     $state.go('root.home');
   };
 
   this.logout = function () {
     $cookies.remove('authToken');
-    SERVER.CONFIG.headers['X-AUTH-TOKEN'] = null;
+    SERVER.CONFIG.headers['Access-Token'] = null;
     (0, _jquery2['default'])('.logout').toggleClass("display");
     (0, _jquery2['default'])('.login').toggleClass("donotdisplay");
     (0, _jquery2['default'])('.signup').toggleClass("donotdisplay");

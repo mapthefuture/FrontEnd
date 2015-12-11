@@ -1,12 +1,14 @@
 <div class="newWrapper">
-  <div class="newForm">
-    <form class="new form" ng-submit="vm.submitTourForm(tour)">
+  <div>
+    <form class="newForm" ng-submit="vm.submitTourForm(tour)">
       <h2>Create a new  _______</h2>
       <input class="new title" type="text" placeholder="Thing Title" ng-model="tour.title">
       <input class="new desc" type="text" placeholder="Briefly describe your adventure" ng-model="tour.description">
-     Click below to add sites
-      <div new-map="" class="new map"></div>
       <button>Submit</button>
     </form>
+    <div class="newMap">
+     Click below to add sites
+      <div new-map=""></div>
+    </div>
   </div>
 </div>

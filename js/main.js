@@ -1,9 +1,11 @@
 import angular from 'angular';
 import 'angular-ui-router';
 
+window._ =  require('lodash');
+
 import 'angular-foundation';
 import 'angular-cookies';
-import 'lodash';
+
 import 'angular-simple-logger';
 
 import 'angular-google-maps';

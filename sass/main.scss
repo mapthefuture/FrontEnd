@@ -136,10 +136,13 @@ li {
   }
 }
 
-#gmap {
-  max-width: 80%;
+#newMap {
+  max-width: 90vw;
   height: 500px;
   margin: 5px auto; 
+}
+
+.newMap {
 }
 
 .listTourWrapper {
@@ -203,3 +206,12 @@ li {
   width: 80vw;
 }
 
+.uploadForm {
+  clear: both;
+  width: 275px;
+  margin-top: 10px;
+  float: right;
+  background-color: rgba(51, 51, 51, 1);
+  color: white;
+  padding: 10px 10px 5px 10px;
+}

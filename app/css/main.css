@@ -6481,8 +6481,8 @@ li {
       width: 20vw;
       height: 100%; }
 
-#gmap {
-  max-width: 80%;
+#newMap {
+  max-width: 90vw;
   height: 500px;
   margin: 5px auto; }
 
@@ -6528,5 +6528,14 @@ li {
 .angular-google-map-container {
   height: 500px;
   width: 80vw; }
+
+.uploadForm {
+  clear: both;
+  width: 275px;
+  margin-top: 10px;
+  float: right;
+  background-color: #333333;
+  color: white;
+  padding: 10px 10px 5px 10px; }
 
 /*# sourceMappingURL=main.css.map */

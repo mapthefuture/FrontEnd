@@ -1,7 +1,10 @@
 let TourService = function(UserService, $stateParams, $http, SERVER) {
   
   this.areaTours = areaTours;
-  this.submitForm = submitForm;
+  this.markerData = {};
+  this.tourStartObj = {};
+  this.submitSiteForm = submitSiteForm;
+  this.submitTourForm = submitTourForm;
 
   function areaTours() {
     let getURL = SERVER.URL + '/tours';
@@ -16,22 +19,58 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
     this.description = siteObj.description;
   }
 
-  function submitForm (siteObj) {
+  function tour (tourObj) {
+    this.title = tourObj.title;
+    this.description = tourObj.description;
+  }
+
+  function submitSiteForm (siteObj) {
     let s = new site(siteObj);
     let c = this.markerData;
 
+    // Get file field
+    var fileField = document.getElementById('siteImage');
+
+    // Get file
+    var imageFile = fileField.files[0];
+    console.log(imageFile);
+
+    // Create an instance of FormData
+    var formData = new FormData();
+
+    // Add image
+    formData.append('image', imageFile);
+
+    // Add lat/lon to s
     for (var latitude in c) { s[latitude] = c[latitude]; }
     for (var longitude in c) { s[longitude] = c[longitude]; }
     console.log(s);
-    alert("Submitted");
-    return $http.post(SERVER.URL + '/tours/:' + c.id + '/sites', s, SERVER.CONFIG);
+
+    // Add other data to FormData
+    formData.append('title', s.title);
+    formData.append('description', s.description);
+    formData.append('latitude', s.latitude);
+    formData.append('longitude', s.longitude);
+    formData.append('id', s.id);
+
+    // Set up server to accept image/formdata
+    SERVER.CONFIG.headers['Content-Type'] = undefined;
+
+    return $http.post(SERVER.URL + '/tours/' + c.id + '/sites', formData, SERVER.CONFIG);
   }
 
   function submitTourForm (tourObj) {
-
-    
+    let t = new tour(tourObj);
+    console.log(t);
+    return $http.post(SERVER.URL + '/tours', t, SERVER.CONFIG);
   }
 
+  function newTourStart () {
+    let c = this.markerData;
+    let t = this.tourStartObj;
+    console.log(t);
+    return $http.patch(SERVER.URL + '/tours/' + c.id, t, SERVER.CONFIG);  
+  }
 };
 
 TourService.$inject = ['UserService', '$stateParams', '$http', 'SERVER'];
