@@ -53,19 +53,7 @@ let TourService = function(UserService, $stateParams, $http, devURL, SERVER) {
     formData.append('longitude', s.longitude);
     formData.append('id', s.id);
 
-
-
-    // Set up server to accept image
-
-    // var url = 'https://fathomless-savannah-6575.herokuapp.com';
-    // var config = {
-    //   headers: {
-    //     'Content-Type': undefined
-    //   }
-    // };
-
-    // return $http.post(url + '/tours/' + c.id + '/sites', formData, config);
-
+    // Set up server to accept image/formdata
     SERVER.CONFIG.headers['Content-Type'] = undefined;
 
     return $http.post(SERVER.URL + '/tours/' + c.id + '/sites', formData, SERVER.CONFIG);

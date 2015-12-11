@@ -210,8 +210,6 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
 
   vm.submitSiteForm = submitSiteForm;
   vm.submitTourForm = submitTourForm;
-  vm.showImageUpload = false;
-  vm.uploadImage = uploadImage;
   vm.tourId = {};
   vm.tourStart = [];
 
@@ -241,42 +239,12 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
 
   function submitTourForm(tourObj) {
     TourService.submitTourForm(tourObj).then(function (res) {
-      // TourService.submitFormSuccess(res);
-      // console.log(res);
       // jquery('.newMap').toggleClass("display");
       // jquery('.newForm').toggleClass("donotdisplay");
       vm.tourId = res.data.tour.id;
       console.log(vm.tourId);
     });
   }
-
-  function uploadImage(data) {
-    console.log(data);
-  }
-
-  // function getTourId () {
-  //   return tourId;
-  // }
-
-  // $scope.login = function (user) {
-  //   UserService.sendLogin(user).then( (res) => {
-  //     UserService.loginSuccess(res);
-  //   });
-  // };
-
-  // let Thing = function(obj) {
-  //   this.title = obj.title;
-  //   this.author = obj.author || 'function not built';
-  //   this.length = 'function not built';
-  //   this.duration = 'function not built';
-  //   // this.points
-  // };
-
-  // $scope.newThing = (obj) => {
-  //   let t = new Thing(obj);
-
-  //   $http.post(requestInfo);
-  // };
 };
 
 NewTourController.$inject = ['$scope', '$http', 'TourService', 'SERVER'];
@@ -284,7 +252,7 @@ NewTourController.$inject = ['$scope', '$http', 'TourService', 'SERVER'];
 exports['default'] = NewTourController;
 module.exports = exports['default'];
 
-},{"jquery":26}],7:[function(require,module,exports){
+},{"jquery":25}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -518,9 +486,7 @@ var newMap = function newMap($state, TourService, $compile) {
     replace: true,
     template: '<div id="newMap"></div>',
     controller: 'NewTourController as vm',
-    // scope: {
-    //   map: '=',
-    // },
+
     link: function link(scope, element, attrs, vm) {
 
       var map, infoWindow;
@@ -653,10 +619,6 @@ var _servicesTourService = require('./services/tour.service');
 
 var _servicesTourService2 = _interopRequireDefault(_servicesTourService);
 
-var _servicesUploadService = require('./services/upload.service');
-
-var _servicesUploadService2 = _interopRequireDefault(_servicesUploadService);
-
 // Import Controllers
 
 var _controllersHomeController = require('./controllers/home.controller');
@@ -713,7 +675,7 @@ window.initMap = function () {
   _angular2['default'].bootstrap(document, ['app']);
 };
 
-},{"./config":1,"./controllers/home.controller":2,"./controllers/listTours.controller":3,"./controllers/login.controller":4,"./controllers/logout.controller":5,"./controllers/newTour.controller":6,"./controllers/signup.controller":7,"./controllers/test.controller":8,"./directives/listMap.directive":9,"./directives/newMap.directive":10,"./services/tour.service":12,"./services/upload.service":13,"./services/user.service":14,"angular":25,"angular-cookies":16,"angular-foundation":17,"angular-google-maps":18,"angular-simple-logger":19,"angular-ui-router":23,"lodash":27}],12:[function(require,module,exports){
+},{"./config":1,"./controllers/home.controller":2,"./controllers/listTours.controller":3,"./controllers/login.controller":4,"./controllers/logout.controller":5,"./controllers/newTour.controller":6,"./controllers/signup.controller":7,"./controllers/test.controller":8,"./directives/listMap.directive":9,"./directives/newMap.directive":10,"./services/tour.service":12,"./services/user.service":13,"angular":24,"angular-cookies":15,"angular-foundation":16,"angular-google-maps":17,"angular-simple-logger":18,"angular-ui-router":22,"lodash":26}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -778,17 +740,7 @@ var TourService = function TourService(UserService, $stateParams, $http, devURL,
     formData.append('longitude', s.longitude);
     formData.append('id', s.id);
 
-    // Set up server to accept image
-
-    // var url = 'https://fathomless-savannah-6575.herokuapp.com';
-    // var config = {
-    //   headers: {
-    //     'Content-Type': undefined
-    //   }
-    // };
-
-    // return $http.post(url + '/tours/' + c.id + '/sites', formData, config);
-
+    // Set up server to accept image/formdata
     SERVER.CONFIG.headers['Content-Type'] = undefined;
 
     return $http.post(SERVER.URL + '/tours/' + c.id + '/sites', formData, SERVER.CONFIG);
@@ -814,33 +766,6 @@ exports['default'] = TourService;
 module.exports = exports['default'];
 
 },{}],13:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-var UploadService = function UploadService($http, FILESERVER) {
-
-  this.upload = upload;
-
-  function upload(file) {
-
-    var formData = new FormData();
-    formData.append('upload', file);
-    // formData.append('details', JSON.stringify({ name: 'Tim' }));
-
-    return $http.post(FILESERVER.URL, formData, FILESERVER.CONFIG);
-  }
-};
-
-UploadService.$inject = ['$http', 'FILESERVER'];
-
-exports['default'] = UploadService;
-
-// refactor into vm
-module.exports = exports['default'];
-
-},{}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -904,7 +829,7 @@ UserService.$inject = ['$http', 'SERVER', '$cookies', '$state'];
 exports['default'] = UserService;
 module.exports = exports['default'];
 
-},{"jquery":26}],15:[function(require,module,exports){
+},{"jquery":25}],14:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.8
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -1227,11 +1152,11 @@ angular.module('ngCookies').provider('$$cookieWriter', function $$CookieWriterPr
 
 })(window, window.angular);
 
-},{}],16:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 require('./angular-cookies');
 module.exports = 'ngCookies';
 
-},{"./angular-cookies":15}],17:[function(require,module,exports){
+},{"./angular-cookies":14}],16:[function(require,module,exports){
 /*
  * angular-mm-foundation
  * http://pineconellc.github.io/angular-foundation/
@@ -4847,7 +4772,7 @@ angular.module("template/typeahead/typeahead-popup.html", []).run(["$templateCac
     "");
 }]);
 
-},{}],18:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 /*! angular-google-maps 2.2.1 2015-09-11
  *  AngularJS directives for Google Maps
  *  git: https://github.com/angular-ui/angular-google-maps.git
@@ -20287,7 +20212,7 @@ angular.module('uiGmapgoogle-maps.extensions')
   };
 }]);
 }( window,angular));
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 /**
  *  angular-simple-logger
  *
@@ -20427,7 +20352,7 @@ angular.module('nemLogging').provider('nemSimpleLogger', [
   }
 ]);
 
-},{"angular":25,"debug":20}],20:[function(require,module,exports){
+},{"angular":24,"debug":19}],19:[function(require,module,exports){
 
 /**
  * This is the web browser implementation of `debug()`.
@@ -20597,7 +20522,7 @@ function localstorage(){
   } catch (e) {}
 }
 
-},{"./debug":21}],21:[function(require,module,exports){
+},{"./debug":20}],20:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -20796,7 +20721,7 @@ function coerce(val) {
   return val;
 }
 
-},{"ms":22}],22:[function(require,module,exports){
+},{"ms":21}],21:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -20923,7 +20848,7 @@ function plural(ms, n, name) {
   return Math.ceil(ms / n) + ' ' + name + 's';
 }
 
-},{}],23:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 /**
  * State-based routing for AngularJS
  * @version v0.2.15
@@ -25294,7 +25219,7 @@ angular.module('ui.router.state')
   .filter('isState', $IsStateFilter)
   .filter('includedByState', $IncludedByStateFilter);
 })(window, window.angular);
-},{}],24:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.8
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -54313,11 +54238,11 @@ $provide.value("$locale", {
 })(window, document);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],25:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":24}],26:[function(require,module,exports){
+},{"./angular":23}],25:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.4
  * http://jquery.com/
@@ -63529,7 +63454,7 @@ return jQuery;
 
 }));
 
-},{}],27:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 (function (global){
 /**
  * @license
