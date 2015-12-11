@@ -16,6 +16,7 @@ import config from './config';
 // Import Services
 import UserService from './services/user.service';
 import TourService from './services/tour.service';
+import UploadService from './services/upload.service';
 
 // Import Controllers
 import HomeController from './controllers/home.controller';

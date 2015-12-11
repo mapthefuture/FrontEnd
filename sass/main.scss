@@ -109,6 +109,9 @@ div.ng-scope {
   margin: 5px auto; 
 }
 
+.newMap {
+}
+
 .listTourWrapper {
   width: 100%;
   height: 100%;
@@ -159,3 +162,12 @@ div.ng-scope {
   width: 80vw;
 }
 
+.uploadForm {
+  clear: both;
+  width: 275px;
+  margin-top: 10px;
+  float: right;
+  background-color: rgba(51, 51, 51, 1);
+  color: white;
+  padding: 10px 10px 5px 10px;
+}
