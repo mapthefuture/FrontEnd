@@ -25,39 +25,35 @@ let HomeController = function($scope, UserService, $state) {
     $state.go('root.new');
   };
 
-  var initialLocation = new google.maps.LatLng(27.9881, 86.9253);
-
-
-  var lat = 27.9881;
-  var lon = 86.9253;
-  var coords;
-  // Find location
-  if ("geolocation" in navigator) {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      lat = position.coords.latitude;
-      lon = position.coords.longitude;
-      initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-
-
-    });
-  }
-
   $scope.map = {
     center: {
-      latitude: 40.1451,
-      longitude: -99.6680 
+      latitude: 27.9881,
+      longitude: 86.9253 
     }, 
     options: {
       zoomControl: false,
       mapTypeControl: false,
       streetViewControl:false,
+      draggable: false,
       scrollwheel: false
     },
 
     mapTypeControl: true,
-    zoom: 8,
+    zoom: 18,
   };
+
+  // Find location
+  var onSuccess = function(position) {
+    $scope.map.center = {
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude
+    };
+    $scope.$apply();
+  };
+  function onError(error) {
+    console.log('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
+  }
+  navigator.geolocation.getCurrentPosition(onSuccess, onError);
 
 };
 

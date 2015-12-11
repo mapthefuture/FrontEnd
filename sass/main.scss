@@ -60,6 +60,9 @@ div.ng-scope {
 
 .homeWrapper {
   height: 100%;
+  width: 100%;
+  margin: 0;
+
 
   h2{
     margin: 0 auto;
@@ -79,6 +82,10 @@ div.ng-scope {
       margin: 15% auto;
       width: 250px;
     }
+  }
+  .homeMap {
+    width: 100vw;
+    margin: 0;
   }
 }
 
