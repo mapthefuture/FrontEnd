@@ -57,20 +57,29 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
 var HomeController = function HomeController($scope, UserService, $state) {
 
-  var promise = UserService.checkAuth();
+  // let promise = UserService.checkAuth();
 
-  if (promise) {
-    promise.then(function (res) {
-      console.log(res);
-      if (res.data.status === 'Authentication failed.') {
-        $state.go('root.login');
-      } else {
-        $scope.message = 'I am logged in';
-      }
-    });
-  }
+  // if (promise) {
+  //   promise.then( (res) => {
+  //     console.log(res);
+  //     if (res.data.status === 'Authentication failed.') {
+  //       // $state.go('root.login');
+  //     } else {
+  //       $scope.message = 'I am logged in';
+  //     }
+  //   });
+  // }
+
+  // jquery('.container').addClass("homePage");
 
   $scope.logmeout = function () {
     UserService.logout();
@@ -84,35 +93,42 @@ var HomeController = function HomeController($scope, UserService, $state) {
     $state.go('root.new');
   };
 
-  var initialLocation = new google.maps.LatLng(27.9881, 86.9253);
-
-  var lat = 27.9881;
-  var lon = 86.9253;
-  var coords;
-  // Find location
-  if ("geolocation" in navigator) {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      lat = position.coords.latitude;
-      lon = position.coords.longitude;
-      initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-    });
-  }
-
   $scope.map = {
     center: {
-      latitude: 40.1451,
-      longitude: -99.6680
+      latitude: 27.9881,
+      longitude: 86.9253
     },
     options: {
       zoomControl: false,
       mapTypeControl: false,
       streetViewControl: false,
+      draggable: false,
+      styles: [{
+        featureType: "poi",
+        elementType: "labels",
+        stylers: [{ visibility: "off" }]
+      }, {
+        featureType: "transit",
+        stylers: [{ visibility: "off" }]
+      }],
       scrollwheel: false
     },
-
     mapTypeControl: true,
-    zoom: 8
+    zoom: 18
   };
+
+  // Find location
+  var onSuccess = function onSuccess(position) {
+    $scope.map.center = {
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude
+    };
+    $scope.$apply();
+  };
+  function onError(error) {
+    console.log('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+  }
+  navigator.geolocation.getCurrentPosition(onSuccess, onError);
 };
 
 HomeController.$inject = ['$scope', 'UserService', '$state'];
@@ -120,7 +136,7 @@ HomeController.$inject = ['$scope', 'UserService', '$state'];
 exports['default'] = HomeController;
 module.exports = exports['default'];
 
-},{}],3:[function(require,module,exports){
+},{"jquery":27}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -210,7 +226,20 @@ var _jquery = require('jquery');
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var NewTourController = function NewTourController($scope, $http, TourService, SERVER) {
+var NewTourController = function NewTourController($scope, $http, TourService, SERVER, UserService) {
+
+  var promise = UserService.checkAuth();
+
+  if (promise) {
+    promise.then(function (res) {
+      console.log(res);
+      if (res.data.status === 'Authentication failed.') {
+        $state.go('root.login');
+      } else {
+        $scope.message = 'I am logged in';
+      }
+    });
+  }
 
   var vm = this;
 
@@ -253,7 +282,7 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
   }
 };
 
-NewTourController.$inject = ['$scope', '$http', 'TourService', 'SERVER'];
+NewTourController.$inject = ['$scope', '$http', 'TourService', 'SERVER', 'UserService'];
 
 exports['default'] = NewTourController;
 module.exports = exports['default'];
@@ -464,7 +493,114 @@ exports['default'] = listMap;
 module.exports = exports['default'];
 
 },{}],10:[function(require,module,exports){
-"use strict";
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+var newMap = function newMap($state, TourService, $compile) {
+
+  return {
+    restrict: 'EA',
+    replace: true,
+    template: '<div id="newMap"></div>',
+    controller: 'NewTourController as vm',
+
+    link: function link(scope, element, attrs, vm) {
+
+      var map, infoWindow;
+
+      var initialLocation = new google.maps.LatLng(27.9881, 86.9253);
+
+      // Find location
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+          map.setCenter(initialLocation);
+        });
+      }
+
+      var markers = [];
+
+      // map config
+      var mapOptions = {
+        center: initialLocation,
+        zoom: 30,
+        mapTypeId: google.maps.MapTypeId.HYBRID,
+        scrollwheel: false,
+        streetViewControl: false,
+
+        styles: [{
+          featureType: "poi",
+          stylers: [{ visibility: "off" }]
+        }, {
+          featureType: "transit",
+          stylers: [{ visibility: "off" }]
+        }]
+      };
+
+      // init the map
+      function initMap() {
+        if (map === void 0) {
+          map = new google.maps.Map(element[0], mapOptions);
+        }
+      }
+
+      // place a marker
+      function setMarker(map, latLng, title, description) {
+
+        var marker = new google.maps.Marker({
+          position: latLng,
+          map: map,
+          draggable: true,
+          animation: google.maps.Animation.DROP,
+          icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
+        });
+
+        var lat = marker.getPosition().lat();
+        var lon = marker.getPosition().lng();
+
+        TourService.markerData = {
+          latitude: lat,
+          longitude: lon,
+          id: vm.tourId
+        };
+
+        // map.panTo(latLng);
+
+        // adds markers to array
+        markers.push(marker);
+
+        var contentString = '<div class="markerForm" ng-controller="NewTourController as vm">\n            <form class="newForm" ng-submit="vm.submitSiteForm(site)">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <div>Add image<input type="file" id="siteImage"></div>\n              <button>Submit</button>\n            </form>\n            <button class="deleteButton">Delete marker</button>\n          </div>';
+        var compiled = $compile(contentString);
+        var scopedHTML = compiled(scope);
+
+        var infoWindow = new google.maps.InfoWindow({
+          content: scopedHTML[0]
+        });
+
+        marker.addListener('click', function () {
+          infoWindow.open(map, marker);
+        });
+
+        infoWindow.addListener('domready', function () {});
+      }
+
+      // show the map
+      initMap();
+
+      // Place marker where clicked
+      map.addListener('click', function (e) {
+        setMarker(map, e.latLng);
+      });
+    }
+  };
+};
+
+newMap.$inject = ['$state', 'TourService', '$compile'];
+
+exports['default'] = newMap;
+module.exports = exports['default'];
 
 },{}],11:[function(require,module,exports){
 'use strict';

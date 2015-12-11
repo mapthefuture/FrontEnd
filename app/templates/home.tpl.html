@@ -1,11 +1,12 @@
 <div class="homeWrapper">
-  <h2>Welcome to your next adventure in _______</h2>
   <div class="homeRedirect">
+    <h2>Welcome to your next adventure in _______</h2>
     <button ng-click="newTour()"><div>Create your Journey</div></button>
     <button ng-click="findTour()"><div>Find an Adventure</div></button>
   </div>
+  <div class="homeOverlay"></div>
 
-  <div >
+  <div class="homeMap">
     <ui-gmap-google-map center="map.center" zoom="map.zoom" options="map.options" draggable="false" events="map.events">
       <ui-gmap-marker coords="m.coords" styles="map.styles" icon="m.icon" idkey="m.id"></ui-gmap-marker>
     </ui-gmap-google-map>
