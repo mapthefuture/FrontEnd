@@ -92,7 +92,7 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var ListTourController = function ListTourController($scope, $stateParams, TourService) {
+var ListTourController = function ListTourController($scope, $stateParams, TourService, $anchorScroll) {
 
   var vm = this;
   $scope.allTours = [];
@@ -109,6 +109,8 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
   $scope.clickedTour = function ($index, t) {
     console.log(t.id);
     $scope.selectedIndex = $index;
+    $anchorScroll('sitemap');
+    vm.something = t;
   };
 
   // $scope.allTours.forEach(tour, function(tour){
@@ -118,7 +120,7 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
   // });
 };
 
-ListTourController.$inject = ['$scope', '$stateParams', 'TourService'];
+ListTourController.$inject = ['$scope', '$stateParams', 'TourService', '$anchorScroll'];
 
 exports['default'] = ListTourController;
 module.exports = exports['default'];

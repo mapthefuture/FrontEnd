@@ -6407,6 +6407,9 @@ body {
   height: 100%;
   background-color: #C1CAD6; }
 
+li {
+  list-style-type: none; }
+
 .top-bar {
   background-color: #4A4A4A;
   color: #FFFFFF; }
@@ -6416,14 +6419,30 @@ body {
     background: #4A4A4A;
     color: #FFFFFF; } }
 
+.hidden {
+  display: none; }
+
 .container {
   width: 80%;
   max-width: 1000px;
   height: 100%;
   margin: 0 auto; }
 
-div.ng-scope {
-  height: 100%; }
+.parallax {
+  perspective: 1px;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: visible; }
+
+.parallax__layer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0; }
+
+.parallax__layer--back {
+  transform: translateZ(0); }
 
 .logout {
   display: none; }
@@ -6474,28 +6493,37 @@ div.ng-scope {
     text-align: center; }
   .listTourWrapper #listmap {
     max-width: 100%;
-    min-height: 500px;
+    min-height: 400px;
     margin: 15px auto; }
   .listTourWrapper .tours {
+    margin: 0 auto;
+    width: 90%;
+    max-height: 300px;
     display: flex;
     flex-direction: column;
-    align-items: center; }
+    align-items: center;
+    margin-bottom: 15px; }
     .listTourWrapper .tours .tourbox {
-      background-color: #FFFFFF;
       padding: 2px;
-      width: 90%; }
+      width: 100%; }
       .listTourWrapper .tours .tourbox .tour:hover {
         background-color: #EEEEEE;
         cursor: pointer; }
       .listTourWrapper .tours .tourbox .tour {
+        background-color: #FFFFFF;
         display: flex;
         margin: 0 auto;
         padding: 3px;
+        height: 6em;
+        overflow: hidden;
+        justify-content: space-between;
         -moz-box-shadow: inset 0 0 10px #000000;
         -webkit-box-shadow: inset 0 0 10px #000000;
         box-shadow: inset 0 0 10px #000000; }
       .listTourWrapper .tours .tourbox .clicked {
         background-color: #CCCCCC; }
+  .listTourWrapper .sitebox {
+    margin: 50 auto; }
 
 .angular-google-map-container {
   height: 500px;

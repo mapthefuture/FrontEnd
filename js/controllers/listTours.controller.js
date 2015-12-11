@@ -1,4 +1,4 @@
-let ListTourController = function($scope, $stateParams, TourService) {
+let ListTourController = function($scope, $stateParams, TourService, $anchorScroll) {
   
   let vm = this;
   $scope.allTours = [];
@@ -16,6 +16,8 @@ let ListTourController = function($scope, $stateParams, TourService) {
   $scope.clickedTour = function($index,t) {
     console.log(t.id);
     $scope.selectedIndex = $index;
+    $anchorScroll('sitemap');
+    vm.something = t;
   };
 
   // $scope.allTours.forEach(tour, function(tour){
@@ -26,6 +28,6 @@ let ListTourController = function($scope, $stateParams, TourService) {
 
 };
 
-ListTourController.$inject = ['$scope', '$stateParams', 'TourService'];
+ListTourController.$inject = ['$scope', '$stateParams', 'TourService', '$anchorScroll'];
 
 export default ListTourController;

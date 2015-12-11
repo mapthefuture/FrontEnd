@@ -8,28 +8,20 @@ let siteMap = function($state, TourService, SiteService) {
         <div class="map" id="sitemap"></div>
         <ul 
         ng-repeat="s in sites" 
-        class="list tour" 
+        class="list site" 
         ng-class="{'clicked': $index == vm.selectedIndex}"
         >
-          <li>{{ s.title }}</li>
-          <li>{{ s.location }}</li>
-          <li>{{ s.distance }}</li>
-          <li class="list hidden">{{ s.description }}</li>
+          <li class="list">{{ s.title }}</li>
+          <li class="list">{{ s.location }}</li>
+          <li class="list">{{ s.distance }}</li>
+          <li class="list">{{ s.description }}</li>
         </ul>
       </div>`,
     controller: 'ListSiteController as vm',
     link: function (scope, element, attrs) {
       var map, infoWindow;
       var markers = [];
-      var initialLocation;
-
-      // Find location
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(function (pos) {
-          initialLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-          map.setCenter(initialLocation);
-        });
-      }
+      var initialLocation = new google.maps.LatLng(s.latitude, s.longitude);
         
       // map config
       var mapOptions = {
