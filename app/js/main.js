@@ -144,9 +144,9 @@ Object.defineProperty(exports, '__esModule', {
 });
 var ListTourController = function ListTourController($scope, $stateParams, TourService, $anchorScroll) {
 
-  var vm = this;
   $scope.allTours = [];
   $scope.tourMarkers = [];
+  $scope.tour = {};
 
   TourService.areaTours().then(function (res) {
     $scope.allTours = res.data.tours;
@@ -159,8 +159,9 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
   $scope.clickedTour = function ($index, t) {
     console.log(t.id);
     $scope.selectedIndex = $index;
+    TourService.storeTour(t);
+    $scope.tour = TourService.getStored();
     $anchorScroll('sitemap');
-    vm.something = t;
   };
 
   // $scope.allTours.forEach(tour, function(tour){
@@ -855,6 +856,9 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
   this.tourStartObj = {};
   this.submitSiteForm = submitSiteForm;
   this.submitTourForm = submitTourForm;
+  this.storeTour = storeTour;
+  this.getStored = getStored;
+  this.storedTour = {};
 
   function areaTours() {
     var getURL = SERVER.URL + '/tours';
@@ -872,6 +876,11 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
   function tour(tourObj) {
     this.title = tourObj.title;
     this.description = tourObj.description;
+  }
+
+  function storeTour(tour) {
+    this.storedTour = tour;
+    console.log(this.storedTour);
   }
 
   function submitSiteForm(siteObj) {
@@ -924,6 +933,11 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
     var t = this.tourStartObj;
     console.log(t);
     return $http.patch(SERVER.URL + '/tours/' + c.id, t, SERVER.CONFIG);
+  }
+
+  function getStored() {
+    console.log(storedTour);
+    return this.storedTour;
   }
 };
 

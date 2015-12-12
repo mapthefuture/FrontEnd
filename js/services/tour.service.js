@@ -5,6 +5,9 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
   this.tourStartObj = {};
   this.submitSiteForm = submitSiteForm;
   this.submitTourForm = submitTourForm;
+  this.storeTour = storeTour;
+  this.getStored = getStored;
+  this.storedTour = {};
 
   function areaTours() {
     let getURL = SERVER.URL + '/tours';
@@ -22,6 +25,11 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
   function tour (tourObj) {
     this.title = tourObj.title;
     this.description = tourObj.description;
+  }
+
+  function storeTour(tour) {
+    this.storedTour = tour;
+    console.log(this.storedTour);
   }
 
   function submitSiteForm (siteObj) {
@@ -70,6 +78,11 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
     let t = this.tourStartObj;
     console.log(t);
     return $http.patch(SERVER.URL + '/tours/' + c.id, t, SERVER.CONFIG);  
+  }
+
+  function getStored() {
+    console.log(storedTour);
+    return this.storedTour;
   }
 };
 

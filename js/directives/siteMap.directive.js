@@ -1,7 +1,7 @@
 let siteMap = function($state, TourService, SiteService) {
   
   return {
-    restrict: 'A',
+    restrict: 'AE',
     replace: true,
     template: 
       `<div class="sitebox">
@@ -21,7 +21,7 @@ let siteMap = function($state, TourService, SiteService) {
     link: function (scope, element, attrs) {
       var map, infoWindow;
       var markers = [];
-      var initialLocation = new google.maps.LatLng(s.latitude, s.longitude);
+      var initialLocation = new google.maps.LatLng(site.latitude, site.longitude);
         
       // map config
       var mapOptions = {
