@@ -266,7 +266,6 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
         };
         newTourStart();
       }
-      console.log('After submit');
     });
   }
 
@@ -919,6 +918,10 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
     formData.append('id', s.id);
 
     console.log(formData);
+
+    // Test infowindow stuff here
+
+    console.log('After submit');
 
     // Set up server to accept image/formdata
     SERVER.CONFIG.headers['Content-Type'] = undefined;

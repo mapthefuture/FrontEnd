@@ -41,7 +41,6 @@ let NewTourController = function($scope, $http, TourService, SERVER, UserService
         };
         newTourStart();
       }
-      console.log('After submit');
 
     });
   }

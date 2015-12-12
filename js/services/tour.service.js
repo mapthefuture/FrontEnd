@@ -63,6 +63,15 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
 
     console.log(formData);
 
+
+    // Test infowindow stuff here
+    
+
+    
+
+    console.log('After submit');
+
+
     // Set up server to accept image/formdata
     SERVER.CONFIG.headers['Content-Type'] = undefined;
 
@@ -86,6 +95,8 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
     console.log(storedTour);
     return this.storedTour;
   }
+
+
 };
 
 TourService.$inject = ['UserService', '$stateParams', '$http', 'SERVER'];
