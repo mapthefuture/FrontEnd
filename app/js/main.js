@@ -57,20 +57,29 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
 var HomeController = function HomeController($scope, UserService, $state) {
 
-  var promise = UserService.checkAuth();
+  // let promise = UserService.checkAuth();
 
-  if (promise) {
-    promise.then(function (res) {
-      console.log(res);
-      if (res.data.status === 'Authentication failed.') {
-        $state.go('root.login');
-      } else {
-        $scope.message = 'I am logged in';
-      }
-    });
-  }
+  // if (promise) {
+  //   promise.then( (res) => {
+  //     console.log(res);
+  //     if (res.data.status === 'Authentication failed.') {
+  //       // $state.go('root.login');
+  //     } else {
+  //       $scope.message = 'I am logged in';
+  //     }
+  //   });
+  // }
+
+  // jquery('.container').addClass("homePage");
 
   $scope.logmeout = function () {
     UserService.logout();
@@ -84,35 +93,42 @@ var HomeController = function HomeController($scope, UserService, $state) {
     $state.go('root.new');
   };
 
-  var initialLocation = new google.maps.LatLng(27.9881, 86.9253);
-
-  var lat = 27.9881;
-  var lon = 86.9253;
-  var coords;
-  // Find location
-  if ("geolocation" in navigator) {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      lat = position.coords.latitude;
-      lon = position.coords.longitude;
-      initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-    });
-  }
-
   $scope.map = {
     center: {
-      latitude: 40.1451,
-      longitude: -99.6680
+      latitude: 27.9881,
+      longitude: 86.9253
     },
     options: {
       zoomControl: false,
       mapTypeControl: false,
       streetViewControl: false,
+      draggable: false,
+      styles: [{
+        featureType: "poi",
+        elementType: "labels",
+        stylers: [{ visibility: "off" }]
+      }, {
+        featureType: "transit",
+        stylers: [{ visibility: "off" }]
+      }],
       scrollwheel: false
     },
-
     mapTypeControl: true,
-    zoom: 8
+    zoom: 18
   };
+
+  // Find location
+  var onSuccess = function onSuccess(position) {
+    $scope.map.center = {
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude
+    };
+    $scope.$apply();
+  };
+  function onError(error) {
+    console.log('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+  }
+  navigator.geolocation.getCurrentPosition(onSuccess, onError);
 };
 
 HomeController.$inject = ['$scope', 'UserService', '$state'];
@@ -120,7 +136,7 @@ HomeController.$inject = ['$scope', 'UserService', '$state'];
 exports['default'] = HomeController;
 module.exports = exports['default'];
 
-},{}],3:[function(require,module,exports){
+},{"jquery":27}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -211,7 +227,20 @@ var _jquery = require('jquery');
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var NewTourController = function NewTourController($scope, $http, TourService, SERVER) {
+var NewTourController = function NewTourController($scope, $http, TourService, SERVER, UserService) {
+
+  var promise = UserService.checkAuth();
+
+  if (promise) {
+    promise.then(function (res) {
+      console.log(res);
+      if (res.data.status === 'Authentication failed.') {
+        $state.go('root.login');
+      } else {
+        $scope.message = 'I am logged in';
+      }
+    });
+  }
 
   var vm = this;
 
@@ -254,7 +283,7 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
   }
 };
 
-NewTourController.$inject = ['$scope', '$http', 'TourService', 'SERVER'];
+NewTourController.$inject = ['$scope', '$http', 'TourService', 'SERVER', 'UserService'];
 
 exports['default'] = NewTourController;
 module.exports = exports['default'];
@@ -493,14 +522,13 @@ var newMap = function newMap($state, TourService, $compile) {
       }
 
       var markers = [];
-      // var uniqueId = Date.now();
 
       // map config
       var mapOptions = {
         center: initialLocation,
         zoom: 30,
         mapTypeId: google.maps.MapTypeId.HYBRID,
-        // scrollwheel: false,
+        scrollwheel: false,
         streetViewControl: false,
 
         styles: [{

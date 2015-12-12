@@ -9,6 +9,7 @@ $grey: #C1CAD6;
 $white: #FFFFFF;
 
 footer {
+
   .footer {
     width: 400px;
     margin: 0 auto;
@@ -38,6 +39,12 @@ li {
   list-style-type: none;
 }
 
+.mainContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 .top-bar {
   background-color: $black;
   color: $white;
@@ -55,10 +62,10 @@ li {
 .container {
   width: 80%;
   max-width: 1000px;
-  height: 100%;
+  height: 86.7%;
   margin: 0 auto;
+  z-index: 1;
 }
-
 
 .parallax {
   perspective: 1px;
@@ -92,20 +99,43 @@ li {
 }
 
 .homeWrapper {
-  height: 100%;
+  height: 94%;
+  margin: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
 
   h2{
     margin: 0 auto;
     text-align: center;
   }
 
+  .homeOverlay {
+    background-color: #494949;
+    position: absolute;
+    z-index: 98;
+    width: 100%;
+    height: 100%;
+    opacity: 0.6;
+  }
+
   .homeRedirect {
-    display: block;
     margin: 0 auto;
+    position: absolute;
+    z-index: 99;
+    width: 100%;
+    height: 100%;
+    opacity: 0.91;
+
+    h2 {
+      color: white;
+    }
 
     button {
       margin: 15px auto;
       display: block;
+      opacity: 1;
     }
 
     div {
@@ -113,11 +143,35 @@ li {
       width: 250px;
     }
   }
+  .homeMap {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+
+    .angular-google-map-container {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+    }
+  }
+}
+
+.newWrapper { 
+  width: 100%;
+  height: 95%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+
+
 }
 
 .newForm {
   margin: 15px auto;
   text-align: center;
+  width: 50%;
 
   form {
     // border: 3px solid black;
@@ -137,12 +191,14 @@ li {
 }
 
 #newMap {
-  max-width: 90vw;
-  height: 500px;
-  margin: 5px auto; 
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute; 
 }
 
 .newMap {
+
 }
 
 .listTourWrapper {
@@ -150,7 +206,7 @@ li {
   height: 100%;
 
   h2 {
-    text-align: center;
+    text-align: center; 
   }
 
   #listmap {
@@ -199,11 +255,6 @@ li {
   .sitebox {
     margin: 50 auto;
   }
-}
-
-.angular-google-map-container { 
-  height: 500px; 
-  width: 80vw;
 }
 
 .uploadForm {
