@@ -1,8 +1,8 @@
 let ListTourController = function($scope, $stateParams, TourService, $anchorScroll) {
   
-  let vm = this;
   $scope.allTours = [];
   $scope.tourMarkers = [];
+  $scope.tour = {};
 
   TourService.areaTours().then((res) => {
     $scope.allTours = res.data.tours;
@@ -16,8 +16,9 @@ let ListTourController = function($scope, $stateParams, TourService, $anchorScro
   $scope.clickedTour = function($index,t) {
     console.log(t.id);
     $scope.selectedIndex = $index;
+    TourService.storeTour(t);
+    $scope.tour = TourService.getStored();
     $anchorScroll('sitemap');
-    vm.something = t;
   };
 
   // $scope.allTours.forEach(tour, function(tour){
