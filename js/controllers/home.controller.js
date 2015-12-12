@@ -2,20 +2,9 @@ import jquery from 'jquery';
 
 let HomeController = function($scope, UserService, $state) {
 
-  // let promise = UserService.checkAuth();
+  let vm = this;
 
-  // if (promise) {
-  //   promise.then( (res) => {
-  //     console.log(res);
-  //     if (res.data.status === 'Authentication failed.') {
-  //       // $state.go('root.login');
-  //     } else {
-  //       $scope.message = 'I am logged in';
-  //     }
-  //   });
-  // }
-
-  // jquery('.container').addClass("homePage");
+  vm.city = '';
 
   $scope.logmeout = function() {
     UserService.logout();
@@ -57,6 +46,8 @@ let HomeController = function($scope, UserService, $state) {
     zoom: 18,
   };
 
+  var city;
+
   // Find location
   var onSuccess = function(position) {
     $scope.map.center = {
@@ -64,6 +55,16 @@ let HomeController = function($scope, UserService, $state) {
       longitude: position.coords.longitude
     };
     $scope.$apply();
+
+    // Get city
+    jquery.ajax({
+      url: 'http://maps.googleapis.com/maps/api/geocode/json?latlng='+position.coords.latitude+','+position.coords.longitude+'&sensor=false',
+      success: function(data){
+        var formatted = data.results;
+        var address_array = formatted[6].formatted_address.split(',');
+        vm.city = 'in ' + address_array[0];
+      }
+    });
   };
   function onError(error) {
     console.log('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
