@@ -13,7 +13,7 @@ var config = function config($stateProvider, $urlRouterProvider) {
     templateUrl: 'templates/layout.tpl.html'
   }).state('root.home', {
     url: '/',
-    controller: 'HomeController',
+    controller: 'HomeController as vm',
     templateUrl: 'templates/home.tpl.html'
   }).state('root.addtour', {
     url: '/addtour',
@@ -66,20 +66,9 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 var HomeController = function HomeController($scope, UserService, $state) {
 
-  // let promise = UserService.checkAuth();
+  var vm = this;
 
-  // if (promise) {
-  //   promise.then( (res) => {
-  //     console.log(res);
-  //     if (res.data.status === 'Authentication failed.') {
-  //       // $state.go('root.login');
-  //     } else {
-  //       $scope.message = 'I am logged in';
-  //     }
-  //   });
-  // }
-
-  // jquery('.container').addClass("homePage");
+  vm.city = '';
 
   $scope.logmeout = function () {
     UserService.logout();
@@ -117,6 +106,8 @@ var HomeController = function HomeController($scope, UserService, $state) {
     zoom: 18
   };
 
+  var city;
+
   // Find location
   var onSuccess = function onSuccess(position) {
     $scope.map.center = {
@@ -124,6 +115,16 @@ var HomeController = function HomeController($scope, UserService, $state) {
       longitude: position.coords.longitude
     };
     $scope.$apply();
+
+    // Get city
+    _jquery2['default'].ajax({
+      url: 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' + position.coords.latitude + ',' + position.coords.longitude + '&sensor=false',
+      success: function success(data) {
+        var formatted = data.results;
+        var address_array = formatted[6].formatted_address.split(',');
+        vm.city = 'in ' + address_array[0];
+      }
+    });
   };
   function onError(error) {
     console.log('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
