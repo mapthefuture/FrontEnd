@@ -16,7 +16,7 @@ let HomeController = function($scope, UserService, $state) {
   };
 
   $scope.newTour = function(){
-    $state.go('root.addtour');
+    $state.go('root.new');
   };
 
   $scope.map = {

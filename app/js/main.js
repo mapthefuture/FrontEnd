@@ -15,14 +15,10 @@ var config = function config($stateProvider, $urlRouterProvider) {
     url: '/',
     controller: 'HomeController as vm',
     templateUrl: 'templates/home.tpl.html'
-  }).state('root.addtour', {
-    url: '/addtour',
+  }).state('root.new', {
+    url: '/new',
     controller: 'NewTourController as vm',
     templateUrl: 'templates/new.tpl.html'
-  }).state('root.addsites', {
-    url: '/addsites',
-    controller: 'NewTourController as vm',
-    templateUrl: 'templates/newmap.tpl.html'
   }).state('root.login', {
     url: '/login',
     controller: 'LoginController',
@@ -80,7 +76,7 @@ var HomeController = function HomeController($scope, UserService, $state) {
   };
 
   $scope.newTour = function () {
-    $state.go('root.addtour');
+    $state.go('root.new');
   };
 
   $scope.map = {
@@ -242,6 +238,8 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
 
   vm.submitSiteForm = submitSiteForm;
   vm.submitTourForm = submitTourForm;
+  vm.showMap = false;
+  vm.showForm = true;
   vm.tourId = {};
   vm.tourStart = [];
 
@@ -276,6 +274,8 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
       vm.tourId = res.data.tour.id;
       console.log(vm.tourId);
       // $state.go('root.addsites');
+      vm.showMap = vm.showMap ? false : true;
+      vm.showForm = vm.showForm ? false : true;
     });
   }
 };

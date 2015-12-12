@@ -12,15 +12,10 @@ let config = function($stateProvider, $urlRouterProvider) {
       controller: 'HomeController as vm',
       templateUrl: 'templates/home.tpl.html'
     })
-    .state('root.addtour', {
-      url: '/addtour',
+    .state('root.new', {
+      url: '/new',
       controller: 'NewTourController as vm',
       templateUrl: 'templates/new.tpl.html'
-    })
-    .state('root.addsites', {
-      url: '/addsites',
-      controller: 'NewTourController as vm',
-      templateUrl: 'templates/newmap.tpl.html'
     })
     .state('root.login', {
       url: '/login',
