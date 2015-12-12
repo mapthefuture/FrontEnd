@@ -43,11 +43,12 @@ let newMap = function($state, TourService, $compile) {
           ]
         }]
       };
-        
+
       // init the map
       function initMap() {
         if (map === void 0) {
           map = new google.maps.Map(element[0], mapOptions);
+          google.maps.event.trigger(map, 'resize');
         }
       }    
         
@@ -103,6 +104,14 @@ let newMap = function($state, TourService, $compile) {
         });
 
       }
+
+      // var newMap = document.getElementById('newMap');
+
+      // if (newMap) {
+        
+      // }
+
+
 
       // show the map
       initMap();

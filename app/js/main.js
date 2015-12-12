@@ -15,10 +15,14 @@ var config = function config($stateProvider, $urlRouterProvider) {
     url: '/',
     controller: 'HomeController',
     templateUrl: 'templates/home.tpl.html'
-  }).state('root.new', {
-    url: '/new',
-    controller: 'NewTourController',
+  }).state('root.addtour', {
+    url: '/addtour',
+    controller: 'NewTourController as vm',
     templateUrl: 'templates/new.tpl.html'
+  }).state('root.addsites', {
+    url: '/addsites',
+    controller: 'NewTourController',
+    templateUrl: 'templates/newmap.tpl.html'
   }).state('root.login', {
     url: '/login',
     controller: 'LoginController',
@@ -39,10 +43,6 @@ var config = function config($stateProvider, $urlRouterProvider) {
     url: '/test',
     controller: 'TestController',
     templateUrl: 'templates/test.tpl.html'
-  }).state('root.newnew', {
-    url: '/newnew',
-    controller: 'NewNewController',
-    templateUrl: 'templates/newnew.tpl.html'
   });
 };
 
@@ -90,7 +90,7 @@ var HomeController = function HomeController($scope, UserService, $state) {
   };
 
   $scope.newTour = function () {
-    $state.go('root.new');
+    $state.go('root.addtour');
   };
 
   $scope.map = {
@@ -219,14 +219,7 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _jquery = require('jquery');
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
-var NewTourController = function NewTourController($scope, $http, TourService, SERVER, UserService) {
+var NewTourController = function NewTourController($scope, $http, TourService, SERVER, UserService, $state) {
 
   var promise = UserService.checkAuth();
 
@@ -273,21 +266,25 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
   }
 
   function submitTourForm(tourObj) {
+    console.log('Hi?');
+
     TourService.submitTourForm(tourObj).then(function (res) {
-      // jquery('.newMap').toggleClass("display");
-      // jquery('.newForm').toggleClass("donotdisplay");
+
+      $state.go('root.addsites');
+      // vm.showMap = (vm.showMap) ? false : true;
+
       vm.tourId = res.data.tour.id;
       console.log(vm.tourId);
     });
   }
 };
 
-NewTourController.$inject = ['$scope', '$http', 'TourService', 'SERVER', 'UserService'];
+NewTourController.$inject = ['$scope', '$http', 'TourService', 'SERVER', 'UserService', '$state'];
 
 exports['default'] = NewTourController;
 module.exports = exports['default'];
 
-},{"jquery":27}],7:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -543,6 +540,7 @@ var newMap = function newMap($state, TourService, $compile) {
       function initMap() {
         if (map === void 0) {
           map = new google.maps.Map(element[0], mapOptions);
+          google.maps.event.trigger(map, 'resize');
         }
       }
 
@@ -585,6 +583,12 @@ var newMap = function newMap($state, TourService, $compile) {
 
         infoWindow.addListener('domready', function () {});
       }
+
+      // var newMap = document.getElementById('newMap');
+
+      // if (newMap) {
+
+      // }
 
       // show the map
       initMap();

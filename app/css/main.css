@@ -6528,7 +6528,12 @@ li {
   margin: 0;
   width: 100%;
   height: 100%;
-  position: absolute; }
+  position: absolute;
+  z-index: 99; }
+
+.newMap {
+  margin-top: 2%;
+  text-align: center; }
 
 .listTourWrapper {
   width: 100%;

@@ -1,6 +1,4 @@
-import jquery from 'jquery';
-
-let NewTourController = function($scope, $http, TourService, SERVER, UserService) {
+let NewTourController = function($scope, $http, TourService, SERVER, UserService, $state) {
 
   let promise = UserService.checkAuth();
 
@@ -47,15 +45,21 @@ let NewTourController = function($scope, $http, TourService, SERVER, UserService
   }
 
   function submitTourForm (tourObj) {
+    console.log('Hi?');
+
+
     TourService.submitTourForm(tourObj).then( (res) => {
-      // jquery('.newMap').toggleClass("display");
-      // jquery('.newForm').toggleClass("donotdisplay");
+      
+      $state.go('root.addsites');
+      // vm.showMap = (vm.showMap) ? false : true;
+
+
       vm.tourId = res.data.tour.id;
       console.log(vm.tourId);
     });
   }
 };
 
-NewTourController.$inject = ['$scope', '$http', 'TourService', 'SERVER', 'UserService'];
+NewTourController.$inject = ['$scope', '$http', 'TourService', 'SERVER', 'UserService', '$state'];
 
 export default NewTourController;

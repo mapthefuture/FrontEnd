@@ -12,10 +12,15 @@ let config = function($stateProvider, $urlRouterProvider) {
       controller: 'HomeController',
       templateUrl: 'templates/home.tpl.html'
     })
-    .state('root.new', {
-      url: '/new',
-      controller: 'NewTourController',
+    .state('root.addtour', {
+      url: '/addtour',
+      controller: 'NewTourController as vm',
       templateUrl: 'templates/new.tpl.html'
+    })
+    .state('root.addsites', {
+      url: '/addsites',
+      controller: 'NewTourController',
+      templateUrl: 'templates/newmap.tpl.html'
     })
     .state('root.login', {
       url: '/login',
@@ -41,11 +46,6 @@ let config = function($stateProvider, $urlRouterProvider) {
       url: '/test',
       controller: 'TestController',
       templateUrl: 'templates/test.tpl.html'
-    })
-    .state('root.newnew', {
-      url: '/newnew',
-      controller: 'NewNewController',
-      templateUrl: 'templates/newnew.tpl.html'
     })
   ;
 };
