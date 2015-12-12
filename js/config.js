@@ -19,7 +19,7 @@ let config = function($stateProvider, $urlRouterProvider) {
     })
     .state('root.addsites', {
       url: '/addsites',
-      controller: 'NewTourController',
+      controller: 'NewTourController as vm',
       templateUrl: 'templates/newmap.tpl.html'
     })
     .state('root.login', {

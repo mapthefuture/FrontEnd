@@ -61,6 +61,8 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
     formData.append('longitude', s.longitude);
     formData.append('id', s.id);
 
+    console.log(formData);
+
     // Set up server to accept image/formdata
     SERVER.CONFIG.headers['Content-Type'] = undefined;
 
