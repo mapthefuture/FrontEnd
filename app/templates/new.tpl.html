@@ -3,12 +3,14 @@
     <form class="newForm" ng-submit="vm.submitTourForm(tour)" ng-if="vm.showForm">
       <h2>Create a new  _______</h2>
       <input class="new title" type="text" placeholder="Thing Title" ng-model="tour.title">
+      <input type="text" placeholder="Category" ng-model="tour.category">
       <input class="new desc" type="text" placeholder="Briefly describe your adventure" ng-model="tour.description">
       <button>Submit</button>
     </form>
     <div class="newMap" ng-if="vm.showMap">
       Click below to add sites to your tour
       <div new-map=""></div>
+      <dir submitClicked="submitClicked"></dir>
     </div>
   </div>
 </div>

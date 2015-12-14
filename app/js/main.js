@@ -243,9 +243,12 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
   vm.tourId = {};
   vm.tourStart = [];
 
+  $scope.submitClicked = false;
+
   function submitSiteForm(siteObj) {
 
     TourService.submitSiteForm(siteObj).then(function (res) {
+      $scope.closeWindow();
 
       // Set start of tour to first site
       var tourStartObj = {};
@@ -269,9 +272,15 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
 
   function submitTourForm(tourObj) {
     TourService.submitTourForm(tourObj).then(function (res) {
+<<<<<<< HEAD
+
+      // vm.tourId = res.data.tour.id;
+      TourService.tempTourId = res.data.tour.id;
+=======
       // jquery('.newMap').toggleClass("display");
       // jquery('.newForm').toggleClass("donotdisplay");
       vm.tourId = res.data.tour.id;
+>>>>>>> master
       console.log(vm.tourId);
     });
   }
@@ -429,6 +438,9 @@ var newMap = function newMap($state, TourService, $compile) {
     replace: true,
     template: '<div id="newMap"></div>',
     controller: 'NewTourController as vm',
+    scope: {
+      submitClicked: '='
+    },
 
     link: function link(scope, element, attrs, vm) {
 
@@ -487,15 +499,21 @@ var newMap = function newMap($state, TourService, $compile) {
         TourService.markerData = {
           latitude: lat,
           longitude: lon,
-          id: vm.tourId
+          id: TourService.tempTourId
         };
+
+        console.log(TourService.markerData);
 
         // map.panTo(latLng);
 
         // adds markers to array
         markers.push(marker);
 
+<<<<<<< HEAD
+        var contentString = '<div class="markerWindow" ng-controller="NewTourController as vm">\n            <form class="markerForm" ng-submit="vm.submitSiteForm(site)" ng-model="submitClicked">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <div>Add image<input type="file" id="siteImage"></div>\n              <button id="submitSite">Submit</button>\n            </form>\n            <button class="deleteButton">Delete marker</button>\n          </div>';
+=======
         var contentString = '<div class="markerForm" ng-controller="NewTourController as vm">\n            <form class="newForm" ng-submit="vm.submitSiteForm(site)">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <div>Add image<input type="file" id="siteImage"></div>\n              <button>Submit</button>\n            </form>\n            <button class="deleteButton">Delete marker</button>\n          </div>';
+>>>>>>> master
         var compiled = $compile(contentString);
         var scopedHTML = compiled(scope);
 
@@ -508,6 +526,12 @@ var newMap = function newMap($state, TourService, $compile) {
         });
 
         infoWindow.addListener('domready', function () {});
+
+        // Close infowindow when submitted
+        scope.closeWindow = function () {
+          infoWindow.close();
+          console.log("Close window");
+        };
       }
 
       // show the map
@@ -876,6 +900,7 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
   this.areaTours = areaTours;
   this.markerData = {};
   this.tourStartObj = {};
+  this.tempTourId = 0;
   this.submitSiteForm = submitSiteForm;
   this.submitTourForm = submitTourForm;
   this.storeTour = storeTour;
@@ -898,6 +923,7 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
   function tour(tourObj) {
     this.title = tourObj.title;
     this.description = tourObj.description;
+    this.category = tourObj.category;
   }
 
   function storeTour(tour) {
@@ -938,6 +964,11 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
     formData.append('longitude', s.longitude);
     formData.append('id', s.id);
 
+<<<<<<< HEAD
+    console.log(formData);
+
+=======
+>>>>>>> master
     // Set up server to accept image/formdata
     SERVER.CONFIG.headers['Content-Type'] = undefined;
 

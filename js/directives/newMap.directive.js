@@ -7,6 +7,9 @@ let newMap = function($state, TourService, $compile) {
     replace: true,
     template: '<div id="newMap"></div>',
     controller: 'NewTourController as vm',
+    scope: {
+      submitClicked: '='
+    },
 
     link: function (scope, element, attrs, vm) {
 
@@ -71,8 +74,10 @@ let newMap = function($state, TourService, $compile) {
         TourService.markerData = {
           latitude: lat,
           longitude: lon,
-          id: vm.tourId
+          id: TourService.tempTourId
         };
+
+        console.log(TourService.markerData);
 
         // map.panTo(latLng);
         
@@ -81,7 +86,7 @@ let newMap = function($state, TourService, $compile) {
 
         var contentString = 
         `<div class="markerWindow" ng-controller="NewTourController as vm">
-            <form class="markerForm" ng-submit="vm.submitSiteForm(site)">
+            <form class="markerForm" ng-submit="vm.submitSiteForm(site)" ng-model="submitClicked">
               <input ng-model="site.title" type="text" placeholder="Title">
               <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>
               <div>Add image<input type="file" id="siteImage"></div>
@@ -104,16 +109,23 @@ let newMap = function($state, TourService, $compile) {
 
         });
 
+        // Close infowindow when submitted
+        scope.closeWindow = function () {
+          infoWindow.close();
+          console.log("Close window");
+        };
       }
-
 
       // show the map
       initMap();
+
+
 
       // Place marker where clicked
       map.addListener('click', function(e) {
         setMarker(map, e.latLng);
       }); 
+
     }
   };
 };
