@@ -1,6 +1,6 @@
 let ListSiteController = function($scope,$stateParams,TourService,SiteService) {
   
-  $scope.TourID = 1;
+  $scope.TourID = 0;
   $scope.Sites = [];
 
   TourService.getStored().then((res) => {
