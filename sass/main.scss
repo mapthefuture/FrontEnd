@@ -109,6 +109,14 @@ li {
   h2{
     margin: 0 auto;
     text-align: center;
+
+    .cityName {
+      // color: white;
+      // -webkit-text-fill-color: #F1452D; 
+      // -webkit-text-stroke-width: 1px;
+      // -webkit-text-stroke-color: #494949;
+      // font-weight: bold;
+    }
   }
 
   .homeOverlay {
@@ -176,18 +184,26 @@ li {
   form {
     // border: 3px solid black;
     border-radius: 5px;
-    padding: 25px;
 
     input {
       max-width: 80%;
       margin: 5px auto;
     }
-
-    .markerForm {
-      width: 20vw;
-      height: 100%;
-    }
   }
+}
+
+.markerWindow {
+  // width: 1000px;;
+
+  .markerForm {
+    margin: 15px auto;
+    text-align: center;
+    // width: 80%;
+  }
+}
+
+.gm-style-iw {
+  // width: 1000px;
 }
 
 #newMap {

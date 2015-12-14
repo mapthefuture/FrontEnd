@@ -15,14 +15,10 @@ var config = function config($stateProvider, $urlRouterProvider) {
     url: '/',
     controller: 'HomeController as vm',
     templateUrl: 'templates/home.tpl.html'
-  }).state('root.addtour', {
-    url: '/addtour',
+  }).state('root.new', {
+    url: '/new',
     controller: 'NewTourController as vm',
     templateUrl: 'templates/new.tpl.html'
-  }).state('root.addsites', {
-    url: '/addsites',
-    controller: 'NewTourController',
-    templateUrl: 'templates/newmap.tpl.html'
   }).state('root.login', {
     url: '/login',
     controller: 'LoginController',
@@ -69,6 +65,7 @@ var HomeController = function HomeController($scope, UserService, $state) {
   var vm = this;
 
   vm.city = '';
+  vm['in'] = '.';
 
   $scope.logmeout = function () {
     UserService.logout();
@@ -79,7 +76,7 @@ var HomeController = function HomeController($scope, UserService, $state) {
   };
 
   $scope.newTour = function () {
-    $state.go('root.addtour');
+    $state.go('root.new');
   };
 
   $scope.map = {
@@ -122,7 +119,8 @@ var HomeController = function HomeController($scope, UserService, $state) {
       success: function success(data) {
         var formatted = data.results;
         var address_array = formatted[6].formatted_address.split(',');
-        vm.city = 'in ' + address_array[0];
+        vm.city = address_array[0] + '.';
+        vm['in'] = ' in ';
       }
     });
   };
@@ -240,6 +238,8 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
 
   vm.submitSiteForm = submitSiteForm;
   vm.submitTourForm = submitTourForm;
+  vm.showMap = false;
+  vm.showForm = true;
   vm.tourId = {};
   vm.tourStart = [];
 
@@ -268,15 +268,14 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
   }
 
   function submitTourForm(tourObj) {
-    console.log('Hi?');
 
     TourService.submitTourForm(tourObj).then(function (res) {
 
-      $state.go('root.addsites');
-      // vm.showMap = (vm.showMap) ? false : true;
-
       vm.tourId = res.data.tour.id;
       console.log(vm.tourId);
+      // $state.go('root.addsites');
+      vm.showMap = vm.showMap ? false : true;
+      vm.showForm = vm.showForm ? false : true;
     });
   }
 };
@@ -497,6 +496,13 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
 var newMap = function newMap($state, TourService, $compile) {
 
   return {
@@ -571,7 +577,7 @@ var newMap = function newMap($state, TourService, $compile) {
         // adds markers to array
         markers.push(marker);
 
-        var contentString = '<div class="markerForm" ng-controller="NewTourController as vm">\n            <form class="newForm" ng-submit="vm.submitSiteForm(site)">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <div>Add image<input type="file" id="siteImage"></div>\n              <button>Submit</button>\n            </form>\n            <button class="deleteButton">Delete marker</button>\n          </div>';
+        var contentString = '<div class="markerWindow" ng-controller="NewTourController as vm">\n            <form class="markerForm" ng-submit="vm.submitSiteForm(site)">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <div>Add image<input type="file" id="siteImage"></div>\n              <button id="submitSite">Submit</button>\n            </form>\n            <button class="deleteButton">Delete marker</button>\n          </div>';
         var compiled = $compile(contentString);
         var scopedHTML = compiled(scope);
 
@@ -585,12 +591,6 @@ var newMap = function newMap($state, TourService, $compile) {
 
         infoWindow.addListener('domready', function () {});
       }
-
-      // var newMap = document.getElementById('newMap');
-
-      // if (newMap) {
-
-      // }
 
       // show the map
       initMap();
@@ -608,7 +608,7 @@ newMap.$inject = ['$state', 'TourService', '$compile'];
 exports['default'] = newMap;
 module.exports = exports['default'];
 
-},{}],11:[function(require,module,exports){
+},{"jquery":27}],11:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -916,6 +916,12 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
     formData.append('latitude', s.latitude);
     formData.append('longitude', s.longitude);
     formData.append('id', s.id);
+
+    console.log(formData);
+
+    // Test infowindow stuff here
+
+    console.log('After submit');
 
     // Set up server to accept image/formdata
     SERVER.CONFIG.headers['Content-Type'] = undefined;

@@ -1,3 +1,5 @@
+import jquery from 'jquery';
+
 let newMap = function($state, TourService, $compile) {
   
   return {
@@ -78,12 +80,12 @@ let newMap = function($state, TourService, $compile) {
         markers.push(marker);
 
         var contentString = 
-        `<div class="markerForm" ng-controller="NewTourController as vm">
-            <form class="newForm" ng-submit="vm.submitSiteForm(site)">
+        `<div class="markerWindow" ng-controller="NewTourController as vm">
+            <form class="markerForm" ng-submit="vm.submitSiteForm(site)">
               <input ng-model="site.title" type="text" placeholder="Title">
               <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>
               <div>Add image<input type="file" id="siteImage"></div>
-              <button>Submit</button>
+              <button id="submitSite">Submit</button>
             </form>
             <button class="deleteButton">Delete marker</button>
           </div>`;
@@ -100,17 +102,9 @@ let newMap = function($state, TourService, $compile) {
 
         infoWindow.addListener('domready', function() {
 
-
         });
 
       }
-
-      // var newMap = document.getElementById('newMap');
-
-      // if (newMap) {
-        
-      // }
-
 
 
       // show the map

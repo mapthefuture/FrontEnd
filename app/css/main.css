@@ -6515,14 +6515,14 @@ li {
   text-align: center;
   width: 50%; }
   .newForm form {
-    border-radius: 5px;
-    padding: 25px; }
+    border-radius: 5px; }
     .newForm form input {
       max-width: 80%;
       margin: 5px auto; }
-    .newForm form .markerForm {
-      width: 20vw;
-      height: 100%; }
+
+.markerWindow .markerForm {
+  margin: 15px auto;
+  text-align: center; }
 
 #newMap {
   margin: 0;
