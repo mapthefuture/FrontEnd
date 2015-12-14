@@ -55,9 +55,8 @@ let NewTourController = function($scope, $http, TourService, SERVER, UserService
 
     TourService.submitTourForm(tourObj).then( (res) => {
       
-      // vm.tourId = res.data.tour.id;
       TourService.tempTourId = res.data.tour.id;
-      console.log(vm.tourId);
+      console.log(TourService.tempTourId);
       // $state.go('root.addsites');
       vm.showMap = (vm.showMap) ? false : true;
       vm.showForm = (vm.showForm) ? false : true;
