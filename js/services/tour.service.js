@@ -49,8 +49,6 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
     // Create an instance of FormData
     var formData = new FormData();
 
-
-
     // Add lat/lon to s
     for (var latitude in c) { s[latitude] = c[latitude]; }
     for (var longitude in c) { s[longitude] = c[longitude]; }
