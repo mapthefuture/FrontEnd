@@ -243,6 +243,8 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
   vm.tourId = {};
   vm.tourStart = [];
 
+  $scope.submitClicked = false;
+
   function submitSiteForm(siteObj) {
 
     TourService.submitSiteForm(siteObj).then(function (res) {
@@ -264,6 +266,7 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
         };
         newTourStart();
       }
+      $scope.submitClicked = true;
     });
   }
 
@@ -271,7 +274,8 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
 
     TourService.submitTourForm(tourObj).then(function (res) {
 
-      vm.tourId = res.data.tour.id;
+      // vm.tourId = res.data.tour.id;
+      TourService.tempTourId = res.data.tour.id;
       console.log(vm.tourId);
       // $state.go('root.addsites');
       vm.showMap = vm.showMap ? false : true;
@@ -569,8 +573,10 @@ var newMap = function newMap($state, TourService, $compile) {
         TourService.markerData = {
           latitude: lat,
           longitude: lon,
-          id: vm.tourId
+          id: TourService.tempTourId
         };
+
+        console.log(TourService.markerData);
 
         // map.panTo(latLng);
 
@@ -590,6 +596,12 @@ var newMap = function newMap($state, TourService, $compile) {
         });
 
         infoWindow.addListener('domready', function () {});
+
+        // When infowindow is submitted, close window (not working)
+        scope.$watch('submitClicked', function () {
+          console.log("I'm in the directive");
+          infoWindow.close();
+        });
       }
 
       // show the map
@@ -855,6 +867,7 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
   this.areaTours = areaTours;
   this.markerData = {};
   this.tourStartObj = {};
+  this.tempTourId = 0;
   this.submitSiteForm = submitSiteForm;
   this.submitTourForm = submitTourForm;
   this.storeTour = storeTour;

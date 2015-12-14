@@ -71,8 +71,10 @@ let newMap = function($state, TourService, $compile) {
         TourService.markerData = {
           latitude: lat,
           longitude: lon,
-          id: vm.tourId
+          id: TourService.tempTourId
         };
+
+        console.log(TourService.markerData);
 
         // map.panTo(latLng);
         
@@ -104,8 +106,12 @@ let newMap = function($state, TourService, $compile) {
 
         });
 
+        // When infowindow is submitted, close window (not working)
+        scope.$watch('submitClicked', function() {
+          console.log("I'm in the directive");
+          infoWindow.close();
+        });
       }
-
 
       // show the map
       initMap();
@@ -114,6 +120,7 @@ let newMap = function($state, TourService, $compile) {
       map.addListener('click', function(e) {
         setMarker(map, e.latLng);
       }); 
+
     }
   };
 };

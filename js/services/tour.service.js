@@ -3,6 +3,7 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
   this.areaTours = areaTours;
   this.markerData = {};
   this.tourStartObj = {};
+  this.tempTourId = 0;
   this.submitSiteForm = submitSiteForm;
   this.submitTourForm = submitTourForm;
   this.storeTour = storeTour;
