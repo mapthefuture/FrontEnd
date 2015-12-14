@@ -33,10 +33,20 @@ html {
 body {
   width: 100%;
   height: 100%;
-  background-color: $grey;
+  background-color: white;
 }
 li {
   list-style-type: none;
+}
+
+button {
+  margin: 15px auto;
+  display: block;
+  background-color: $blue;   
+}
+
+button:hover {
+  background-color: $red;    
 }
 
 .mainContainer {
@@ -48,10 +58,16 @@ li {
 .top-bar {
   background-color: $black;
   color: $white;
+  opacity: 1;
 }
 
 @media(min-width: 40.0625em) {.top-bar-section li:not(.has-form) a:not(.button) {
     background: $black;
+    color: $white;
+}}
+
+@media(min-width: 40.0625em) {.top-bar-section li:not(.has-form) a:not(.button):hover {
+    background: $blue;
     color: $white;
 }}
 
@@ -120,7 +136,7 @@ li {
   }
 
   .homeOverlay {
-    background-color: #494949;
+    background-color: $black;
     position: absolute;
     z-index: 98;
     width: 100%;
@@ -134,7 +150,6 @@ li {
     z-index: 99;
     width: 100%;
     height: 100%;
-    opacity: 0.91;
 
     h2 {
       color: white;
@@ -143,8 +158,12 @@ li {
     button {
       margin: 15px auto;
       display: block;
-      opacity: 1;
+      background-color: rgba(81,126,232,0.89);   
     }
+
+    button:hover {
+      background-color: rgba(239,72,54,0.77);    
+     }
 
     div {
       margin: 15% auto;

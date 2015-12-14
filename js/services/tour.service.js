@@ -49,9 +49,6 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
     // Create an instance of FormData
     var formData = new FormData();
 
-    // Add image
-    formData.append('image', imageFile);
-
     // Add lat/lon to s
     for (var latitude in c) { s[latitude] = c[latitude]; }
     for (var longitude in c) { s[longitude] = c[longitude]; }
@@ -65,6 +62,11 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
     formData.append('id', s.id);
 
     console.log(formData);
+
+    if (imageFile) {
+      // Add image
+      formData.append('image', imageFile);
+    }
 
     // Set up server to accept image/formdata
     SERVER.CONFIG.headers['Content-Type'] = undefined;

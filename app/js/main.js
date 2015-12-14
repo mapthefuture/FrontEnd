@@ -13,11 +13,11 @@ var config = function config($stateProvider, $urlRouterProvider) {
     templateUrl: 'templates/layout.tpl.html'
   }).state('root.home', {
     url: '/',
-    controller: 'HomeController',
+    controller: 'HomeController as vm',
     templateUrl: 'templates/home.tpl.html'
   }).state('root.new', {
     url: '/new',
-    controller: 'NewTourController',
+    controller: 'NewTourController as vm',
     templateUrl: 'templates/new.tpl.html'
   }).state('root.login', {
     url: '/login',
@@ -39,10 +39,6 @@ var config = function config($stateProvider, $urlRouterProvider) {
     url: '/test',
     controller: 'TestController',
     templateUrl: 'templates/test.tpl.html'
-  }).state('root.newnew', {
-    url: '/newnew',
-    controller: 'NewNewController',
-    templateUrl: 'templates/newnew.tpl.html'
   });
 };
 
@@ -66,20 +62,10 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 var HomeController = function HomeController($scope, UserService, $state) {
 
-  // let promise = UserService.checkAuth();
+  var vm = this;
 
-  // if (promise) {
-  //   promise.then( (res) => {
-  //     console.log(res);
-  //     if (res.data.status === 'Authentication failed.') {
-  //       // $state.go('root.login');
-  //     } else {
-  //       $scope.message = 'I am logged in';
-  //     }
-  //   });
-  // }
-
-  // jquery('.container').addClass("homePage");
+  vm.city = '';
+  vm['in'] = '.';
 
   $scope.logmeout = function () {
     UserService.logout();
@@ -117,6 +103,8 @@ var HomeController = function HomeController($scope, UserService, $state) {
     zoom: 18
   };
 
+  var city;
+
   // Find location
   var onSuccess = function onSuccess(position) {
     $scope.map.center = {
@@ -124,6 +112,17 @@ var HomeController = function HomeController($scope, UserService, $state) {
       longitude: position.coords.longitude
     };
     $scope.$apply();
+
+    // Get city
+    _jquery2['default'].ajax({
+      url: 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' + position.coords.latitude + ',' + position.coords.longitude + '&sensor=false',
+      success: function success(data) {
+        var formatted = data.results;
+        var address_array = formatted[6].formatted_address.split(',');
+        vm.city = address_array[0] + '.';
+        vm['in'] = ' in ';
+      }
+    });
   };
   function onError(error) {
     console.log('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
@@ -214,14 +213,7 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _jquery = require('jquery');
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
-var NewTourController = function NewTourController($scope, $http, TourService, SERVER, UserService) {
+var NewTourController = function NewTourController($scope, $http, TourService, SERVER, UserService, $state) {
 
   var promise = UserService.checkAuth();
 
@@ -240,6 +232,8 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
 
   vm.submitSiteForm = submitSiteForm;
   vm.submitTourForm = submitTourForm;
+  vm.showMap = false;
+  vm.showForm = true;
   vm.tourId = {};
   vm.tourStart = [];
 
@@ -271,27 +265,24 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
   }
 
   function submitTourForm(tourObj) {
-    TourService.submitTourForm(tourObj).then(function (res) {
-<<<<<<< HEAD
 
-      // vm.tourId = res.data.tour.id;
+    TourService.submitTourForm(tourObj).then(function (res) {
+
       TourService.tempTourId = res.data.tour.id;
-=======
-      // jquery('.newMap').toggleClass("display");
-      // jquery('.newForm').toggleClass("donotdisplay");
-      vm.tourId = res.data.tour.id;
->>>>>>> master
-      console.log(vm.tourId);
+      console.log(TourService.tempTourId);
+      // $state.go('root.addsites');
+      vm.showMap = vm.showMap ? false : true;
+      vm.showForm = vm.showForm ? false : true;
     });
   }
 };
 
-NewTourController.$inject = ['$scope', '$http', 'TourService', 'SERVER', 'UserService'];
+NewTourController.$inject = ['$scope', '$http', 'TourService', 'SERVER', 'UserService', '$state'];
 
 exports['default'] = NewTourController;
 module.exports = exports['default'];
 
-},{"jquery":28}],7:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -431,6 +422,13 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
 var newMap = function newMap($state, TourService, $compile) {
 
   return {
@@ -479,6 +477,7 @@ var newMap = function newMap($state, TourService, $compile) {
       function initMap() {
         if (map === void 0) {
           map = new google.maps.Map(element[0], mapOptions);
+          google.maps.event.trigger(map, 'resize');
         }
       }
 
@@ -509,11 +508,7 @@ var newMap = function newMap($state, TourService, $compile) {
         // adds markers to array
         markers.push(marker);
 
-<<<<<<< HEAD
         var contentString = '<div class="markerWindow" ng-controller="NewTourController as vm">\n            <form class="markerForm" ng-submit="vm.submitSiteForm(site)" ng-model="submitClicked">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <div>Add image<input type="file" id="siteImage"></div>\n              <button id="submitSite">Submit</button>\n            </form>\n            <button class="deleteButton">Delete marker</button>\n          </div>';
-=======
-        var contentString = '<div class="markerForm" ng-controller="NewTourController as vm">\n            <form class="newForm" ng-submit="vm.submitSiteForm(site)">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <div>Add image<input type="file" id="siteImage"></div>\n              <button>Submit</button>\n            </form>\n            <button class="deleteButton">Delete marker</button>\n          </div>';
->>>>>>> master
         var compiled = $compile(contentString);
         var scopedHTML = compiled(scope);
 
@@ -550,7 +545,7 @@ newMap.$inject = ['$state', 'TourService', '$compile'];
 exports['default'] = newMap;
 module.exports = exports['default'];
 
-},{}],11:[function(require,module,exports){
+},{"jquery":28}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -945,9 +940,6 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
     // Create an instance of FormData
     var formData = new FormData();
 
-    // Add image
-    formData.append('image', imageFile);
-
     // Add lat/lon to s
     for (var latitude in c) {
       s[latitude] = c[latitude];
@@ -964,11 +956,13 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
     formData.append('longitude', s.longitude);
     formData.append('id', s.id);
 
-<<<<<<< HEAD
     console.log(formData);
 
-=======
->>>>>>> master
+    if (imageFile) {
+      // Add image
+      formData.append('image', imageFile);
+    }
+
     // Set up server to accept image/formdata
     SERVER.CONFIG.headers['Content-Type'] = undefined;
 
