@@ -13,11 +13,11 @@ var config = function config($stateProvider, $urlRouterProvider) {
     templateUrl: 'templates/layout.tpl.html'
   }).state('root.home', {
     url: '/',
-    controller: 'HomeController as vm',
+    controller: 'HomeController',
     templateUrl: 'templates/home.tpl.html'
   }).state('root.new', {
     url: '/new',
-    controller: 'NewTourController as vm',
+    controller: 'NewTourController',
     templateUrl: 'templates/new.tpl.html'
   }).state('root.login', {
     url: '/login',
@@ -39,6 +39,10 @@ var config = function config($stateProvider, $urlRouterProvider) {
     url: '/test',
     controller: 'TestController',
     templateUrl: 'templates/test.tpl.html'
+  }).state('root.newnew', {
+    url: '/newnew',
+    controller: 'NewNewController',
+    templateUrl: 'templates/newnew.tpl.html'
   });
 };
 
@@ -62,10 +66,20 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 var HomeController = function HomeController($scope, UserService, $state) {
 
-  var vm = this;
+  // let promise = UserService.checkAuth();
 
-  vm.city = '';
-  vm['in'] = '.';
+  // if (promise) {
+  //   promise.then( (res) => {
+  //     console.log(res);
+  //     if (res.data.status === 'Authentication failed.') {
+  //       // $state.go('root.login');
+  //     } else {
+  //       $scope.message = 'I am logged in';
+  //     }
+  //   });
+  // }
+
+  // jquery('.container').addClass("homePage");
 
   $scope.logmeout = function () {
     UserService.logout();
@@ -103,8 +117,6 @@ var HomeController = function HomeController($scope, UserService, $state) {
     zoom: 18
   };
 
-  var city;
-
   // Find location
   var onSuccess = function onSuccess(position) {
     $scope.map.center = {
@@ -112,17 +124,6 @@ var HomeController = function HomeController($scope, UserService, $state) {
       longitude: position.coords.longitude
     };
     $scope.$apply();
-
-    // Get city
-    _jquery2['default'].ajax({
-      url: 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' + position.coords.latitude + ',' + position.coords.longitude + '&sensor=false',
-      success: function success(data) {
-        var formatted = data.results;
-        var address_array = formatted[6].formatted_address.split(',');
-        vm.city = address_array[0] + '.';
-        vm['in'] = ' in ';
-      }
-    });
   };
   function onError(error) {
     console.log('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
@@ -135,7 +136,7 @@ HomeController.$inject = ['$scope', 'UserService', '$state'];
 exports['default'] = HomeController;
 module.exports = exports['default'];
 
-},{"jquery":27}],3:[function(require,module,exports){
+},{"jquery":28}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -162,12 +163,6 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
     $scope.tour = TourService.getStored();
     $anchorScroll('sitemap');
   };
-
-  // $scope.allTours.forEach(tour, function(tour){
-  //   TourService.getMarkers(tour).then((res) =>{
-  //     $scope.tourMarkers = res.data;
-  //   });
-  // });
 };
 
 ListTourController.$inject = ['$scope', '$stateParams', 'TourService', '$anchorScroll'];
@@ -219,7 +214,14 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var NewTourController = function NewTourController($scope, $http, TourService, SERVER, UserService, $state) {
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var NewTourController = function NewTourController($scope, $http, TourService, SERVER, UserService) {
 
   var promise = UserService.checkAuth();
 
@@ -238,8 +240,6 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
 
   vm.submitSiteForm = submitSiteForm;
   vm.submitTourForm = submitTourForm;
-  vm.showMap = false;
-  vm.showForm = true;
   vm.tourId = {};
   vm.tourStart = [];
 
@@ -271,25 +271,27 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
   }
 
   function submitTourForm(tourObj) {
-
     TourService.submitTourForm(tourObj).then(function (res) {
+<<<<<<< HEAD
 
       // vm.tourId = res.data.tour.id;
       TourService.tempTourId = res.data.tour.id;
+=======
+      // jquery('.newMap').toggleClass("display");
+      // jquery('.newForm').toggleClass("donotdisplay");
+      vm.tourId = res.data.tour.id;
+>>>>>>> master
       console.log(vm.tourId);
-      // $state.go('root.addsites');
-      vm.showMap = vm.showMap ? false : true;
-      vm.showForm = vm.showForm ? false : true;
     });
   }
 };
 
-NewTourController.$inject = ['$scope', '$http', 'TourService', 'SERVER', 'UserService', '$state'];
+NewTourController.$inject = ['$scope', '$http', 'TourService', 'SERVER', 'UserService'];
 
 exports['default'] = NewTourController;
 module.exports = exports['default'];
 
-},{}],7:[function(require,module,exports){
+},{"jquery":28}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -401,97 +403,26 @@ module.exports = exports["default"];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var listMap = function listMap($state, TourService, MapService) {
+var TourMapController = function TourMapController($scope, TourService) {
 
-  return {
-    restrict: 'A',
-    replace: true,
-    template: '<div id="listmap"></div>',
-    controller: 'ListTourController as vm',
-    link: function link(scope, element, attrs) {
-      var map, infoWindow;
-      var initialLocation;
+  $scope.allTours = [];
+  $scope.tourMarkers = [];
 
-      function initMap() {
-        if (map === void 0) {
-          map = new google.maps.Map(element[0], mapOptions);
-        }
-      }
+  TourService.areaTours().then(function (res) {
+    $scope.allTours = res.data.tours;
+    // console.log($scope.allTours);
+  });
 
-      // Find location
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(function (pos) {
-          MapService.initialLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-          map.setCenter(initialLocation);
-        });
-      }
-
-      // map config
-      var mapOptions = {
-        center: initialLocation,
-        zoom: 12,
-        mapTypeId: google.maps.MapTypeId.HYBRID,
-        scrollwheel: false,
-        styles: [{
-          featureType: "poi",
-          stylers: [{ visibility: "off" }]
-        }, {
-          featureType: "transit",
-          stylers: [{ visibility: "off" }]
-        }]
-      };
-
-      // place a marker
-      function setMarker(map, pos, title, content) {
-        var marker;
-        var markerOptions = {
-          position: pos,
-          map: map,
-          title: title,
-          draggable: true,
-          icon: 'http://maps.google.com/mapfiles/ms/micons/blue.png'
-        };
-
-        marker = new google.maps.Marker(markerOptions);
-        markers.push(marker); // add marker to array
-
-        google.maps.event.addListener(marker, 'click', function () {
-          // close window if not undefined
-          var pos = marker.position;
-          if (infoWindow !== void 0) {
-            infoWindow.close();
-          }
-          // create new window
-          var infoWindowOptions = {
-            content: content
-          };
-          infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-          infoWindow.open(map, marker);
-
-          function setMapOnAll(map) {
-            for (var i = 0; i < markers.length; i++) {
-              markers[i].setMap(map);
-            }
-          }
-        });
-      }
-
-      /* Load markers code */
-      TourService.areaTours().then(function (res) {
-        var tours = res.data.tours;
-        tours.forEach(function (tour) {
-          MapService.setMarker(MapService.map, new google.maps.LatLng(tour.start_lat, tour.start_lon), tour.title, tour.description);
-        });
-      });
-
-      initMap();
-    }
-  };
+  $scope.allTours.forEach(function (tour) {
+    TourService.getMarkers(tour).then(function (res) {
+      $scope.tourMarkers = res.data;
+    });
+  });
 };
 
-listMap.$inject = ['$state', 'TourService', 'MapService'];
+TourMapController.$inject = ['$scope', 'TourService'];
 
-exports['default'] = listMap;
+exports['default'] = TourMapController;
 module.exports = exports['default'];
 
 },{}],10:[function(require,module,exports){
@@ -500,13 +431,6 @@ module.exports = exports['default'];
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _jquery = require('jquery');
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
 var newMap = function newMap($state, TourService, $compile) {
 
   return {
@@ -555,7 +479,6 @@ var newMap = function newMap($state, TourService, $compile) {
       function initMap() {
         if (map === void 0) {
           map = new google.maps.Map(element[0], mapOptions);
-          google.maps.event.trigger(map, 'resize');
         }
       }
 
@@ -586,7 +509,11 @@ var newMap = function newMap($state, TourService, $compile) {
         // adds markers to array
         markers.push(marker);
 
+<<<<<<< HEAD
         var contentString = '<div class="markerWindow" ng-controller="NewTourController as vm">\n            <form class="markerForm" ng-submit="vm.submitSiteForm(site)" ng-model="submitClicked">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <div>Add image<input type="file" id="siteImage"></div>\n              <button id="submitSite">Submit</button>\n            </form>\n            <button class="deleteButton">Delete marker</button>\n          </div>';
+=======
+        var contentString = '<div class="markerForm" ng-controller="NewTourController as vm">\n            <form class="newForm" ng-submit="vm.submitSiteForm(site)">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <div>Add image<input type="file" id="siteImage"></div>\n              <button>Submit</button>\n            </form>\n            <button class="deleteButton">Delete marker</button>\n          </div>';
+>>>>>>> master
         var compiled = $compile(contentString);
         var scopedHTML = compiled(scope);
 
@@ -623,7 +550,106 @@ newMap.$inject = ['$state', 'TourService', '$compile'];
 exports['default'] = newMap;
 module.exports = exports['default'];
 
-},{"jquery":27}],11:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+var tourMap = function tourMap($state, TourService, MapService) {
+
+  return {
+    restrict: 'A',
+    replace: true,
+    template: '<div id="listmap"></div>',
+    controller: 'TourMapController',
+    link: function link(scope, element, attrs) {
+      var map, infoWindow;
+      var initialLocation;
+
+      // Find location
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(function (pos) {
+          MapService.initialLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+          map.setCenter(initialLocation);
+        });
+      }
+
+      function initMap() {
+        if (map === void 0) {
+          map = new google.maps.Map(element[0], mapOptions);
+        }
+      }
+
+      // map config
+      var mapOptions = {
+        center: initialLocation,
+        zoom: 12,
+        mapTypeId: google.maps.MapTypeId.HYBRID,
+        scrollwheel: false,
+        styles: [{
+          featureType: "poi",
+          stylers: [{ visibility: "off" }]
+        }, {
+          featureType: "transit",
+          stylers: [{ visibility: "off" }]
+        }]
+      };
+
+      // place a marker
+      function setMarker(map, pos, title, content) {
+        var marker;
+        var markerOptions = {
+          position: pos,
+          map: map,
+          title: title,
+          draggable: true,
+          icon: 'http://maps.google.com/mapfiles/ms/micons/blue.png'
+        };
+
+        marker = new google.maps.Marker(markerOptions);
+        markers.push(marker); // add marker to array
+
+        google.maps.event.addListener(marker, 'click', function () {
+          // close window if not undefined
+          var pos = marker.position;
+          if (infoWindow !== void 0) {
+            infoWindow.close();
+          }
+          // create new window
+          var infoWindowOptions = {
+            content: content
+          };
+          infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+          infoWindow.open(map, marker);
+
+          // function setMapOnAll(map) {
+          //   for (var i = 0; i < markers.length; i++) {
+          //     markers[i].setMap(map);
+          //   }
+          // }
+        });
+      }
+
+      /* Load markers code */
+      TourService.areaTours().then(function (res) {
+        var tours = res.data.tours;
+        tours.forEach(function (tour) {
+          MapService.setMarker(MapService.map, new google.maps.LatLng(tour.start_lat, tour.start_lon), tour.title, tour.description);
+        });
+      });
+
+      initMap();
+    }
+  };
+};
+
+tourMap.$inject = ['$state', 'TourService', 'MapService'];
+
+exports['default'] = tourMap;
+module.exports = exports['default'];
+
+},{}],12:[function(require,module,exports){
 'use strict';
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -680,6 +706,10 @@ var _controllersListToursController = require('./controllers/listTours.controlle
 
 var _controllersListToursController2 = _interopRequireDefault(_controllersListToursController);
 
+var _controllersTourMapController = require('./controllers/tourMap.controller');
+
+var _controllersTourMapController2 = _interopRequireDefault(_controllersTourMapController);
+
 var _controllersLoginController = require('./controllers/login.controller');
 
 var _controllersLoginController2 = _interopRequireDefault(_controllersLoginController);
@@ -702,9 +732,9 @@ var _directivesNewMapDirective = require('./directives/newMap.directive');
 
 var _directivesNewMapDirective2 = _interopRequireDefault(_directivesNewMapDirective);
 
-var _directivesListMapDirective = require('./directives/listMap.directive');
+var _directivesTourMapDirective = require('./directives/tourMap.directive');
 
-var _directivesListMapDirective2 = _interopRequireDefault(_directivesListMapDirective);
+var _directivesTourMapDirective2 = _interopRequireDefault(_directivesTourMapDirective);
 
 window._ = require('lodash');
 
@@ -716,13 +746,13 @@ _angular2['default'].module('app', ['ui.router', 'mm.foundation', 'ngCookies', '
 }).config(_config2['default'])
 // .constant('glocURL', 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyBH5nVGZJ9PpIikitg1Q9x11xrSgg3JRlw')
 // .constant('gmapURL', 'url')
-.service('TourService', _servicesTourService2['default']).service('UserService', _servicesUserService2['default']).service('MapService', _servicesMapService2['default']).service('SitService', _servicesSiteService2['default']).controller('HomeController', _controllersHomeController2['default']).controller('NewTourController', _controllersNewTourController2['default']).controller('LoginController', _controllersLoginController2['default']).controller('LogoutController', _controllersLogoutController2['default']).controller('SignupController', _controllersSignupController2['default']).controller('ListTourController', _controllersListToursController2['default']).controller('TestController', _controllersTestController2['default']).directive('newMap', _directivesNewMapDirective2['default']).directive('listMap', _directivesListMapDirective2['default']);
+.service('TourService', _servicesTourService2['default']).service('UserService', _servicesUserService2['default']).service('MapService', _servicesMapService2['default']).service('SiteService', _servicesSiteService2['default']).controller('HomeController', _controllersHomeController2['default']).controller('NewTourController', _controllersNewTourController2['default']).controller('LoginController', _controllersLoginController2['default']).controller('LogoutController', _controllersLogoutController2['default']).controller('SignupController', _controllersSignupController2['default']).controller('ListTourController', _controllersListToursController2['default']).controller('TourMapController', _controllersTourMapController2['default']).controller('TestController', _controllersTestController2['default']).directive('newMap', _directivesNewMapDirective2['default']).directive('tourMap', _directivesTourMapDirective2['default']);
 
 window.initMap = function () {
   _angular2['default'].bootstrap(document, ['app']);
 };
 
-},{"./config":1,"./controllers/home.controller":2,"./controllers/listTours.controller":3,"./controllers/login.controller":4,"./controllers/logout.controller":5,"./controllers/newTour.controller":6,"./controllers/signup.controller":7,"./controllers/test.controller":8,"./directives/listMap.directive":9,"./directives/newMap.directive":10,"./services/map.service":12,"./services/site.service":13,"./services/tour.service":14,"./services/user.service":15,"angular":26,"angular-cookies":17,"angular-foundation":18,"angular-google-maps":19,"angular-simple-logger":20,"angular-ui-router":24,"lodash":28}],12:[function(require,module,exports){
+},{"./config":1,"./controllers/home.controller":2,"./controllers/listTours.controller":3,"./controllers/login.controller":4,"./controllers/logout.controller":5,"./controllers/newTour.controller":6,"./controllers/signup.controller":7,"./controllers/test.controller":8,"./controllers/tourMap.controller":9,"./directives/newMap.directive":10,"./directives/tourMap.directive":11,"./services/map.service":13,"./services/site.service":14,"./services/tour.service":15,"./services/user.service":16,"angular":27,"angular-cookies":18,"angular-foundation":19,"angular-google-maps":20,"angular-simple-logger":21,"angular-ui-router":25,"lodash":29}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -837,7 +867,7 @@ MapService.$inject = ['UserService', '$state', '$stateParams', '$http', '$compil
 exports['default'] = MapService;
 module.exports = exports['default'];
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -859,7 +889,7 @@ SiteService.$inject = ['UserService', '$stateParams', '$http', 'SERVER'];
 exports['default'] = SiteService;
 module.exports = exports['default'];
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -934,8 +964,11 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
     formData.append('longitude', s.longitude);
     formData.append('id', s.id);
 
+<<<<<<< HEAD
     console.log(formData);
 
+=======
+>>>>>>> master
     // Set up server to accept image/formdata
     SERVER.CONFIG.headers['Content-Type'] = undefined;
 
@@ -956,7 +989,7 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
   }
 
   function getStored() {
-    console.log(storedTour);
+    // console.log(this.storedTour);
     return this.storedTour;
   }
 };
@@ -966,7 +999,7 @@ TourService.$inject = ['UserService', '$stateParams', '$http', 'SERVER'];
 exports['default'] = TourService;
 module.exports = exports['default'];
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1030,7 +1063,7 @@ UserService.$inject = ['$http', 'SERVER', '$cookies', '$state'];
 exports['default'] = UserService;
 module.exports = exports['default'];
 
-},{"jquery":27}],16:[function(require,module,exports){
+},{"jquery":28}],17:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.8
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -1353,11 +1386,11 @@ angular.module('ngCookies').provider('$$cookieWriter', function $$CookieWriterPr
 
 })(window, window.angular);
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 require('./angular-cookies');
 module.exports = 'ngCookies';
 
-},{"./angular-cookies":16}],18:[function(require,module,exports){
+},{"./angular-cookies":17}],19:[function(require,module,exports){
 /*
  * angular-mm-foundation
  * http://pineconellc.github.io/angular-foundation/
@@ -4973,7 +5006,7 @@ angular.module("template/typeahead/typeahead-popup.html", []).run(["$templateCac
     "");
 }]);
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 /*! angular-google-maps 2.2.1 2015-09-11
  *  AngularJS directives for Google Maps
  *  git: https://github.com/angular-ui/angular-google-maps.git
@@ -20413,7 +20446,7 @@ angular.module('uiGmapgoogle-maps.extensions')
   };
 }]);
 }( window,angular));
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 /**
  *  angular-simple-logger
  *
@@ -20553,7 +20586,7 @@ angular.module('nemLogging').provider('nemSimpleLogger', [
   }
 ]);
 
-},{"angular":26,"debug":21}],21:[function(require,module,exports){
+},{"angular":27,"debug":22}],22:[function(require,module,exports){
 
 /**
  * This is the web browser implementation of `debug()`.
@@ -20723,7 +20756,7 @@ function localstorage(){
   } catch (e) {}
 }
 
-},{"./debug":22}],22:[function(require,module,exports){
+},{"./debug":23}],23:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -20922,7 +20955,7 @@ function coerce(val) {
   return val;
 }
 
-},{"ms":23}],23:[function(require,module,exports){
+},{"ms":24}],24:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -21049,7 +21082,7 @@ function plural(ms, n, name) {
   return Math.ceil(ms / n) + ' ' + name + 's';
 }
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 /**
  * State-based routing for AngularJS
  * @version v0.2.15
@@ -25420,7 +25453,7 @@ angular.module('ui.router.state')
   .filter('isState', $IsStateFilter)
   .filter('includedByState', $IncludedByStateFilter);
 })(window, window.angular);
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.8
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -54439,11 +54472,11 @@ $provide.value("$locale", {
 })(window, document);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":25}],27:[function(require,module,exports){
+},{"./angular":26}],28:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.4
  * http://jquery.com/
@@ -63655,7 +63688,7 @@ return jQuery;
 
 }));
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -76011,7 +76044,7 @@ return jQuery;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}]},{},[11])
+},{}]},{},[12])
 
 
 //# sourceMappingURL=main.js.map
