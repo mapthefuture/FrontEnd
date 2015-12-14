@@ -92,7 +92,7 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
   }
 
   function getStored() {
-    console.log(storedTour);
+    // console.log(this.storedTour);
     return this.storedTour;
   }
 

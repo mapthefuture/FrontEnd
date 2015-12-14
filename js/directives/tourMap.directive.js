@@ -1,19 +1,13 @@
-let listMap = function($state, TourService, MapService) {
+let tourMap = function($state, TourService, MapService) {
 
   return {
     restrict: 'A',
     replace: true,
     template: '<div id="listmap"></div>',
-    controller: 'ListTourController as vm',
+    controller: 'TourMapController',
     link: function (scope, element, attrs) {
       var map, infoWindow;
       var initialLocation;
-
-      function initMap() {
-        if (map === void 0) {
-          map = new google.maps.Map(element[0], mapOptions);
-        }
-      }
 
       // Find location
       if ("geolocation" in navigator) {
@@ -21,6 +15,12 @@ let listMap = function($state, TourService, MapService) {
           MapService.initialLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
           map.setCenter(initialLocation);
         });
+      }
+
+      function initMap() {
+        if (map === void 0) {
+          map = new google.maps.Map(element[0], mapOptions);
+        }
       }
         
       // map config
@@ -70,11 +70,11 @@ let listMap = function($state, TourService, MapService) {
           infoWindow = new google.maps.InfoWindow(infoWindowOptions);
           infoWindow.open(map, marker);
 
-          function setMapOnAll(map) {
-            for (var i = 0; i < markers.length; i++) {
-              markers[i].setMap(map);
-            }
-          }
+          // function setMapOnAll(map) {
+          //   for (var i = 0; i < markers.length; i++) {
+          //     markers[i].setMap(map);
+          //   }
+          // }
         });
       }
 
@@ -91,6 +91,6 @@ let listMap = function($state, TourService, MapService) {
   };
 };
 
-listMap.$inject = ['$state', 'TourService', 'MapService'];
+tourMap.$inject = ['$state', 'TourService', 'MapService'];
 
-export default listMap;
+export default tourMap;
