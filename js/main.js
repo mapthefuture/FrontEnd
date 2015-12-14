@@ -23,6 +23,7 @@ import TourService from './services/tour.service';
 import HomeController from './controllers/home.controller';
 import NewTourController from './controllers/newTour.controller';
 import ListTourController from './controllers/listTours.controller';
+import TourMapController from './controllers/tourMap.controller';
 import LoginController from './controllers/login.controller';
 import LogoutController from './controllers/logout.controller';
 import SignupController from './controllers/signup.controller';
@@ -30,7 +31,7 @@ import TestController from './controllers/test.controller';
 
 // Import Directives
 import newMap from './directives/newMap.directive';
-import listMap from './directives/listMap.directive';
+import tourMap from './directives/tourMap.directive';
 
 angular
   .module('app', ['ui.router', 'mm.foundation', 'ngCookies', 'uiGmapgoogle-maps'])
@@ -53,9 +54,10 @@ angular
   .controller('LogoutController', LogoutController)
   .controller('SignupController', SignupController)
   .controller('ListTourController', ListTourController)
+  .controller('ListMapController', ListMapController)
   .controller('TestController', TestController)
   .directive('newMap', newMap)
-  .directive('listMap', listMap)
+  .directive('tourMap', tourMap)
 ;
 
 window.initMap = function () {

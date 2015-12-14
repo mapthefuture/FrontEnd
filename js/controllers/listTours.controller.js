@@ -21,12 +21,6 @@ let ListTourController = function($scope, $stateParams, TourService, $anchorScro
     $anchorScroll('sitemap');
   };
 
-  // $scope.allTours.forEach(tour, function(tour){
-  //   TourService.getMarkers(tour).then((res) =>{
-  //     $scope.tourMarkers = res.data;
-  //   });
-  // });
-
 };
 
 ListTourController.$inject = ['$scope', '$stateParams', 'TourService', '$anchorScroll'];

@@ -164,11 +164,11 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
     $anchorScroll('sitemap');
   };
 
-  // $scope.allTours.forEach(tour, function(tour){
-  //   TourService.getMarkers(tour).then((res) =>{
-  //     $scope.tourMarkers = res.data;
-  //   });
-  // });
+  $scope.allTours.forEach(function (tour) {
+    TourService.getMarkers(tour).then(function (res) {
+      $scope.tourMarkers = res.data;
+    });
+  });
 };
 
 ListTourController.$inject = ['$scope', '$stateParams', 'TourService', '$anchorScroll'];
@@ -411,18 +411,18 @@ var listMap = function listMap($state, TourService, MapService) {
       var map, infoWindow;
       var initialLocation;
 
-      function initMap() {
-        if (map === void 0) {
-          map = new google.maps.Map(element[0], mapOptions);
-        }
-      }
-
       // Find location
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(function (pos) {
           MapService.initialLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
           map.setCenter(initialLocation);
         });
+      }
+
+      function initMap() {
+        if (map === void 0) {
+          map = new google.maps.Map(element[0], mapOptions);
+        }
       }
 
       // map config
@@ -932,7 +932,7 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
   }
 
   function getStored() {
-    console.log(storedTour);
+    // console.log(this.storedTour);
     return this.storedTour;
   }
 };
