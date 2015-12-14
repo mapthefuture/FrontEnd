@@ -10,6 +10,7 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
   this.getStored = getStored;
   this.storedTour = {};
 
+
   function areaTours() {
     let getURL = SERVER.URL + '/tours';
     return $http({
@@ -26,6 +27,7 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
   function tour (tourObj) {
     this.title = tourObj.title;
     this.description = tourObj.description;
+    this.category = tourObj.category;
   }
 
   function storeTour(tour) {
@@ -63,15 +65,6 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
     formData.append('id', s.id);
 
     console.log(formData);
-
-
-    // Test infowindow stuff here
-    
-
-    
-
-    console.log('After submit');
-
 
     // Set up server to accept image/formdata
     SERVER.CONFIG.headers['Content-Type'] = undefined;

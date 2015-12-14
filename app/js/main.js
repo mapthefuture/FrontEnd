@@ -248,6 +248,7 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
   function submitSiteForm(siteObj) {
 
     TourService.submitSiteForm(siteObj).then(function (res) {
+      $scope.closeWindow();
 
       // Set start of tour to first site
       var tourStartObj = {};
@@ -266,7 +267,6 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
         };
         newTourStart();
       }
-      $scope.submitClicked = true;
     });
   }
 
@@ -514,6 +514,9 @@ var newMap = function newMap($state, TourService, $compile) {
     replace: true,
     template: '<div id="newMap"></div>',
     controller: 'NewTourController as vm',
+    scope: {
+      submitClicked: '='
+    },
 
     link: function link(scope, element, attrs, vm) {
 
@@ -583,7 +586,7 @@ var newMap = function newMap($state, TourService, $compile) {
         // adds markers to array
         markers.push(marker);
 
-        var contentString = '<div class="markerWindow" ng-controller="NewTourController as vm">\n            <form class="markerForm" ng-submit="vm.submitSiteForm(site)">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <div>Add image<input type="file" id="siteImage"></div>\n              <button id="submitSite">Submit</button>\n            </form>\n            <button class="deleteButton">Delete marker</button>\n          </div>';
+        var contentString = '<div class="markerWindow" ng-controller="NewTourController as vm">\n            <form class="markerForm" ng-submit="vm.submitSiteForm(site)" ng-model="submitClicked">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <div>Add image<input type="file" id="siteImage"></div>\n              <button id="submitSite">Submit</button>\n            </form>\n            <button class="deleteButton">Delete marker</button>\n          </div>';
         var compiled = $compile(contentString);
         var scopedHTML = compiled(scope);
 
@@ -597,11 +600,11 @@ var newMap = function newMap($state, TourService, $compile) {
 
         infoWindow.addListener('domready', function () {});
 
-        // When infowindow is submitted, close window (not working)
-        scope.$watch('submitClicked', function () {
-          console.log("I'm in the directive");
+        // Close infowindow when submitted
+        scope.closeWindow = function () {
           infoWindow.close();
-        });
+          console.log("Close window");
+        };
       }
 
       // show the map
@@ -890,6 +893,7 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
   function tour(tourObj) {
     this.title = tourObj.title;
     this.description = tourObj.description;
+    this.category = tourObj.category;
   }
 
   function storeTour(tour) {
@@ -931,10 +935,6 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
     formData.append('id', s.id);
 
     console.log(formData);
-
-    // Test infowindow stuff here
-
-    console.log('After submit');
 
     // Set up server to accept image/formdata
     SERVER.CONFIG.headers['Content-Type'] = undefined;

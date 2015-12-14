@@ -26,8 +26,8 @@ let NewTourController = function($scope, $http, TourService, SERVER, UserService
 
   function submitSiteForm (siteObj) {
     
-
     TourService.submitSiteForm(siteObj).then( (res) => {
+      $scope.closeWindow();
 
       // Set start of tour to first site
       let tourStartObj = {};
@@ -46,7 +46,7 @@ let NewTourController = function($scope, $http, TourService, SERVER, UserService
         };
         newTourStart();
       }
-      $scope.submitClicked = true;
+
     });
   }
 
