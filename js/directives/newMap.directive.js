@@ -32,6 +32,10 @@ let newMap = function($state, TourService, $compile) {
         center: initialLocation,
         zoom: 30,
         mapTypeId: google.maps.MapTypeId.HYBRID,
+        mapTypeControlOptions: {
+          style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+          position: google.maps.ControlPosition.LEFT_BOTTOM
+        },
         scrollwheel: false,
         streetViewControl: false,
 
@@ -96,7 +100,7 @@ let newMap = function($state, TourService, $compile) {
         // <button class="deleteButton">Delete marker</button>
 
 
-          
+
         var compiled = $compile(contentString);
         var scopedHTML = compiled(scope);
 
