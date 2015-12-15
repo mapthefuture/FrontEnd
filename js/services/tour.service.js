@@ -77,6 +77,8 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
   function submitTourForm (tourObj) {
     let t = new tour(tourObj);
     console.log(t);
+
+    SERVER.CONFIG.headers['Content-Type'] = 'application/json';
     return $http.post(SERVER.URL + '/tours', t, SERVER.CONFIG);
   }
 
