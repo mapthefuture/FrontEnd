@@ -6425,17 +6425,27 @@ button:hover {
   height: 100%; }
 
 .top-bar {
-  background-color: #4A4A4A;
+  background-color: rgba(74, 74, 74, 0.96) !important;
   color: #FFFFFF;
-  opacity: 1;
   z-index: 100; }
+
+.top-bar-section {
+  background-color: transparent !important; }
+
+.top-bar-section li {
+  background-color: transparent !important; }
+
+.top-bar-section li a {
+  background-color: transparent !important; }
+
+.top-bar-section li a:hover {
+  background-color: rgba(81, 126, 232, 0.95) !important; }
 
 .title-area .name h1 {
   font-family: "Lato", sans-serif; }
 
 @media (min-width: 40.0625em) {
   .top-bar-section li:not(.has-form) a:not(.button) {
-    background: #4A4A4A;
     color: #FFFFFF;
     font-family: "Lato", sans-serif; } }
 
@@ -6480,7 +6490,7 @@ button:hover {
   display: none; }
 
 .homeWrapper {
-  height: 94%;
+  height: 100%;
   margin: 0;
   position: absolute;
   left: 0;
@@ -6497,7 +6507,7 @@ button:hover {
     height: 100%;
     opacity: 0.6; }
   .homeWrapper .homeRedirect {
-    margin: 0 auto;
+    margin: 4% auto;
     position: absolute;
     z-index: 99;
     width: 100%;
@@ -6517,10 +6527,10 @@ button:hover {
       width: 250px; }
   .homeWrapper .homeMap {
     width: 100%;
-    height: 100%;
-    margin: 0; }
+    height: 100%; }
     .homeWrapper .homeMap .angular-google-map-container {
       margin: 0;
+      top: 0;
       width: 100%;
       height: 100%;
       position: absolute; }
@@ -6538,7 +6548,7 @@ button:hover {
 
 .newWrapper {
   width: 100%;
-  height: 95%;
+  height: 100%;
   left: 0;
   right: 0;
   bottom: 0;
@@ -6570,7 +6580,7 @@ button:hover {
     z-index: 97;
     top: 0;
     right: 0;
-    margin: 10px 15px; }
+    margin: 45px 15px; }
     .newWrapper .newButtonOverlay button {
       font-family: "Lato", sans-serif;
       background-color: rgba(81, 126, 232, 0.95); }
@@ -6581,7 +6591,7 @@ button:hover {
     .newWrapper .newMap #newMap {
       margin: 0;
       width: 100%;
-      height: 98.5%;
+      height: 100%;
       position: absolute;
       bottom: 0;
       z-index: 96; }

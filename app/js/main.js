@@ -461,6 +461,10 @@ var newMap = function newMap($state, TourService, $compile) {
         center: initialLocation,
         zoom: 30,
         mapTypeId: google.maps.MapTypeId.HYBRID,
+        mapTypeControlOptions: {
+          style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+          position: google.maps.ControlPosition.LEFT_BOTTOM
+        },
         scrollwheel: false,
         streetViewControl: false,
 
