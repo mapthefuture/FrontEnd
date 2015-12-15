@@ -17,8 +17,8 @@ let NewTourController = function($scope, $http, TourService, SERVER, UserService
 
   vm.submitSiteForm = submitSiteForm;
   vm.submitTourForm = submitTourForm;
-  vm.showMap = true;
-  vm.showForm = false;
+  vm.showMap = false;
+  vm.showForm = true;
   vm.tourId = {}; 
   vm.tourStart = [];
 
@@ -50,14 +50,12 @@ let NewTourController = function($scope, $http, TourService, SERVER, UserService
     });
   }
 
-
   function submitTourForm (tourObj) {
 
     TourService.submitTourForm(tourObj).then( (res) => {
       
       TourService.tempTourId = res.data.tour.id;
       console.log(TourService.tempTourId);
-      // $state.go('root.addsites');
       vm.showMap = (vm.showMap) ? false : true;
       vm.showForm = (vm.showForm) ? false : true;
     });

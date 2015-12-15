@@ -232,8 +232,8 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
 
   vm.submitSiteForm = submitSiteForm;
   vm.submitTourForm = submitTourForm;
-  vm.showMap = true;
-  vm.showForm = false;
+  vm.showMap = false;
+  vm.showForm = true;
   vm.tourId = {};
   vm.tourStart = [];
 
@@ -270,7 +270,6 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
 
       TourService.tempTourId = res.data.tour.id;
       console.log(TourService.tempTourId);
-      // $state.go('root.addsites');
       vm.showMap = vm.showMap ? false : true;
       vm.showForm = vm.showForm ? false : true;
     });
@@ -974,6 +973,8 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
   function submitTourForm(tourObj) {
     var t = new tour(tourObj);
     console.log(t);
+
+    SERVER.CONFIG.headers['Content-Type'] = 'application/json';
     return $http.post(SERVER.URL + '/tours', t, SERVER.CONFIG);
   }
 
