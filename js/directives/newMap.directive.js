@@ -92,8 +92,11 @@ let newMap = function($state, TourService, $compile) {
               <div>Add image<input type="file" id="siteImage"></div>
               <button id="submitSite">Submit</button>
             </form>
-            <button class="deleteButton">Delete marker</button>
           </div>`;
+        // <button class="deleteButton">Delete marker</button>
+
+
+          
         var compiled = $compile(contentString);
         var scopedHTML = compiled(scope);
 
