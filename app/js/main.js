@@ -232,8 +232,8 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
 
   vm.submitSiteForm = submitSiteForm;
   vm.submitTourForm = submitTourForm;
-  vm.showMap = false;
-  vm.showForm = true;
+  vm.showMap = true;
+  vm.showForm = false;
   vm.tourId = {};
   vm.tourStart = [];
 
@@ -508,7 +508,9 @@ var newMap = function newMap($state, TourService, $compile) {
         // adds markers to array
         markers.push(marker);
 
-        var contentString = '<div class="markerWindow" ng-controller="NewTourController as vm">\n            <form class="markerForm" ng-submit="vm.submitSiteForm(site)" ng-model="submitClicked">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <div>Add image<input type="file" id="siteImage"></div>\n              <button id="submitSite">Submit</button>\n            </form>\n            <button class="deleteButton">Delete marker</button>\n          </div>';
+        var contentString = '<div class="markerWindow" ng-controller="NewTourController as vm">\n            <form class="markerForm" ng-submit="vm.submitSiteForm(site)" ng-model="submitClicked">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <div>Add image<input type="file" id="siteImage"></div>\n              <button id="submitSite">Submit</button>\n            </form>\n          </div>';
+        // <button class="deleteButton">Delete marker</button>
+
         var compiled = $compile(contentString);
         var scopedHTML = compiled(scope);
 

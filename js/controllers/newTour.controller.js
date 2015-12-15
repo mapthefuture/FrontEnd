@@ -17,8 +17,8 @@ let NewTourController = function($scope, $http, TourService, SERVER, UserService
 
   vm.submitSiteForm = submitSiteForm;
   vm.submitTourForm = submitTourForm;
-  vm.showMap = false;
-  vm.showForm = true;
+  vm.showMap = true;
+  vm.showForm = false;
   vm.tourId = {}; 
   vm.tourStart = [];
 
