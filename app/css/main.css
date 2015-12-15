@@ -6508,10 +6508,10 @@ button:hover {
     .homeWrapper .homeRedirect button {
       margin: 15px auto;
       display: block;
-      background-color: rgba(81, 126, 232, 0.89);
+      background-color: rgba(81, 126, 232, 0.9);
       font-family: "Lato", sans-serif; }
     .homeWrapper .homeRedirect button:hover {
-      background-color: rgba(239, 72, 54, 0.77); }
+      background-color: rgba(239, 72, 54, 0.89); }
     .homeWrapper .homeRedirect div {
       margin: 15% auto;
       width: 250px; }
@@ -6563,8 +6563,19 @@ button:hover {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: rgba(81, 126, 232, 0.9);
+    background-color: rgba(81, 126, 232, 0.95);
     margin: 0 auto; }
+  .newWrapper .newButtonOverlay {
+    position: absolute;
+    z-index: 97;
+    top: 0;
+    right: 0;
+    margin: 10px 15px; }
+    .newWrapper .newButtonOverlay button {
+      font-family: "Lato", sans-serif;
+      background-color: rgba(81, 126, 232, 0.95); }
+    .newWrapper .newButtonOverlay button:hover {
+      background-color: rgba(239, 72, 54, 0.95); }
   .newWrapper .newMap {
     text-align: center; }
     .newWrapper .newMap #newMap {
@@ -6575,13 +6586,16 @@ button:hover {
       bottom: 0;
       z-index: 96; }
 
-.markerWindow {
-  max-width: 200px; }
-  .markerWindow .markerForm {
-    margin: 15px auto;
-    text-align: center;
-    width: 95%;
-    height: 95%; }
+.markerWindow .markerForm {
+  margin: 15px auto;
+  text-align: center;
+  width: 95%;
+  height: 95%;
+  font-family: "Lato", sans-serif; }
+  .markerWindow .markerForm textarea {
+    height: 100px; }
+  .markerWindow .markerForm button {
+    font-family: "Lato", sans-serif; }
 
 .listTourWrapper {
   width: 100%;
