@@ -32,10 +32,6 @@ let newMap = function($state, TourService, $compile) {
         center: initialLocation,
         zoom: 30,
         mapTypeId: google.maps.MapTypeId.HYBRID,
-        mapTypeControlOptions: {
-          style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-          position: google.maps.ControlPosition.LEFT_BOTTOM
-        },
         scrollwheel: false,
         streetViewControl: false,
 
@@ -90,6 +86,7 @@ let newMap = function($state, TourService, $compile) {
 
         var contentString = 
         `<div class="markerWindow" ng-controller="NewTourController as vm">
+            <h4>Add site</h4>
             <form class="markerForm" ng-submit="vm.submitSiteForm(site)" ng-model="submitClicked">
               <input ng-model="site.title" type="text" placeholder="Title">
               <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>

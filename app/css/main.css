@@ -6425,7 +6425,7 @@ button:hover {
   height: 100%; }
 
 .top-bar {
-  background-color: rgba(74, 74, 74, 0.96) !important;
+  background-color: #4a4a4a !important;
   color: #FFFFFF;
   z-index: 100; }
 
@@ -6439,10 +6439,14 @@ button:hover {
   background-color: transparent !important; }
 
 .top-bar-section li a:hover {
-  background-color: rgba(81, 126, 232, 0.95) !important; }
+  background-color: #517ee8 !important; }
 
 .title-area .name h1 {
   font-family: "Lato", sans-serif; }
+
+.title-area .name img {
+  max-height: 40px;
+  margin-bottom: 4%; }
 
 @media (min-width: 40.0625em) {
   .top-bar-section li:not(.has-form) a:not(.button) {
@@ -6507,7 +6511,7 @@ button:hover {
     height: 100%;
     opacity: 0.6; }
   .homeWrapper .homeRedirect {
-    margin: 4% auto;
+    margin-top: 8vh;
     position: absolute;
     z-index: 99;
     width: 100%;
@@ -6538,7 +6542,8 @@ button:hover {
 .loginWrapper {
   text-align: center; }
   .loginWrapper h3 {
-    font-family: "Lato", sans-serif; }
+    font-family: "Lato", sans-serif;
+    color: #4A4A4A; }
   .loginWrapper form {
     margin: 15px auto;
     text-align: center;
@@ -6580,7 +6585,7 @@ button:hover {
     z-index: 97;
     top: 0;
     right: 0;
-    margin: 45px 15px; }
+    margin: 40px 10px; }
     .newWrapper .newButtonOverlay button {
       font-family: "Lato", sans-serif;
       background-color: rgba(81, 126, 232, 0.95); }
@@ -6591,13 +6596,16 @@ button:hover {
     .newWrapper .newMap #newMap {
       margin: 0;
       width: 100%;
-      height: 100%;
+      height: 93.5%;
       position: absolute;
       bottom: 0;
       z-index: 96; }
 
+.markerWindow h4 {
+  color: #4A4A4A;
+  font-family: "Lato", sans-serif; }
+
 .markerWindow .markerForm {
-  margin: 15px auto;
   text-align: center;
   width: 95%;
   height: 95%;

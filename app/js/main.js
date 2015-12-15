@@ -461,10 +461,6 @@ var newMap = function newMap($state, TourService, $compile) {
         center: initialLocation,
         zoom: 30,
         mapTypeId: google.maps.MapTypeId.HYBRID,
-        mapTypeControlOptions: {
-          style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-          position: google.maps.ControlPosition.LEFT_BOTTOM
-        },
         scrollwheel: false,
         streetViewControl: false,
 
@@ -512,7 +508,7 @@ var newMap = function newMap($state, TourService, $compile) {
         // adds markers to array
         markers.push(marker);
 
-        var contentString = '<div class="markerWindow" ng-controller="NewTourController as vm">\n            <form class="markerForm" ng-submit="vm.submitSiteForm(site)" ng-model="submitClicked">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <div>Add image<input type="file" id="siteImage"></div>\n              <button id="submitSite">Submit</button>\n            </form>\n          </div>';
+        var contentString = '<div class="markerWindow" ng-controller="NewTourController as vm">\n            <h4>Add site</h4>\n            <form class="markerForm" ng-submit="vm.submitSiteForm(site)" ng-model="submitClicked">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <div>Add image<input type="file" id="siteImage"></div>\n              <button id="submitSite">Submit</button>\n            </form>\n          </div>';
         // <button class="deleteButton">Delete marker</button>
 
         var compiled = $compile(contentString);
