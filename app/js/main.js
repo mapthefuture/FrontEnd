@@ -61,7 +61,6 @@ var HomeController = function HomeController($scope, UserService, $state) {
   var vm = this;
 
   vm.city = '';
-  vm['in'] = '.';
 
   $scope.logmeout = function () {
     UserService.logout();
@@ -115,8 +114,7 @@ var HomeController = function HomeController($scope, UserService, $state) {
       success: function success(data) {
         var formatted = data.results;
         var address_array = formatted[6].formatted_address.split(',');
-        vm.city = address_array[0] + '.';
-        vm['in'] = ' in ';
+        vm.city = address_array[0];
       }
     });
   };
