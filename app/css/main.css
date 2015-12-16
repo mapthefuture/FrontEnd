@@ -6405,10 +6405,19 @@ html {
 body {
   width: 100%;
   height: 100%;
-  background-color: #C1CAD6; }
+  background-color: white;
+  font-family: "Lato", sans-serif; }
 
 li {
   list-style-type: none; }
+
+button {
+  margin: 15px auto;
+  display: block;
+  background-color: #517EE8; }
+
+button:hover {
+  background-color: #EF4836; }
 
 .mainContainer {
   position: relative;
@@ -6416,12 +6425,38 @@ li {
   height: 100%; }
 
 .top-bar {
-  background-color: RGBA(74, 74, 74, 1);
-  color: #FFFFFF; }
+  background-color: #4a4a4a !important;
+  color: #FFFFFF;
+  z-index: 100; }
 
-.top-bar-section li:not(.has-form) a:not(.button) {
-  background-color: RGBA(74, 74, 74, 1);
-  color: #FFFFFF; }
+.top-bar-section {
+  background-color: transparent !important; }
+
+.top-bar-section li {
+  background-color: transparent !important; }
+
+.top-bar-section li a {
+  background-color: transparent !important; }
+
+.top-bar-section li a:hover {
+  background-color: #517ee8 !important; }
+
+.title-area .name h1 {
+  font-family: "Lato", sans-serif; }
+
+.title-area .name img {
+  max-height: 40px;
+  margin-bottom: 0.7vh; }
+
+@media (min-width: 40.0625em) {
+  .top-bar-section li:not(.has-form) a:not(.button) {
+    color: #FFFFFF;
+    font-family: "Lato", sans-serif; } }
+
+@media (min-width: 40.0625em) {
+  .top-bar-section li:not(.has-form) a:not(.button):hover {
+    background: #517EE8;
+    color: #FFFFFF; } }
 
 .hidden {
   display: none; }
@@ -6459,7 +6494,7 @@ li {
   display: none; }
 
 .homeWrapper {
-  height: 94%;
+  height: 100%;
   margin: 0;
   position: absolute;
   left: 0;
@@ -6469,70 +6504,122 @@ li {
     margin: 0 auto;
     text-align: center; }
   .homeWrapper .homeOverlay {
-    background-color: #494949;
+    background-color: #4A4A4A;
     position: absolute;
     z-index: 98;
     width: 100%;
     height: 100%;
     opacity: 0.6; }
   .homeWrapper .homeRedirect {
-    margin: 0 auto;
+    margin-top: 8vh;
     position: absolute;
     z-index: 99;
     width: 100%;
-    height: 100%;
-    opacity: 0.91; }
+    height: 90%; }
     .homeWrapper .homeRedirect h2 {
-      color: white; }
+      color: white;
+      font-family: "Lato", sans-serif; }
     .homeWrapper .homeRedirect button {
       margin: 15px auto;
       display: block;
-      opacity: 1; }
+      background-color: rgba(81, 126, 232, 0.9);
+      font-family: "Lato", sans-serif; }
+    .homeWrapper .homeRedirect button:hover {
+      background-color: rgba(239, 72, 54, 0.89); }
     .homeWrapper .homeRedirect div {
       margin: 15% auto;
       width: 250px; }
   .homeWrapper .homeMap {
     width: 100%;
-    height: 100%;
-    margin: 0; }
+    height: 100%; }
     .homeWrapper .homeMap .angular-google-map-container {
       margin: 0;
+      top: 0;
       width: 100%;
       height: 100%;
       position: absolute; }
 
+.loginWrapper {
+  text-align: center; }
+  .loginWrapper h3 {
+    font-family: "Lato", sans-serif;
+    color: #4A4A4A; }
+  .loginWrapper form {
+    margin: 15px auto;
+    text-align: center;
+    max-width: 300px; }
+    .loginWrapper form button {
+      font-family: "Lato", sans-serif; }
+
 .newWrapper {
   width: 100%;
-  height: 95%;
+  height: 100%;
   left: 0;
   right: 0;
   bottom: 0;
   position: absolute; }
+  .newWrapper .newForm {
+    margin: 7.5vh auto;
+    text-align: center;
+    max-width: 500px; }
+    .newWrapper .newForm h3 {
+      color: #4A4A4A; }
+    .newWrapper .newForm textarea {
+      height: 100px; }
+    .newWrapper .newForm button {
+      font-family: "Lato", sans-serif; }
+    .newWrapper .newForm form {
+      border-radius: 5px; }
+      .newWrapper .newForm form input {
+        max-width: 80%;
+        margin: 5px auto; }
+  .newWrapper .newOverlay {
+    position: absolute;
+    z-index: 97;
+    color: white;
+    max-width: 295px;
+    padding: 0 3px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(81, 126, 232, 0.95);
+    margin: 0 auto; }
+  .newWrapper .newButtonOverlay {
+    position: absolute;
+    z-index: 97;
+    top: 0;
+    right: 0;
+    margin: 40px 10px; }
+    .newWrapper .newButtonOverlay button {
+      font-family: "Lato", sans-serif;
+      background-color: rgba(81, 126, 232, 0.95); }
+    .newWrapper .newButtonOverlay button:hover {
+      background-color: rgba(239, 72, 54, 0.95); }
+  .newWrapper .newMap {
+    text-align: center; }
+    .newWrapper .newMap #newMap {
+      margin: 0;
+      width: 100%;
+      height: 93.5%;
+      position: absolute;
+      bottom: 0;
+      z-index: 96; }
 
-.newForm {
-  margin: 15px auto;
-  text-align: center;
-  width: 50%; }
-  .newForm form {
-    border-radius: 5px; }
-    .newForm form input {
-      max-width: 80%;
-      margin: 5px auto; }
-
-.markerWindow .markerForm {
-  margin: 15px auto;
+.markerWindow {
   text-align: center; }
-
-#newMap {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  z-index: 99; }
-
-.newMap {
-  margin-top: 2%;
-  text-align: center; }
+  .markerWindow h4 {
+    color: #4A4A4A;
+    font-family: "Lato", sans-serif; }
+  .markerWindow .markerForm {
+    text-align: center;
+    width: 95%;
+    height: 95%;
+    font-family: "Lato", sans-serif;
+    margin: 0 auto; }
+    .markerWindow .markerForm textarea {
+      height: 100px; }
+    .markerWindow .markerForm button {
+      font-family: "Lato", sans-serif; }
 
 .listTourWrapper {
   width: 100%;

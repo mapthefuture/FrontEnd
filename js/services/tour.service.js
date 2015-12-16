@@ -3,11 +3,13 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
   this.areaTours = areaTours;
   this.markerData = {};
   this.tourStartObj = {};
+  this.tempTourId = 0;
   this.submitSiteForm = submitSiteForm;
   this.submitTourForm = submitTourForm;
   this.storeTour = storeTour;
   this.getStored = getStored;
   this.storedTour = {};
+
 
   function areaTours() {
     let getURL = SERVER.URL + '/tours';
@@ -25,6 +27,7 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
   function tour (tourObj) {
     this.title = tourObj.title;
     this.description = tourObj.description;
+    this.category = tourObj.category;
   }
 
   function storeTour(tour) {
@@ -46,9 +49,6 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
     // Create an instance of FormData
     var formData = new FormData();
 
-    // Add image
-    formData.append('image', imageFile);
-
     // Add lat/lon to s
     for (var latitude in c) { s[latitude] = c[latitude]; }
     for (var longitude in c) { s[longitude] = c[longitude]; }
@@ -63,10 +63,10 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
 
     console.log(formData);
 
-
-    // // Test infowindow stuff here
-    // console.log('After submit');
-
+    if (imageFile) {
+      // Add image
+      formData.append('image', imageFile);
+    }
 
     // Set up server to accept image/formdata
     SERVER.CONFIG.headers['Content-Type'] = undefined;
@@ -77,6 +77,8 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
   function submitTourForm (tourObj) {
     let t = new tour(tourObj);
     console.log(t);
+
+    SERVER.CONFIG.headers['Content-Type'] = 'application/json';
     return $http.post(SERVER.URL + '/tours', t, SERVER.CONFIG);
   }
 

@@ -303,9 +303,12 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
   vm.tourId = {};
   vm.tourStart = [];
 
+  $scope.submitClicked = false;
+
   function submitSiteForm(siteObj) {
 
     TourService.submitSiteForm(siteObj).then(function (res) {
+      $scope.closeWindow();
 
       // Set start of tour to first site
       var tourStartObj = {};
@@ -331,9 +334,8 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
 
     TourService.submitTourForm(tourObj).then(function (res) {
 
-      vm.tourId = res.data.tour.id;
-      console.log(vm.tourId);
-      // $state.go('root.addsites');
+      TourService.tempTourId = res.data.tour.id;
+      console.log(TourService.tempTourId);
       vm.showMap = vm.showMap ? false : true;
       vm.showForm = vm.showForm ? false : true;
     });
@@ -499,6 +501,9 @@ var newMap = function newMap($state, TourService, $compile) {
     replace: true,
     template: '<div id="newMap"></div>',
     controller: 'NewTourController as vm',
+    scope: {
+      submitClicked: '='
+    },
 
     link: function link(scope, element, attrs, vm) {
 
@@ -544,12 +549,29 @@ var newMap = function newMap($state, TourService, $compile) {
       // place a marker
       function setMarker(map, latLng, title, description) {
 
+        // Custom google maps icon
+        var icon = new google.maps.MarkerImage("./images/marker.svg", null, /* size is determined at runtime */
+        null, /* origin is 0,0 */
+        null, /* anchor is bottom center of the scaled image */
+        new google.maps.Size(39, 32));
+
+        // Specifying all properties may fix animation issue with Chrome
+        // var image = {
+        //   url: './images/marker.svg',
+        //   // This marker is 32 pixels wide by 39 pixels tall.
+        //   size: new google.maps.Size(32, 39),
+        //   // The origin for this image is 0,0.
+        //   origin: new google.maps.Point(0,0),
+        //   // The anchor for this image is the base of the image at 0,39.
+        //   anchor: new google.maps.Point(0, 39)
+        // };
+
         var marker = new google.maps.Marker({
           position: latLng,
           map: map,
           draggable: true,
-          animation: google.maps.Animation.DROP,
-          icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
+          // animation: google.maps.Animation.DROP,
+          icon: icon
         });
 
         var lat = marker.getPosition().lat();
@@ -558,15 +580,19 @@ var newMap = function newMap($state, TourService, $compile) {
         TourService.markerData = {
           latitude: lat,
           longitude: lon,
-          id: vm.tourId
+          id: TourService.tempTourId
         };
+
+        console.log(TourService.markerData);
 
         // map.panTo(latLng);
 
         // adds markers to array
         markers.push(marker);
 
-        var contentString = '<div class="markerWindow" ng-controller="NewTourController as vm">\n            <form class="markerForm" ng-submit="vm.submitSiteForm(site)">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <div>Add image<input type="file" id="siteImage"></div>\n              <button id="submitSite">Submit</button>\n            </form>\n            <button class="deleteButton">Delete marker</button>\n          </div>';
+        var contentString = '<div class="markerWindow" ng-controller="NewTourController as vm">\n            <h4>Add site</h4>\n            <form class="markerForm" ng-submit="vm.submitSiteForm(site)" ng-model="submitClicked">\n              <input ng-model="site.title" type="text" placeholder="Title">\n              <textarea ng-model="site.description" type="text" placeholder="Description"></textarea>\n              <div>Add image<input type="file" id="siteImage"></div>\n              <button id="submitSite">Submit</button>\n            </form>\n          </div>';
+        // <button class="deleteButton">Delete marker</button>
+
         var compiled = $compile(contentString);
         var scopedHTML = compiled(scope);
 
@@ -579,6 +605,12 @@ var newMap = function newMap($state, TourService, $compile) {
         });
 
         infoWindow.addListener('domready', function () {});
+
+        // Close infowindow when submitted
+        scope.closeWindow = function () {
+          infoWindow.close();
+          console.log("Close window");
+        };
       }
 
       // show the map
@@ -955,6 +987,7 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
   this.areaTours = areaTours;
   this.markerData = {};
   this.tourStartObj = {};
+  this.tempTourId = 0;
   this.submitSiteForm = submitSiteForm;
   this.submitTourForm = submitTourForm;
   this.storeTour = storeTour;
@@ -977,6 +1010,7 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
   function tour(tourObj) {
     this.title = tourObj.title;
     this.description = tourObj.description;
+    this.category = tourObj.category;
   }
 
   function storeTour(tour) {
@@ -998,9 +1032,6 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
     // Create an instance of FormData
     var formData = new FormData();
 
-    // Add image
-    formData.append('image', imageFile);
-
     // Add lat/lon to s
     for (var latitude in c) {
       s[latitude] = c[latitude];
@@ -1019,8 +1050,10 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
 
     console.log(formData);
 
-    // // Test infowindow stuff here
-    // console.log('After submit');
+    if (imageFile) {
+      // Add image
+      formData.append('image', imageFile);
+    }
 
     // Set up server to accept image/formdata
     SERVER.CONFIG.headers['Content-Type'] = undefined;
@@ -1031,6 +1064,8 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
   function submitTourForm(tourObj) {
     var t = new tour(tourObj);
     console.log(t);
+
+    SERVER.CONFIG.headers['Content-Type'] = 'application/json';
     return $http.post(SERVER.URL + '/tours', t, SERVER.CONFIG);
   }
 
