@@ -6558,12 +6558,25 @@ button:hover {
   right: 0;
   bottom: 0;
   position: absolute; }
+  .newWrapper .newFormOverlay {
+    background-color: #4A4A4A;
+    position: absolute;
+    z-index: 98;
+    width: 100%;
+    height: 100%;
+    opacity: 0.75; }
   .newWrapper .newForm {
-    margin: 7.5vh auto;
+    margin: 0 auto;
     text-align: center;
-    max-width: 500px; }
+    max-width: 500px;
+    z-index: 100;
+    left: 0;
+    right: 0;
+    top: 0;
+    margin-top: 3.5%;
+    position: absolute; }
     .newWrapper .newForm h3 {
-      color: #4A4A4A; }
+      color: white; }
     .newWrapper .newForm textarea {
       height: 100px; }
     .newWrapper .newForm button {
@@ -6577,7 +6590,7 @@ button:hover {
     position: absolute;
     z-index: 97;
     color: white;
-    max-width: 295px;
+    max-width: 320px;
     padding: 0 3px;
     bottom: 0;
     left: 0;

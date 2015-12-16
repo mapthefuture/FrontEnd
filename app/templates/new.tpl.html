@@ -1,16 +1,15 @@
 <div class="newWrapper">
-  <div>
+  <div class="newFormOverlay" ng-if="vm.showForm"></div>
     <form class="newForm" ng-submit="vm.submitTourForm(tour)" ng-if="vm.showForm">
-      <h3>Create a new tour</h3>
+      <h3>Create a new journey</h3>
       <input class="new title" type="text" placeholder="Title" ng-model="tour.title">
       <input type="text" placeholder="Category" ng-model="tour.category">
       <textarea class="new desc" type="textarea" placeholder="Briefly describe your adventure" ng-model="tour.description"></textarea>
       <button>Submit</button>
     </form>
-    <div class="newMap" ng-if="vm.showMap">
+    <div class="newMap">
       <div new-map=""></div>
-      <div class="newOverlay">Click the map to add sites to your tour.</div>
-      <div class="newButtonOverlay"><a href="#/"><button>Submit</button></a></div>
+      <div class="newOverlay" ng-if="vm.showMap">Click the map to add places to your journey.</div>
+      <div class="newButtonOverlay" ng-if="vm.showMap"><a href="#/"><button>Submit</button></a></div>
     </div>
-  </div>
 </div>
