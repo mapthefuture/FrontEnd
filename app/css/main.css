@@ -6464,7 +6464,7 @@ button:hover {
 .container {
   width: 80%;
   max-width: 1000px;
-  height: 86.7%;
+  height: 100%;
   margin: 0 auto;
   z-index: 1; }
 
@@ -6626,10 +6626,12 @@ button:hover {
   height: 100%; }
   .listTourWrapper h2 {
     text-align: center; }
-  .listTourWrapper #listmap {
+  .listTourWrapper .angular-google-map {
     max-width: 100%;
-    min-height: 400px;
     margin: 15px auto; }
+    .listTourWrapper .angular-google-map .angular-google-map-container {
+      width: 100%;
+      min-height: 400px; }
   .listTourWrapper .tours {
     margin: 0 auto;
     width: 90%;
@@ -6657,8 +6659,18 @@ button:hover {
         box-shadow: inset 0 0 10px #000000; }
       .listTourWrapper .tours .tourbox .clicked {
         background-color: #CCCCCC; }
-  .listTourWrapper .sitebox {
-    margin: 50 auto; }
+
+.sites {
+  background-color: #FFFFFF;
+  margin: 50px auto; }
+  .sites .angular-google-map {
+    max-width: 200px;
+    margin: 10px auto; }
+    .sites .angular-google-map .angular-google-map-container {
+      width: 100%;
+      min-height: 200px; }
+  .sites .siteContainer p {
+    display: inline-block; }
 
 .uploadForm {
   clear: both;

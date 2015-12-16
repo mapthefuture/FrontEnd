@@ -10,7 +10,6 @@ $white: #FFFFFF;
 $font: 'Lato', sans-serif;
 
 footer {
-
   .footer {
     width: 400px;
     margin: 0 auto;
@@ -99,7 +98,7 @@ button:hover {
 .container {
   width: 80%;
   max-width: 1000px;
-  height: 86.7%;
+  height: 100%;
   margin: 0 auto;
   z-index: 1;
 }
@@ -345,10 +344,14 @@ button:hover {
     text-align: center; 
   }
 
-  #listmap {
+  .angular-google-map {
     max-width: 100%;
-    min-height: 400px;
     margin: 15px auto;
+
+    .angular-google-map-container {
+      width: 100%;
+      min-height: 400px;
+    }
   }
 
   .tours {
@@ -387,9 +390,27 @@ button:hover {
       }
     }
   }
+}
 
-  .sitebox {
-    margin: 50 auto;
+.sites {
+  background-color: $white;
+  margin: 50px auto;
+
+  .angular-google-map {
+    max-width: 200px;
+    margin: 10px auto;
+
+    .angular-google-map-container {
+      width: 100%;
+      min-height: 200px;
+    }
+  }
+
+  .siteContainer {
+
+    p {
+      display: inline-block;
+    }
   }
 }
 

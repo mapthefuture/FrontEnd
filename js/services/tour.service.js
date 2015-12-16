@@ -32,7 +32,7 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
 
   function storeTour(tour) {
     this.storedTour = tour;
-    console.log(this.storedTour);
+    // console.log(this.storedTour);
   }
 
   function submitSiteForm (siteObj) {

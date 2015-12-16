@@ -31,10 +31,6 @@ var config = function config($stateProvider, $urlRouterProvider) {
     url: '/list',
     controller: 'ListTourController as vm',
     templateUrl: 'templates/listTours.tpl.html'
-  }).state('root.sites', {
-    // url: '/tour/',
-    controller: 'ListSiteController as vm',
-    templateUrl: 'templates/listSites.tpl.html'
   }).state('root.test', {
     url: '/test',
     controller: 'TestController',
@@ -136,38 +132,108 @@ exports['default'] = HomeController;
 module.exports = exports['default'];
 
 },{"jquery":28}],3:[function(require,module,exports){
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var ListTourController = function ListTourController($scope, $stateParams, TourService, $anchorScroll) {
+var ListTourController = function ListTourController($scope, $stateParams, TourService, $anchorScroll, SiteService) {
 
   $scope.allTours = [];
-  $scope.tourMarkers = [];
   $scope.tour = {};
+  $scope.sites = [];
 
   TourService.areaTours().then(function (res) {
     $scope.allTours = res.data.tours;
     // console.log($scope.allTours);
   });
 
-  // Editing CSS Styles on-click
-  $scope.selectedIndex = -1;
+  $scope.tourMap = {
+    center: { latitude: 0, longitude: 0 },
+    zoom: 16,
+    mapTypeId: google.maps.MapTypeId.HYBRID,
+    mapTypeControl: true
+  };
 
-  $scope.clickedTour = function ($index, t) {
-    console.log(t.id);
+  $scope.siteMap = {
+    center: { latitude: 0, longitude: 0 },
+    zoom: 16,
+    mapTypeId: google.maps.MapTypeId.HYBRID,
+    mapTypeControl: false,
+    options: $scope.tourMapOptions
+  };
+
+  $scope.tourMapOptions = {
+    draggable: true,
+    scrollwheel: false,
+    styles: [{ featureType: "poi",
+      stylers: [{ visibility: "off" }]
+    }, { featureType: "transit",
+      stylers: [{ visibility: "off" }]
+    }]
+  };
+
+  function onSuccess(position) {
+    $scope.tourMap.center = {
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude
+    };
+    $scope.$apply();
+  }
+  function onError(error) {
+    console.log('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+  }
+  navigator.geolocation.getCurrentPosition(onSuccess, onError);
+
+  $scope.tourMarkers = [];
+
+  TourService.areaTours().then(function (res) {
+    var tours = res.data.tours;
+    tours.filter(function (tour) {
+      return tour.start_lat && tour.start_lon;
+    }).forEach(function (tour) {
+      $scope.tourMarkers.push({
+        title: tour.title,
+        id: tour.id,
+        coords: {
+          latitude: tour.start_lat,
+          longitude: tour.start_lon
+        },
+        click: function click() {
+          return $scope.gotoTour(tour);
+        },
+        options: { icon: 'http://maps.google.com/mapfiles/ms/micons/blue.png' }
+      });
+    });
+  });
+
+  // For editing CSS Styles on-click
+  $scope.selectedIndex = -1;
+  $scope.gotoTour = function (tour, $index) {
+    TourService.storeTour(tour);
+    SiteService.getSites(tour.id).then(function (res) {
+      // console.log(res);
+      $scope.sites = res.data.sites;
+    });
     $scope.selectedIndex = $index;
-    TourService.storeTour(t);
     $scope.tour = TourService.getStored();
-    $anchorScroll('sitemap');
+    console.log($scope.tour);
+    $anchorScroll(document.getElementById('startTour'));
+  };
+
+  $scope.siteDirections = function (x) {
+    window.location.href = 'https://www.google.com/maps?saddr=My+Location&daddr=' + x.longitude + ',' + x.latitude;
+  };
+
+  $scope.tourDirections = function (x) {
+    window.location.href = 'https://www.google.com/maps?saddr=My+Location&daddr=' + x.start_lon + ',' + x.start_lat;
   };
 };
 
-ListTourController.$inject = ['$scope', '$stateParams', 'TourService', '$anchorScroll'];
+ListTourController.$inject = ['$scope', '$stateParams', 'TourService', '$anchorScroll', 'SiteService'];
 
-exports['default'] = ListTourController;
-module.exports = exports['default'];
+exports["default"] = ListTourController;
+module.exports = exports["default"];
 
 },{}],4:[function(require,module,exports){
 'use strict';
@@ -572,88 +638,94 @@ Object.defineProperty(exports, '__esModule', {
 var tourMap = function tourMap($state, TourService, MapService) {
 
   return {
-    restrict: 'A',
-    replace: true,
-    template: '<div id="listmap"></div>',
-    controller: 'TourMapController',
-    link: function link(scope, element, attrs) {
-      var map, infoWindow;
-      var initialLocation;
+    // restrict: 'A',
+    // replace: true,
+    // template: '<div id="listmap"></div>',
+    // controller: 'TourMapController',
+    // link: function (scope, element, attrs) {
+    //   var map, infoWindow;
+    //   var initialLocation;
 
-      // Find location
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(function (pos) {
-          MapService.initialLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-          map.setCenter(initialLocation);
-        });
-      }
+    //   // Find location
+    //   if ("geolocation" in navigator) {
+    //     navigator.geolocation.getCurrentPosition(function (pos) {
+    //       MapService.initialLocation = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+    //       map.setCenter(initialLocation);
+    //     });
+    //   }
 
-      function initMap() {
-        if (map === void 0) {
-          map = new google.maps.Map(element[0], mapOptions);
-        }
-      }
+    //   function initMap() {
+    //     if (map === void 0) {
+    //       map = new google.maps.Map(element[0], mapOptions);
+    //     }
+    //   }
 
-      // map config
-      var mapOptions = {
-        center: initialLocation,
-        zoom: 12,
-        mapTypeId: google.maps.MapTypeId.HYBRID,
-        scrollwheel: false,
-        styles: [{
-          featureType: "poi",
-          stylers: [{ visibility: "off" }]
-        }, {
-          featureType: "transit",
-          stylers: [{ visibility: "off" }]
-        }]
-      };
+    //   // map config
+    //   var mapOptions = {
+    //     center: initialLocation,
+    //     zoom: 12,
+    //     mapTypeId: google.maps.MapTypeId.HYBRID,
+    //     scrollwheel: false,
+    //     styles: [{
+    //       featureType: "poi",
+    //       stylers: [
+    //         { visibility: "off" }
+    //       ]
+    //     },
+    //     {
+    //       featureType: "transit",
+    //       stylers: [
+    //         { visibility: "off" }
+    //       ]
+    //     }]
+    //   };  
 
-      // place a marker
-      function setMarker(map, pos, title, content) {
-        var marker;
-        var markerOptions = {
-          position: pos,
-          map: map,
-          title: title,
-          draggable: true,
-          icon: 'http://maps.google.com/mapfiles/ms/micons/blue.png'
-        };
+    //   // place a marker
+    //   function setMarker(map, pos, title, content) {
+    //     var marker;
+    //     var markerOptions = {
+    //       position: pos,
+    //       map: map,
+    //       title: title,
+    //       draggable:true,
+    //       icon: 'http://maps.google.com/mapfiles/ms/micons/blue.png',
+    //     };
 
-        marker = new google.maps.Marker(markerOptions);
-        markers.push(marker); // add marker to array
+    //     marker = new google.maps.Marker(markerOptions);
+    //     markers.push(marker); // add marker to array
 
-        google.maps.event.addListener(marker, 'click', function () {
-          // close window if not undefined
-          var pos = marker.position;
-          if (infoWindow !== void 0) {
-            infoWindow.close();
-          }
-          // create new window
-          var infoWindowOptions = {
-            content: content
-          };
-          infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-          infoWindow.open(map, marker);
+    //     google.maps.event.addListener(marker, 'click', function () {
+    //       // close window if not undefined
+    //       var pos = marker.position;
+    //       if (infoWindow !== void 0) {
+    //         infoWindow.close();
+    //       }
+    //       // create new window
+    //       var infoWindowOptions = {
+    //         content: content
+    //       };
+    //       infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+    //       infoWindow.open(map, marker);
 
-          // function setMapOnAll(map) {
-          //   for (var i = 0; i < markers.length; i++) {
-          //     markers[i].setMap(map);
-          //   }
-          // }
-        });
-      }
+    //       // function setMapOnAll(map) {
+    //       //   for (var i = 0; i < markers.length; i++) {
+    //       //     markers[i].setMap(map);
+    //       //   }
 
-      /* Load markers code */
-      TourService.areaTours().then(function (res) {
-        var tours = res.data.tours;
-        tours.forEach(function (tour) {
-          MapService.setMarker(MapService.map, new google.maps.LatLng(tour.start_lat, tour.start_lon), tour.title, tour.description);
-        });
-      });
+    //       // }
+    //     });
+    //   }
 
-      initMap();
-    }
+    //   /* Load markers code */
+    //   TourService.areaTours().then((res) =>{
+    //     var tours = res.data.tours;
+    //     tours.forEach(function (tour) {
+    //       MapService.setMarker(MapService.map, new google.maps.LatLng(tour.start_lat,tour.start_lon),tour.title,tour.description);
+    //     });
+    //   });
+
+    //   initMap();
+    // }
   };
 };
 
@@ -671,8 +743,6 @@ var _angular = require('angular');
 
 var _angular2 = _interopRequireDefault(_angular);
 
-require('angular-ui-router');
-
 require('angular-foundation');
 
 require('angular-cookies');
@@ -680,6 +750,8 @@ require('angular-cookies');
 require('angular-simple-logger');
 
 require('angular-google-maps');
+
+require('angular-ui-router');
 
 // Import Config
 
@@ -888,8 +960,10 @@ Object.defineProperty(exports, '__esModule', {
 });
 var SiteService = function SiteService(UserService, $stateParams, $http, SERVER) {
 
-  function getSites(tour) {
-    var getURL = SERVER.URL + 'tours/' + tour.id + '/sites';
+  this.getSites = getSites;
+
+  function getSites(id) {
+    var getURL = SERVER.URL + '/tours/' + id + '/sites';
     return $http({
       method: 'GET',
       url: getURL
@@ -941,7 +1015,7 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
 
   function storeTour(tour) {
     this.storedTour = tour;
-    console.log(this.storedTour);
+    // console.log(this.storedTour);
   }
 
   function submitSiteForm(siteObj) {
