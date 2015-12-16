@@ -308,14 +308,13 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
   function submitSiteForm(siteObj) {
 
     TourService.submitSiteForm(siteObj).then(function (res) {
-      $scope.closeWindow();
 
       // Set start of tour to first site
       var tourStartObj = {};
       var newTourStart = function newTourStart() {
         var c = TourService.markerData;
         var t = tourStartObj;
-        console.log(t);
+        console.log(c.id);
 
         SERVER.CONFIG.headers['Content-Type'] = 'application/json';
         return $http.patch(SERVER.URL + '/tours/' + c.id, t, SERVER.CONFIG);
@@ -331,6 +330,7 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
         console.log(vm.tourStart[0].latitude);
         newTourStart();
       }
+      $scope.closeWindow();
     });
   }
 
