@@ -89,7 +89,7 @@ let ListTourController = function($scope, $stateParams, TourService, $anchorScro
     // $scope.windowOptions.visible = !$scope.windowOptions.visible;
     console.log($scope.windowOptions);
     console.log($scope.tour);
-    $anchorScroll(document.getElementById('startTour'));
+    $anchorScroll('sites');
   };
 
   // Infowindow
