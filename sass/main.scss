@@ -308,6 +308,7 @@ button:hover {
 }
 
 .markerWindow {
+  text-align: center;
 
   h4 {
     color: $black;
@@ -320,6 +321,7 @@ button:hover {
     width: 95%;
     height: 95%;
     font-family: $font;
+    margin: 0 auto;
 
     textarea {
       height: 100px;

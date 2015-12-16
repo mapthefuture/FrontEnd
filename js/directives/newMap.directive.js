@@ -60,12 +60,32 @@ let newMap = function($state, TourService, $compile) {
       // place a marker
       function setMarker(map, latLng, title, description) {
 
+        // Custom google maps icon
+        var icon = new google.maps.MarkerImage(
+          "./images/marker.svg",
+          null, /* size is determined at runtime */
+          null, /* origin is 0,0 */
+          null, /* anchor is bottom center of the scaled image */
+          new google.maps.Size(39, 32)
+        );  
+
+        // Specifying all properties may fix animation issue with Chrome
+        // var image = {
+        //   url: './images/marker.svg',
+        //   // This marker is 32 pixels wide by 39 pixels tall.
+        //   size: new google.maps.Size(32, 39),
+        //   // The origin for this image is 0,0.
+        //   origin: new google.maps.Point(0,0),
+        //   // The anchor for this image is the base of the image at 0,39.
+        //   anchor: new google.maps.Point(0, 39)
+        // };
+
         var marker = new google.maps.Marker({
           position:latLng,
           map: map,
           draggable:true,
-          animation: google.maps.Animation.DROP,
-          icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
+          // animation: google.maps.Animation.DROP,
+          icon: icon,
         });
 
         var lat = marker.getPosition().lat();
