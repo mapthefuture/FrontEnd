@@ -1,7 +1,15 @@
 <div class="listTourWrapper">
   <h2>Choose a new adventure!</h2>
-  <div tour-map="" class="list map"></div>
-  <div class="list tours parallax">
+  <ui-gmap-google-map center="tourMap.center" zoom="tourMap.zoom" options="tourMap.options">
+    <ui-gmap-marker
+        ng-repeat='marker in tourMarkers'
+        idKey='marker.id'
+        coords='marker.coords'
+        click='gotoTour(marker, $index)'
+        >
+    </ui-gmap-marker>
+  </ui-gmap-google-map>
+  <!--<div class="list tours parallax">
     <div class="tourbox parallax__layer parallax__layer--back">
       <ul 
       ng-repeat="t in allTours" 
@@ -11,11 +19,62 @@
       ng-mouseover="hoverTour(t)"
       >
         <li>{{ t.title }}</li>
-        <li>{{ t.distance }}</li>
-        <li>{{ t.duration }}</li>
+        <li>Distance traveled: {{ t.distance }}</li>
+        <li>This tour should last: {{ t.duration }}</li>
         <li class="list hidden">{{ t.description }}</li>
       </ul>
     </div>
+  </div>-->
+</div>
+<div 
+class="sites"
+id="sitesDiv" 
+tour="tour">
+  <div>Your adventure, "{{tour.title}}" is here:</div>
+  <div class="siteContainer">
+    <div
+    ng-repeat="s in sites"
+    class="siteBox"
+    >
+      <p>{{s.title}}</p>
+      <p><img src='s.image_url'></p>
+      <p>{{s.description}}</p>
+      <!--<ui-gmap-google-map 
+      center="{
+        latitude: 0,
+        longitude: 0
+      }"
+      zoom="16" 
+      options='tourMap.options'
+      >
+        <ui-gmap-marker 
+        idKey="1"
+        coords="{
+          latitude: 0,
+          longitude: 0
+        }"
+        ></ui-gmap-marker>
+      </ui-gmap-google-map>-->
+      <ui-gmap-google-map 
+      id=s.id
+      center='{
+        latitude: s.latitude,
+        longitude: s.longitude
+      }' 
+      zoom='siteMap.zoom' 
+      options='tourMapOptions'
+      >
+        <ui-gmap-marker 
+        idKey='s.id'
+        coords='{
+          latitude: s.latitude,
+          longitude: s.longitude
+        }'
+        ></ui-gmap-marker>
+      </ui-gmap-google-map>
+      <a href="https://www.google.com/maps?saddr=My+Location&daddr={{s.longitude}},{{s.latitude}}"><button ng-click="siteDirections(s.coords)">Take me there!</button></a>
+    </div>
+    <p>Make this experience Wanderfully:</p>
   </div>
-  <div site-map="" tour="tour" id="tour{{tour.id}}"></div>
+  <a href="https://www.google.com/maps?saddr=My+Location&daddr={{tour.coords.latitude}},{{tour.coords.longitude}}"><button id="startTour" class="startTour">Start Your Tour</button></a>
 </div>

@@ -29,7 +29,7 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
 
   function storeTour(tour) {
     this.storedTour = tour;
-    console.log(this.storedTour);
+    // console.log(this.storedTour);
   }
 
   function submitSiteForm (siteObj) {
@@ -64,12 +64,8 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
     console.log(formData);
 
 
-    // Test infowindow stuff here
-    
-
-    
-
-    console.log('After submit');
+    // // Test infowindow stuff here
+    // console.log('After submit');
 
 
     // Set up server to accept image/formdata
