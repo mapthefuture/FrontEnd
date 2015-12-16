@@ -6605,19 +6605,21 @@ button:hover {
       bottom: 0;
       z-index: 96; }
 
-.markerWindow h4 {
-  color: #4A4A4A;
-  font-family: "Lato", sans-serif; }
-
-.markerWindow .markerForm {
-  text-align: center;
-  width: 95%;
-  height: 95%;
-  font-family: "Lato", sans-serif; }
-  .markerWindow .markerForm textarea {
-    height: 100px; }
-  .markerWindow .markerForm button {
+.markerWindow {
+  text-align: center; }
+  .markerWindow h4 {
+    color: #4A4A4A;
     font-family: "Lato", sans-serif; }
+  .markerWindow .markerForm {
+    text-align: center;
+    width: 95%;
+    height: 95%;
+    font-family: "Lato", sans-serif;
+    margin: 0 auto; }
+    .markerWindow .markerForm textarea {
+      height: 100px; }
+    .markerWindow .markerForm button {
+      font-family: "Lato", sans-serif; }
 
 .listTourWrapper {
   width: 100%;
