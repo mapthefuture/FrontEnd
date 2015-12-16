@@ -85,7 +85,7 @@ let ListTourController = function($scope, $stateParams, TourService, $anchorScro
     $scope.selectedIndex = $index;
     $scope.tour = TourService.getStored();
     console.log($scope.tour);
-    $anchorScroll(document.getElementById('startTour'));
+    $anchorScroll('sites');
   };
 
   $scope.siteDirections = function(x){

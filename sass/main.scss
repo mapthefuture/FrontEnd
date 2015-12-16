@@ -298,7 +298,7 @@ button:hover {
     #newMap {
       margin: 0;
       width: 100%;
-      height: 93.5%;
+      height: 100%;
       position: absolute; 
       bottom: 0;
       z-index: 96;
@@ -350,11 +350,12 @@ button:hover {
 
   .angular-google-map {
     max-width: 100%;
+    height: 100%;
 
     .angular-google-map-container {
       margin: 0;
       width: 100%;
-      height: 93.5%;
+      height: 100%;
       position: absolute; 
       bottom: 0;
       z-index: 96;
@@ -401,7 +402,20 @@ button:hover {
 
 .sites {
   background-color: $white;
-  margin: 50px auto;
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: -800px;
+  margin: 0 auto;
+  border: 2px solid black;
+
+  * {
+    border: 2px solid black;
+  }
+
+  .siteBox {
+    max-width: 33%;
+  }
 
   .angular-google-map {
     max-width: 200px;

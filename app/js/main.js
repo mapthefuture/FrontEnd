@@ -218,7 +218,7 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
     $scope.selectedIndex = $index;
     $scope.tour = TourService.getStored();
     console.log($scope.tour);
-    $anchorScroll(document.getElementById('startTour'));
+    $anchorScroll('sites');
   };
 
   $scope.siteDirections = function (x) {

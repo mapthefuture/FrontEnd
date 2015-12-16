@@ -6600,7 +6600,7 @@ button:hover {
     .newWrapper .newMap #newMap {
       margin: 0;
       width: 100%;
-      height: 93.5%;
+      height: 100%;
       position: absolute;
       bottom: 0;
       z-index: 96; }
@@ -6631,11 +6631,12 @@ button:hover {
   .listTourWrapper h2 {
     text-align: center; }
   .listTourWrapper .angular-google-map {
-    max-width: 100%; }
+    max-width: 100%;
+    height: 100%; }
     .listTourWrapper .angular-google-map .angular-google-map-container {
       margin: 0;
       width: 100%;
-      height: 93.5%;
+      height: 100%;
       position: absolute;
       bottom: 0;
       z-index: 96; }
@@ -6669,7 +6670,16 @@ button:hover {
 
 .sites {
   background-color: #FFFFFF;
-  margin: 50px auto; }
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: -800px;
+  margin: 0 auto;
+  border: 2px solid black; }
+  .sites * {
+    border: 2px solid black; }
+  .sites .siteBox {
+    max-width: 33%; }
   .sites .angular-google-map {
     max-width: 200px;
     margin: 10px auto; }

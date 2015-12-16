@@ -56,7 +56,7 @@ tour="tour">
         ></ui-gmap-marker>
       </ui-gmap-google-map>-->
       <ui-gmap-google-map 
-      id=s.id
+      id='s.id'
       center='{
         latitude: s.latitude,
         longitude: s.longitude
@@ -72,9 +72,9 @@ tour="tour">
         }'
         ></ui-gmap-marker>
       </ui-gmap-google-map>
-      <a href="https://www.google.com/maps?saddr=My+Location&daddr={{s.longitude}},{{s.latitude}}"><button ng-click="siteDirections(s.coords)">Take me there!</button></a>
+      <a href="https://www.google.com/maps?saddr=My+Location&daddr={{s.longitude}},{{s.latitude}}"><button ng-click="siteDirections(s.coords)">Take Me To This Spot!</button></a>
     </div>
     <p>Make this experience Wanderfully:</p>
   </div>
-  <a href="https://www.google.com/maps?saddr=My+Location&daddr={{tour.coords.latitude}},{{tour.coords.longitude}}"><button id="startTour" class="startTour">Start Your Tour</button></a>
+  <a href="https://www.google.com/maps?saddr=My+Location&daddr={{tour.coords.latitude}},{{tour.coords.longitude}}"><button id="startTour" class="startTour">Start Wandering Here</button></a>
 </div>
