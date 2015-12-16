@@ -194,6 +194,7 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
     }).forEach(function (tour) {
       $scope.tourMarkers.push({
         title: tour.title,
+        description: tour.description,
         id: tour.id,
         coords: {
           latitude: tour.start_lat,
@@ -212,13 +213,21 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
   $scope.gotoTour = function (tour, $index) {
     TourService.storeTour(tour);
     SiteService.getSites(tour.id).then(function (res) {
-      // console.log(res);
+      console.log("HIIiii");
+      $scope.windowOptions.visible = !$scope.windowOptions.visible;
       $scope.sites = res.data.sites;
     });
     $scope.selectedIndex = $index;
     $scope.tour = TourService.getStored();
+    // $scope.windowOptions.visible = !$scope.windowOptions.visible;
+    console.log($scope.windowOptions);
     console.log($scope.tour);
     $anchorScroll('sites');
+  };
+
+  // Infowindow
+  $scope.windowOptions = {
+    visible: false
   };
 
   $scope.siteDirections = function (x) {
@@ -308,14 +317,15 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
   function submitSiteForm(siteObj) {
 
     TourService.submitSiteForm(siteObj).then(function (res) {
-      $scope.closeWindow();
 
       // Set start of tour to first site
       var tourStartObj = {};
       var newTourStart = function newTourStart() {
         var c = TourService.markerData;
         var t = tourStartObj;
-        console.log(c);
+        console.log(c.id);
+
+        SERVER.CONFIG.headers['Content-Type'] = 'application/json';
         return $http.patch(SERVER.URL + '/tours/' + c.id, t, SERVER.CONFIG);
       };
 
@@ -325,8 +335,11 @@ var NewTourController = function NewTourController($scope, $http, TourService, S
           start_lat: vm.tourStart[0].latitude,
           start_lon: vm.tourStart[0].longitude
         };
+
+        console.log(vm.tourStart[0].latitude);
         newTourStart();
       }
+      $scope.closeWindow();
     });
   }
 
@@ -1072,7 +1085,8 @@ var TourService = function TourService(UserService, $stateParams, $http, SERVER)
   function newTourStart() {
     var c = this.markerData;
     var t = this.tourStartObj;
-    console.log(t);
+    console.log("Hello??");
+    SERVER.CONFIG.headers['Content-Type'] = 'application/json';
     return $http.patch(SERVER.URL + '/tours/' + c.id, t, SERVER.CONFIG);
   }
 

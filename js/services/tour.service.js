@@ -85,7 +85,8 @@ let TourService = function(UserService, $stateParams, $http, SERVER) {
   function newTourStart () {
     let c = this.markerData;
     let t = this.tourStartObj;
-    console.log(t);
+    console.log("Hello??");
+    SERVER.CONFIG.headers['Content-Type'] = 'application/json';
     return $http.patch(SERVER.URL + '/tours/' + c.id, t, SERVER.CONFIG);  
   }
 

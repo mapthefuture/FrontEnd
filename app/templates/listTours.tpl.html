@@ -2,12 +2,18 @@
   <h2>Choose a new adventure!</h2>
   <ui-gmap-google-map center="tourMap.center" zoom="tourMap.zoom" options="tourMap.options">
     <ui-gmap-marker
-        ng-repeat='marker in tourMarkers'
-        idKey='marker.id'
-        coords='marker.coords'
-        click='gotoTour(marker, $index)'
-        >
+      ng-repeat='marker in tourMarkers'
+      idKey='marker.id'
+      coords='marker.coords'
+      click='gotoTour(marker, $index)'
+      >
+      <ui-gmap-window options="windowOptions" closeClick="closeClick()">
+        <div>{{tour.title}}</div>
+        <div>{{tour.description}}</div>
+        <button>Begin</button>
+      </ui-gmap-window>
     </ui-gmap-marker>
+
   </ui-gmap-google-map>
   <!--<div class="list tours parallax">
     <div class="tourbox parallax__layer parallax__layer--back">
