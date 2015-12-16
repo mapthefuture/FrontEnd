@@ -234,13 +234,28 @@ button:hover {
   bottom: 0;
   position: absolute;
 
+  .newFormOverlay {
+    background-color: $black;
+    position: absolute;
+    z-index: 98;
+    width: 100%;
+    height: 100%;
+    opacity: 0.75;
+  }
+
   .newForm {
-    margin: 7.5vh auto;
+    margin: 0 auto;
     text-align: center;
     max-width: 500px;
+    z-index: 100;
+    left: 0;
+    right: 0;
+    top: 0;
+    margin-top: 3.5%;
+    position: absolute; 
 
     h3 {
-      color: $black;
+      color: white;
     }
 
     textarea {
@@ -266,7 +281,7 @@ button:hover {
     position: absolute;
     z-index: 97;
     color: white;
-    max-width: 295px;
+    max-width: 320px;
     padding: 0 3px;
     bottom: 0;
     left: 0;
@@ -302,6 +317,7 @@ button:hover {
       position: absolute; 
       bottom: 0;
       z-index: 96;
+
     }
   }
 }
@@ -343,6 +359,20 @@ button:hover {
   right: 0;
   bottom: 0;
   position: absolute;
+  text-align: center;
+
+  .listTourOverlay {
+    position: absolute;
+    z-index: 97;
+    color: white;
+    max-width: 260px;
+    padding: 0 3px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(81, 126, 232, 0.95);
+    margin: 0 auto;
+  }
 
   h2 {
     text-align: center; 
@@ -355,7 +385,7 @@ button:hover {
     .angular-google-map-container {
       margin: 0;
       width: 100%;
-      height: 100%;
+      height: 93.5%;
       position: absolute; 
       bottom: 0;
       z-index: 96;
