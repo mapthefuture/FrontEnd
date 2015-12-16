@@ -194,6 +194,7 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
     }).forEach(function (tour) {
       $scope.tourMarkers.push({
         title: tour.title,
+        description: tour.description,
         id: tour.id,
         coords: {
           latitude: tour.start_lat,
@@ -212,13 +213,21 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
   $scope.gotoTour = function (tour, $index) {
     TourService.storeTour(tour);
     SiteService.getSites(tour.id).then(function (res) {
-      // console.log(res);
+      console.log("HIIiii");
+      $scope.windowOptions.visible = !$scope.windowOptions.visible;
       $scope.sites = res.data.sites;
     });
     $scope.selectedIndex = $index;
     $scope.tour = TourService.getStored();
+    // $scope.windowOptions.visible = !$scope.windowOptions.visible;
+    console.log($scope.windowOptions);
     console.log($scope.tour);
     $anchorScroll(document.getElementById('startTour'));
+  };
+
+  // Infowindow
+  $scope.windowOptions = {
+    visible: false
   };
 
   $scope.siteDirections = function (x) {
