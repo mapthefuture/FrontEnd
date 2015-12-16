@@ -149,10 +149,17 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
   });
 
   $scope.tourMap = {
-    center: { latitude: 0, longitude: 0 },
+    center: { latitude: 27.9881, longitude: 86.9253 },
     zoom: 16,
-    mapTypeId: google.maps.MapTypeId.HYBRID,
-    mapTypeControl: true
+    options: {
+      mapTypeId: google.maps.MapTypeId.HYBRID,
+      mapTypeControl: true,
+      styles: [{ featureType: "poi",
+        stylers: [{ visibility: "off" }]
+      }, { featureType: "transit",
+        stylers: [{ visibility: "off" }]
+      }]
+    }
   };
 
   $scope.siteMap = {
@@ -160,10 +167,10 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
     zoom: 16,
     mapTypeId: google.maps.MapTypeId.HYBRID,
     mapTypeControl: false,
-    options: $scope.tourMapOptions
+    options: tourMapOptions
   };
 
-  $scope.tourMapOptions = {
+  var tourMapOptions = {
     draggable: true,
     scrollwheel: false,
     styles: [{ featureType: "poi",
@@ -187,6 +194,11 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
 
   $scope.tourMarkers = [];
 
+  var iconimg = {
+    url: './images/marker.svg',
+    scaledSize: new google.maps.Size(32, 39) };
+
+  // size
   TourService.areaTours().then(function (res) {
     var tours = res.data.tours;
     tours.filter(function (tour) {
@@ -203,7 +215,9 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
         click: function click() {
           return $scope.gotoTour(tour);
         },
-        options: { icon: 'http://maps.google.com/mapfiles/ms/micons/blue.png' }
+        options: {
+          icon: iconimg
+        }
       });
     });
   });
