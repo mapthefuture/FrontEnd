@@ -6623,15 +6623,22 @@ button:hover {
 
 .listTourWrapper {
   width: 100%;
-  height: 100%; }
+  height: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute; }
   .listTourWrapper h2 {
     text-align: center; }
   .listTourWrapper .angular-google-map {
-    max-width: 100%;
-    margin: 15px auto; }
+    max-width: 100%; }
     .listTourWrapper .angular-google-map .angular-google-map-container {
+      margin: 0;
       width: 100%;
-      min-height: 400px; }
+      height: 93.5%;
+      position: absolute;
+      bottom: 0;
+      z-index: 96; }
   .listTourWrapper .tours {
     margin: 0 auto;
     width: 90%;

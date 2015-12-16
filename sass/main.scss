@@ -339,6 +339,10 @@ button:hover {
 .listTourWrapper {
   width: 100%;
   height: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
 
   h2 {
     text-align: center; 
@@ -346,11 +350,14 @@ button:hover {
 
   .angular-google-map {
     max-width: 100%;
-    margin: 15px auto;
 
     .angular-google-map-container {
+      margin: 0;
       width: 100%;
-      min-height: 400px;
+      height: 93.5%;
+      position: absolute; 
+      bottom: 0;
+      z-index: 96;
     }
   }
 
