@@ -4,7 +4,7 @@ let HomeController = function($scope, UserService, $state) {
 
   let vm = this;
 
-  vm.city = '';
+  vm.city = 'the world';
 
   $scope.logmeout = function() {
     UserService.logout();
