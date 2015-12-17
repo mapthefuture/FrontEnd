@@ -144,13 +144,18 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
   $scope.sites = [];
   $scope.win = {
     id: 0,
-    coords: {},
-    title: 'test',
+    coords: { latitude: 0,
+      longitude: 0 },
+    title: '',
+    length: 0,
+    description: '',
     show: false,
+    options: { maxWidth: 200 },
     closeClick: function closeClick() {
       this.show = false;
     },
-    gotoSites: function gotoSites(x) {
+    gotoSites: function gotoSites() {
+      console.log('hey');
       SiteService.getSites($scope.tour.id).then(function (res) {
         $scope.sites = res.data.sites;
       });
@@ -164,13 +169,17 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
   });
 
   $scope.markerClick = function (marker) {
-    console.log(marker);
-    $scope.win.id = marker.id;
-    $scope.win.show = true;
-    $scope.win.coords = marker.coords;
-    $scope.win.title = marker.title;
     TourService.storeTour(marker);
     $scope.tour = TourService.getStored();
+    console.log($scope.tour);
+    $scope.win.id = marker.id;
+    $scope.win.options.pixelOffset = new google.maps.Size(0, -15, 'px', 'px');
+    $scope.win.coords = marker.coords;
+    $scope.win.title = marker.title;
+    $scope.win.length = marker.length;
+    $scope.win.description = marker.description;
+    $scope.win.show = true;
+    console.log($scope.win);
   };
 
   $scope.tourMap = {
@@ -236,15 +245,12 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
           latitude: tour.start_lat,
           longitude: tour.start_lon
         },
-        click: function click(tour) {
-          return $scope.markerClick(tour);
-        }
+        options: { icon: 'http://maps.google.com/mapfiles/ms/micons/blue.png' }
       });
     });
   });
 
   // For editing CSS Styles on-click
-  // options: {icon: 'http://maps.google.com/mapfiles/ms/micons/blue.png'},
   $scope.selectedIndex = -1;
   // $scope.gotoTour = function(tour, $index) {
   //   $scope.selectedIndex = $index;

@@ -9,19 +9,18 @@
       ng-repeat='marker in tourMarkers'
       idKey='marker.id'
       coords='marker.coords'
-      events="tourMap.markerEvents"
+      click='markerClick(marker)'
+      icon='icon'
       >
     </ui-gmap-marker>
     <ui-gmap-window
-    idKey='1'
-    coords='{latitude: -84.5606888,
-    longitude: 33.7676338}' 
+    show='false'
+    coords='self' 
+    options='options' 
     closeClick='win.closeClick()'
     >
-      <div>{{win.title}}</div>
-      <div>{{win.length}}</div>
-      <div>{{win.description}}</div>
-      <button>Check It Out!</button>
+      <div><p>{{win.title}}</p><p>{{win.description}}</p><button ng-click='gotoSites(win)'>Check It Out!</button>
+      </div>
     </ui-gmap-windows>
   </ui-gmap-google-map>
   <!--<div class="list tours parallax">
