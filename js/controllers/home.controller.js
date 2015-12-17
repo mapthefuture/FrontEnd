@@ -61,7 +61,8 @@ let HomeController = function($scope, UserService, $state) {
       url: 'http://maps.googleapis.com/maps/api/geocode/json?latlng='+position.coords.latitude+','+position.coords.longitude+'&sensor=false',
       success: function(data){
         var formatted = data.results;
-        var address_array = formatted[6].formatted_address.split(',');
+        console.log(data.results);
+        var address_array = formatted[5].formatted_address.split(',');
         vm.city = address_array[0];
       }
     });
