@@ -3,17 +3,54 @@ let ListTourController = function($scope, $stateParams, TourService, $anchorScro
   $scope.allTours = [];
   $scope.tour = {};
   $scope.sites = [];
+  $scope.win = {
+    id: 0,
+    coords: {},
+    title: 'test',
+    show: false,
+    closeClick: function() {
+      this.show = false;
+    },
+    gotoSites: function(x) {
+      SiteService.getSites($scope.tour.id).then((res) =>{
+        $scope.sites = res.data.sites;
+      });
+      $anchorScroll('sites');
+    },
+  };
 
   TourService.areaTours().then((res) => {
     $scope.allTours = res.data.tours;
     // console.log($scope.allTours);
   });
 
+  $scope.markerClick = function(marker) {
+    console.log(marker);
+    $scope.win.id = marker.id;
+    $scope.win.show = true;
+    $scope.win.coords = marker.coords;
+    $scope.win.title = marker.title;
+    TourService.storeTour(marker);
+    $scope.tour = TourService.getStored();
+  };
+
+
   $scope.tourMap = {
     center: {latitude: 0, longitude: 0},
     zoom: 16,
     mapTypeId: google.maps.MapTypeId.HYBRID,
     mapTypeControl: true,
+    // markerEvents: {
+    //   click: function(marker) {
+    //     console.log(marker);
+    //     $scope.win.id = marker.id;
+    //     $scope.win.show = true;
+    //     $scope.win.coords = marker.coords;
+    //     $scope.win.title = marker.title;
+    //     TourService.storeTour(marker);
+    //     $scope.tour = TourService.getStored();
+    //   }
+    // },
   };
 
   $scope.siteMap = {
@@ -69,33 +106,21 @@ let ListTourController = function($scope, $stateParams, TourService, $anchorScro
           latitude: tour.start_lat,
           longitude: tour.start_lon
         },
-        click: () => $scope.gotoTour(tour),
-        options: {icon: 'http://maps.google.com/mapfiles/ms/micons/blue.png'},
+        click: (tour) => $scope.markerClick(tour),
+        // options: {icon: 'http://maps.google.com/mapfiles/ms/micons/blue.png'},
       });
     });
   });
 
   // For editing CSS Styles on-click
   $scope.selectedIndex = -1;
-  $scope.gotoTour = function(tour, $index) {
-    TourService.storeTour(tour);
-    SiteService.getSites(tour.id).then((res) =>{
-      console.log("HIIiii");
-      $scope.windowOptions.visible = !$scope.windowOptions.visible;
-      $scope.sites = res.data.sites;
-    });
-    $scope.selectedIndex = $index;
-    $scope.tour = TourService.getStored();
-    // $scope.windowOptions.visible = !$scope.windowOptions.visible;
-    console.log($scope.windowOptions);
-    console.log($scope.tour);
-    $anchorScroll('sites');
-  };
+  // $scope.gotoTour = function(tour, $index) {
+  //   $scope.selectedIndex = $index;
+  //   // $scope.map.window.show = !$scope.map.window.show;
+  //   console.log($scope.tour);
+  //   $anchorScroll('sites');
+  // };
 
-  // Infowindow
-  $scope.windowOptions = {
-    visible: false
-  };
 
   $scope.siteDirections = function(x){
     window.location.href = 'https://www.google.com/maps?saddr=My+Location&daddr=' + x.longitude + ',' + x.latitude;

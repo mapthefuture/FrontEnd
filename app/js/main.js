@@ -132,9 +132,9 @@ exports['default'] = HomeController;
 module.exports = exports['default'];
 
 },{"jquery":28}],3:[function(require,module,exports){
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 var ListTourController = function ListTourController($scope, $stateParams, TourService, $anchorScroll, SiteService) {
@@ -142,11 +142,36 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
   $scope.allTours = [];
   $scope.tour = {};
   $scope.sites = [];
+  $scope.win = {
+    id: 0,
+    coords: {},
+    title: 'test',
+    show: false,
+    closeClick: function closeClick() {
+      this.show = false;
+    },
+    gotoSites: function gotoSites(x) {
+      SiteService.getSites($scope.tour.id).then(function (res) {
+        $scope.sites = res.data.sites;
+      });
+      $anchorScroll('sites');
+    }
+  };
 
   TourService.areaTours().then(function (res) {
     $scope.allTours = res.data.tours;
     // console.log($scope.allTours);
   });
+
+  $scope.markerClick = function (marker) {
+    console.log(marker);
+    $scope.win.id = marker.id;
+    $scope.win.show = true;
+    $scope.win.coords = marker.coords;
+    $scope.win.title = marker.title;
+    TourService.storeTour(marker);
+    $scope.tour = TourService.getStored();
+  };
 
   $scope.tourMap = {
     center: { latitude: 0, longitude: 0 },
@@ -155,6 +180,17 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
     mapTypeControl: true
   };
 
+  // markerEvents: {
+  //   click: function(marker) {
+  //     console.log(marker);
+  //     $scope.win.id = marker.id;
+  //     $scope.win.show = true;
+  //     $scope.win.coords = marker.coords;
+  //     $scope.win.title = marker.title;
+  //     TourService.storeTour(marker);
+  //     $scope.tour = TourService.getStored();
+  //   }
+  // },
   $scope.siteMap = {
     center: { latitude: 0, longitude: 0 },
     zoom: 16,
@@ -200,35 +236,22 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
           latitude: tour.start_lat,
           longitude: tour.start_lon
         },
-        click: function click() {
-          return $scope.gotoTour(tour);
-        },
-        options: { icon: 'http://maps.google.com/mapfiles/ms/micons/blue.png' }
+        click: function click(tour) {
+          return $scope.markerClick(tour);
+        }
       });
     });
   });
 
   // For editing CSS Styles on-click
+  // options: {icon: 'http://maps.google.com/mapfiles/ms/micons/blue.png'},
   $scope.selectedIndex = -1;
-  $scope.gotoTour = function (tour, $index) {
-    TourService.storeTour(tour);
-    SiteService.getSites(tour.id).then(function (res) {
-      console.log("HIIiii");
-      $scope.windowOptions.visible = !$scope.windowOptions.visible;
-      $scope.sites = res.data.sites;
-    });
-    $scope.selectedIndex = $index;
-    $scope.tour = TourService.getStored();
-    // $scope.windowOptions.visible = !$scope.windowOptions.visible;
-    console.log($scope.windowOptions);
-    console.log($scope.tour);
-    $anchorScroll('sites');
-  };
-
-  // Infowindow
-  $scope.windowOptions = {
-    visible: false
-  };
+  // $scope.gotoTour = function(tour, $index) {
+  //   $scope.selectedIndex = $index;
+  //   // $scope.map.window.show = !$scope.map.window.show;
+  //   console.log($scope.tour);
+  //   $anchorScroll('sites');
+  // };
 
   $scope.siteDirections = function (x) {
     window.location.href = 'https://www.google.com/maps?saddr=My+Location&daddr=' + x.longitude + ',' + x.latitude;
@@ -241,8 +264,8 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
 
 ListTourController.$inject = ['$scope', '$stateParams', 'TourService', '$anchorScroll', 'SiteService'];
 
-exports["default"] = ListTourController;
-module.exports = exports["default"];
+exports['default'] = ListTourController;
+module.exports = exports['default'];
 
 },{}],4:[function(require,module,exports){
 'use strict';
