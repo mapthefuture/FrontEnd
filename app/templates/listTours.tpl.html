@@ -86,6 +86,7 @@ tour="tour">
           latitude: s.latitude,
           longitude: s.longitude
         }'
+        options='tourMarkers.options'
         ></ui-gmap-marker>
       </ui-gmap-google-map>
       <a href="https://www.google.com/maps?saddr=My+Location&daddr={{s.longitude}},{{s.latitude}}"><button ng-click="siteDirections(s.coords)">Take Me To This Spot!</button></a>
