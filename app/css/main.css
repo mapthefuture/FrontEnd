@@ -6698,20 +6698,47 @@ button:hover {
   left: 20%;
   right: 20%;
   bottom: -800px;
-  margin: 0 auto;
-  border: 2px solid black; }
-  .sites * {
-    border: 2px solid black; }
+  margin: 0 auto; }
+  .sites .title {
+    font-size: 2em;
+    text-align: center; }
   .sites .siteBox {
-    max-width: 33%; }
+    display: inline-block;
+    max-width: 30%;
+    min-height: 600px;
+    margin: 0 1.6%;
+    border: 1px solid #C1CAD6;
+    border-radius: 3px;
+    -webkit-box-shadow: 0px 0px 3px 3px #4a4a4a;
+    -moz-box-shadow: 0px 0px 3px 3px #4a4a4a;
+    box-shadow: 0px 0px 3px 3px #4a4a4a; }
+    .sites .siteBox .title {
+      height: 125px;
+      font-size: 1.5em;
+      margin: 0 auto;
+      text-align: center; }
+    .sites .siteBox .desc {
+      height: 150px;
+      overflow: auto;
+      margin: 0 auto; }
+    .sites .siteBox .image {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto;
+      overflow: hidden; }
   .sites .angular-google-map {
     max-width: 200px;
-    margin: 10px auto; }
+    margin: 0 auto; }
     .sites .angular-google-map .angular-google-map-container {
       width: 100%;
       min-height: 200px; }
-  .sites .siteContainer p {
-    display: inline-block; }
+  .sites a button {
+    margin: 0 auto; }
+  .sites .siteContainer {
+    max-height: 750px;
+    margin: 10px auto; }
+    .sites .siteContainer p {
+      margin: 0 auto; }
 
 .uploadForm {
   clear: both;

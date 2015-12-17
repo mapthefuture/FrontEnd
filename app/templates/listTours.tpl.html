@@ -14,12 +14,12 @@
       >
     </ui-gmap-marker>
     <ui-gmap-window
-    show='false'
-    coords='self' 
-    options='options' 
+    show='win.show'
+    coords='win.coords' 
+    options='win.options' 
     closeClick='win.closeClick()'
     >
-      <div><p>{{win.title}}</p><p>{{win.description}}</p><button ng-click='gotoSites(win)'>Check It Out!</button>
+      <div><p>{{win.title}}</p><p>{{win.description}}</p><button click='gotoSites(win)'>Check It Out!</button>
       </div>
     </ui-gmap-windows>
   </ui-gmap-google-map>
@@ -46,15 +46,15 @@
 class="sites"
 id="sitesDiv" 
 tour="tour">
-  <div>Your adventure, "{{tour.title}}" is here:</div>
+  <div class="title">Your adventure, "{{tour.title}}" is here:</div>
   <div class="siteContainer">
     <div
     ng-repeat="s in sites"
     class="siteBox"
     >
-      <p>{{s.title}}</p>
-      <p><img src='s.image_url'></p>
-      <p>{{s.description}}</p>
+      <p class="title">{{s.title}}</p>
+      <p class="image"><img ng-src='{{s.image_url}}'></p>
+      <p class="desc">{{s.description}}</p>
       <!--<ui-gmap-google-map 
       center="{
         latitude: 0,
@@ -90,7 +90,6 @@ tour="tour">
       </ui-gmap-google-map>
       <a href="https://www.google.com/maps?saddr=My+Location&daddr={{s.longitude}},{{s.latitude}}"><button ng-click="siteDirections(s.coords)">Take Me To This Spot!</button></a>
     </div>
-    <p>Make this experience Wanderfully:</p>
   </div>
-  <a href="https://www.google.com/maps?saddr=My+Location&daddr={{tour.coords.latitude}},{{tour.coords.longitude}}"><button id="startTour" class="startTour">Start Wandering Here</button></a>
+  <a href="https://www.google.com/maps?saddr=My+Location&daddr={{tour.coords.longitude}},{{tour.coords.latitude}}"><button id="startTour" class="startTour">Start Your Wanderful Journey</button></a>
 </div>
