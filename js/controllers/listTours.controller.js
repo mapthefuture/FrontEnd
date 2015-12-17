@@ -4,7 +4,6 @@ let ListTourController = function($scope, $stateParams, TourService, $anchorScro
   $scope.tour = {};
   $scope.sites = [];
   $scope.win = {
-    id: 0,
     coords: {latitude: 0,
       longitude: 0},
     title: '',
@@ -15,32 +14,40 @@ let ListTourController = function($scope, $stateParams, TourService, $anchorScro
     closeClick: function() {
       this.show = false;
     },
-    gotoSites: function() {
-      console.log('hey');
-      SiteService.getSites($scope.tour.id).then((res) =>{
-        $scope.sites = res.data.sites;
-      });
-      $anchorScroll('sites');
-    },
   };
 
-  TourService.areaTours().then((res) => {
-    $scope.allTours = res.data.tours;
-    // console.log($scope.allTours);
-  });
+  $scope.gotoSites = function() {
+    console.log('hey');
+    SiteService.getSites($scope.tour.id).then((res) =>{
+      $scope.sites = res.data.sites;
+    });
+    $anchorScroll('sitesDiv');
+  };
 
   $scope.markerClick = function(marker) {
-    TourService.storeTour(marker);
-    $scope.tour = TourService.getStored();
-    console.log($scope.tour);
-    $scope.win.id = marker.id;
-    $scope.win.options.pixelOffset = new google.maps.Size(0, -15, 'px', 'px');
-    $scope.win.coords = marker.coords;
-    $scope.win.title = marker.title;
-    $scope.win.length = marker.length;
-    $scope.win.description = marker.description;
+    if($scope.win.show) {
+      $scope.win.show = false;
+      TourService.storeTour(marker);
+      $scope.tour = TourService.getStored();
+      $scope.win.options.pixelOffset = new google.maps.Size(0, -15, 'px', 'px');
+      $scope.win.coords = marker.coords;
+      $scope.win.title = marker.title;
+      $scope.win.length = marker.length;
+      $scope.win.description = marker.description;
+    } else {
+      TourService.storeTour(marker);
+      $scope.tour = TourService.getStored();
+      $scope.win.options.pixelOffset = new google.maps.Size(0, -15, 'px', 'px');
+      $scope.win.coords = marker.coords;
+      $scope.win.title = marker.title;
+      $scope.win.length = marker.length;
+      $scope.win.description = marker.description;
+    }
+    SiteService.getSites($scope.tour.id).then((res) =>{
+      $scope.sites = res.data.sites;
+    });
+    $anchorScroll('sitesDiv');
     $scope.win.show = true;
-    console.log($scope.win);
   };
 
 
@@ -84,7 +91,10 @@ let ListTourController = function($scope, $stateParams, TourService, $anchorScro
     options: tourMapOptions
   };
 
-
+  TourService.areaTours().then((res) => {
+    $scope.allTours = res.data.tours;
+    // console.log($scope.allTours);
+  });
 
   var tourMapOptions = {
     draggable: true,
@@ -146,9 +156,11 @@ let ListTourController = function($scope, $stateParams, TourService, $anchorScro
   // For editing CSS Styles on-click
   $scope.selectedIndex = -1;
   // $scope.gotoTour = function(tour, $index) {
-  //   $scope.selectedIndex = $index;
-  //   // $scope.map.window.show = !$scope.map.window.show;
-  //   console.log($scope.tour);
+  //   TourService.storeTour(tour);
+  //   SiteService.getSites(tour.id).then((res) =>{
+  //     $scope.sites = res.data.sites;
+  //   });
+  //   $scope.tour = TourService.getStored();
   //   $anchorScroll('sites');
   // };
 
