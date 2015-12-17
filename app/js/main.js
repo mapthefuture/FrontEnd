@@ -60,8 +60,7 @@ var HomeController = function HomeController($scope, UserService, $state) {
 
   var vm = this;
 
-  vm.city = '';
-  vm['in'] = '.';
+  vm.city = 'the world';
 
   $scope.logmeout = function () {
     UserService.logout();
@@ -115,8 +114,7 @@ var HomeController = function HomeController($scope, UserService, $state) {
       success: function success(data) {
         var formatted = data.results;
         var address_array = formatted[6].formatted_address.split(',');
-        vm.city = address_array[0] + '.';
-        vm['in'] = ' in ';
+        vm.city = address_array[0];
       }
     });
   };
@@ -183,32 +181,39 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
   };
 
   $scope.tourMap = {
-    center: { latitude: 0, longitude: 0 },
+    center: { latitude: 27.9881, longitude: 86.9253 },
     zoom: 16,
-    mapTypeId: google.maps.MapTypeId.HYBRID,
-    mapTypeControl: true
+    options: {
+      mapTypeId: google.maps.MapTypeId.HYBRID,
+      mapTypeControl: true,
+      styles: [{ featureType: "poi",
+        stylers: [{ visibility: "off" }]
+      }, { featureType: "transit",
+        stylers: [{ visibility: "off" }]
+      }]
+    }
+    // markerEvents: {
+    //   click: function(marker) {
+    //     console.log(marker);
+    //     $scope.win.id = marker.id;
+    //     $scope.win.show = true;
+    //     $scope.win.coords = marker.coords;
+    //     $scope.win.title = marker.title;
+    //     TourService.storeTour(marker);
+    //     $scope.tour = TourService.getStored();
+    //   }
+    // },
   };
 
-  // markerEvents: {
-  //   click: function(marker) {
-  //     console.log(marker);
-  //     $scope.win.id = marker.id;
-  //     $scope.win.show = true;
-  //     $scope.win.coords = marker.coords;
-  //     $scope.win.title = marker.title;
-  //     TourService.storeTour(marker);
-  //     $scope.tour = TourService.getStored();
-  //   }
-  // },
   $scope.siteMap = {
     center: { latitude: 0, longitude: 0 },
     zoom: 16,
     mapTypeId: google.maps.MapTypeId.HYBRID,
     mapTypeControl: false,
-    options: $scope.tourMapOptions
+    options: tourMapOptions
   };
 
-  $scope.tourMapOptions = {
+  var tourMapOptions = {
     draggable: true,
     scrollwheel: false,
     styles: [{ featureType: "poi",
@@ -232,6 +237,11 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
 
   $scope.tourMarkers = [];
 
+  var iconimg = {
+    url: './images/marker.svg',
+    scaledSize: new google.maps.Size(32, 39) };
+
+  // size
   TourService.areaTours().then(function (res) {
     var tours = res.data.tours;
     tours.filter(function (tour) {
@@ -245,7 +255,12 @@ var ListTourController = function ListTourController($scope, $stateParams, TourS
           latitude: tour.start_lat,
           longitude: tour.start_lon
         },
-        options: { icon: 'http://maps.google.com/mapfiles/ms/micons/blue.png' }
+        click: function click() {
+          return $scope.gotoTour(tour);
+        },
+        options: {
+          icon: iconimg
+        }
       });
     });
   });

@@ -45,10 +45,24 @@ let ListTourController = function($scope, $stateParams, TourService, $anchorScro
 
 
   $scope.tourMap = {
-    center: {latitude: 0, longitude: 0},
+    center: {latitude: 27.9881, longitude: 86.9253},
     zoom: 16,
-    mapTypeId: google.maps.MapTypeId.HYBRID,
-    mapTypeControl: true,
+    options: {
+      mapTypeId: google.maps.MapTypeId.HYBRID,
+      mapTypeControl: true,
+      styles: [
+        {featureType: "poi",
+          stylers: [
+            { visibility: "off" }
+          ]
+        },
+        {featureType: "transit",
+          stylers: [
+            { visibility: "off" }
+          ]
+        }
+      ],
+    }
     // markerEvents: {
     //   click: function(marker) {
     //     console.log(marker);
@@ -67,10 +81,12 @@ let ListTourController = function($scope, $stateParams, TourService, $anchorScro
     zoom: 16,
     mapTypeId: google.maps.MapTypeId.HYBRID,
     mapTypeControl: false,
-    options: $scope.tourMapOptions
+    options: tourMapOptions
   };
 
-  $scope.tourMapOptions = {
+
+
+  var tourMapOptions = {
     draggable: true,
     scrollwheel: false,
     styles: [
@@ -101,6 +117,10 @@ let ListTourController = function($scope, $stateParams, TourService, $anchorScro
 
   $scope.tourMarkers = [];
 
+  var iconimg = {
+    url: './images/marker.svg',
+    scaledSize: new google.maps.Size(32, 39), // size
+  };
 
   TourService.areaTours().then((res) =>{
     var tours = res.data.tours;
@@ -115,7 +135,10 @@ let ListTourController = function($scope, $stateParams, TourService, $anchorScro
           latitude: tour.start_lat,
           longitude: tour.start_lon
         },
-        options: {icon: 'http://maps.google.com/mapfiles/ms/micons/blue.png'},
+        click: () => $scope.gotoTour(tour),
+        options: {
+          icon: iconimg
+        },
       });
     });
   });
